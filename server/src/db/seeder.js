@@ -75,6 +75,8 @@ async function seed() {
   const posts = [];
 
   for (const user of users) {
+    const userPostIds = [];
+
     for (
       let i = 0;
       i < Math.floor(Math.random() * (MAX_NUM_POSTS_PER_USER + 1));
@@ -94,8 +96,10 @@ async function seed() {
       const savedPost = await post.save();
       posts.push(savedPost);
 
-      // adding post reference to user
-      user.posts.push(savedPost._id);
+      userPostIds.push(savedPost._id);
+    }
+    if (userPostIds.length > 0) {
+      user.posts.push(...userPostIds);
       await user.save();
     }
   }
@@ -104,38 +108,69 @@ async function seed() {
   // generating likes
   logInfo("Generating likes...");
   const numLikes = users.length * AVG_NUM_LIKES;
+
+  // getting existing likes to avoid duplication
+  const existingLikes = await Like.find({}, { user: 1, post: 1 }).lean();
+  const existingLikeSet = new Set(
+    existingLikes.map((like) => `${like.user}-${like.post}`),
+  );
+
   const likes = [];
+  const userLikeUpdates = new Map();
 
   for (let i = 0; i < numLikes; i++) {
     const randomUser = users[Math.floor(Math.random() * users.length)];
     const randomPost = posts[Math.floor(Math.random() * posts.length)];
+    const likeKey = `${randomUser._id}-${randomPost._id}`;
 
-    // avoiding duplicate likes from the same user on the same post
-    const existingLike = await Like.findOne({
-      user: randomUser._id,
-      post: randomPost._id,
-    });
+    // checking for duplicates
+    if (!existingLikeSet.has(likeKey)) {
+      existingLikeSet.add(likeKey);
 
-    if (!existingLike) {
       const like = new Like({
         user: randomUser._id,
         post: randomPost._id,
         created_at: faker.date.recent(),
       });
 
-      const savedLike = await like.save();
-      likes.push(savedLike);
+      likes.push(like);
+      if (!userLikeUpdates.has(randomUser._id)) {
+        userLikeUpdates.set(randomUser._id, []);
+      }
 
-      // adding like reference to user
-      randomUser.likes.push(savedLike._id);
-      await randomUser.save();
+      userLikeUpdates.get(randomUser._id).push(like);
     }
   }
-  logInfo(`Created ${likes.length} likes`);
+  // saving likes in bulk
+  let insertedLikes = [];
+  if (likes.length > 0) {
+    insertedLikes = await Like.insertMany(likes);
+    logInfo(`Created ${insertedLikes.length} likes`);
+  } else {
+    logInfo("No new likes created");
+  }
 
+  // updating users with newly created likes
+  const usersBulk = [];
+  for (const [userId, likes] of userLikeUpdates.entries()) {
+    const likeIds = likes.map((like) => like._id);
+    usersBulk.push({
+      updateOne: {
+        filter: { _id: userId },
+        update: { $push: { likes: { $each: likeIds } } },
+      },
+    });
+  }
+
+  if (usersBulk.length > 0) {
+    await User.bulkWrite(usersBulk);
+    logInfo(`Updated ${usersBulk.length} users with new likes`);
+  }
   // generating follows
   logInfo("Generating follows...");
   const numFollows = users.length * AVG_NUM_FOLLOWS;
+  const followSet = new Set();
+  const potentialFollows = [];
 
   for (let i = 0; i < numFollows; i++) {
     const followerIndex = Math.floor(Math.random() * users.length);
@@ -149,32 +184,54 @@ async function seed() {
     const follower = users[followerIndex];
     const following = users[followingIndex];
 
-    // avoiding duplicate follows
-    const existingFollow = await Follow.findOne({
-      follower: follower._id,
-      following: following._id,
-    });
+    const followKey = `${follower._id}-${following._id}`;
 
-    if (!existingFollow) {
-      const follow = new Follow({
+    if (!followSet.has(followKey)) {
+      followSet.add(followKey);
+      potentialFollows.push({
         follower: follower._id,
         following: following._id,
       });
-
-      await follow.save();
-
-      // updating user references
-      follower.following.push(following._id);
-      following.followers.push(follower._id);
-
-      await follower.save();
-      await following.save();
     }
   }
+
+  // pre-filtering duplicates
+  const existingFollows = await Follow.find({
+    $or: potentialFollows.map(({ follower, following }) => ({
+      follower,
+      following,
+    })),
+  });
+
+  const existingFollowSet = new Set(
+    existingFollows.map((follow) => `${follow.follower}-${follow.following}`),
+  );
+
+  const newFollows = potentialFollows.filter(
+    ({ follower, following }) =>
+      !existingFollowSet.has(`${follower}-${following}`),
+  );
+
+  // inserting new follows in bulk
+  if (newFollows.length > 0) {
+    await Follow.insertMany(newFollows);
+
+    // updating user references
+    for (const { follower, following } of newFollows) {
+      const followerUser = users.find((user) => user._id.equals(follower));
+      const followingUser = users.find((user) => user._id.equals(following));
+
+      followerUser.following.push(following);
+      followingUser.followers.push(follower);
+    }
+
+    await Promise.all(users.map((user) => user.save()));
+  }
+
   logInfo("Follows generated");
 }
 
 seed()
   .then(() => logInfo("Database seeding completed"))
-  .catch((error) => logInfo("Error seeding database: " + error))
+  .catch((error) => logError("Error seeding database: " + error))
   .finally(() => mongoose.connection.close());
