@@ -11,6 +11,7 @@
     "setup": "npm install",
     "start": "node ./src/index",
     "dev": "nodemon ./src/index",
+    "seed": "node ./src/db/seeder.js",
     "code-style-check": "npm run prettier && npm run lint",
     "pre-commit": "npm run code-style-check",
     "autofix": "npm run lint:fix && npm run prettier:fix",
@@ -23,7 +24,9 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/preset-env": "^7.16.0",
+    "@faker-js/faker": "^9.9.0",
     "babel-jest": "^29.7.0",
+    "bcrypt": "^6.0.0",
     "eslint": "^8.2.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",
