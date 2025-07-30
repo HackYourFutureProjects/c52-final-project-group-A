@@ -1,4 +1,4 @@
-import { Post, User } from "../models/User.js"; // TODO update the path after model is setted
+import { Post } from "../models/User.js"; // TODO update the path after model is setted
 // import jwt from "jsonwebtoken";
 
 //
@@ -28,15 +28,15 @@ export const getPostById = async (req, res) => {
 // Create Post endpoint
 export const createPost = async (req, res) => {
   try {
-    const { title, content, status, author } = req.body;
+    const { title, content, status } = req.body;
 
-    // Check that author is exist
-    const userExists = await User.findById(author);
-    if (!userExists) {
-      return res.status(400).json({ error: "Author not found" });
-    }
+    const newPost = await Post.create({
+      title,
+      content,
+      status,
+      author: req.user._id,
+    });
 
-    const newPost = await Post.create({ title, content, status, author });
     res.status(201).json(newPost);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -46,12 +46,21 @@ export const createPost = async (req, res) => {
 // Update Post endpoint
 export const updatePost = async (req, res) => {
   try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    // Check that only the author can edit
+    if (post.author.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to update this post" });
+    }
+
     const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
-    if (!updatedPost)
-      return res.status(404).json({ message: "Post not found" });
+
     res.json(updatedPost);
   } catch (error) {
     res.status(400).json({ error: error.message });

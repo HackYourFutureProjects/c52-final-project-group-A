@@ -1,7 +1,7 @@
 import express from "express";
 
 import userRouter from "./routes/user.js";
-import postRouter from "./routes/postRouter.js";
+import postRouter from "./routes/post.js";
 
 // Create an express server
 const app = express();
