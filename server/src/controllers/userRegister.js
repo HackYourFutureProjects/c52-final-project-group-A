@@ -16,8 +16,8 @@ export const userRegister = async (req, res) => {
   try {
     const existingUser = await User.findOne({
       $or: [
-        { username: new RegExp(`^${username}$`, "i") },
-        { email: new RegExp(`^${email}$`, "i") },
+        { username: new RegExp(username, "i") },
+        { email: new RegExp(email, "i") },
       ],
     });
 
@@ -27,7 +27,7 @@ export const userRegister = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const code = generateCode();
+    const verificationCode = generateCode();
 
     const tokenPayload = {
       email,
@@ -35,12 +35,12 @@ export const userRegister = async (req, res) => {
       lastName,
       username,
       password: hashedPassword,
-      code,
+      verificationCode,
     };
 
     const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: "10m" });
 
-    await sendEmail(email, code);
+    await sendEmail(email, verificationCode);
 
     return res.status(200).json({
       message: "Verification code sent to email",
