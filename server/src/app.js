@@ -1,6 +1,7 @@
 import express from "express";
 
 import userRouter from "./routes/user.js";
+import postRouter from "./routes/post.js";
 
 // Create an express server
 const app = express();
@@ -14,5 +15,8 @@ app.use(express.json());
  * As we also host our client code on heroku we want to separate the API endpoints.
  */
 app.use("/api/users", userRouter);
+
+// Post routes
+app.use("/api/post", postRouter);
 
 export default app;
