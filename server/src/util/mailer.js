@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { logError } from "./logger.js";
 import OUR_EMAIL from "../config/emailConfig.js";
 import OUR_APP_PASSWORD from "../config/appPasswordConfig.js";
 
@@ -18,7 +19,12 @@ async function sendEmail(to, code) {
     text: `Your verification code is: ${code}`,
   };
 
-  return transporter.sendMail(mailOptions);
+  try {
+    return await transporter.sendMail(mailOptions);
+  } catch (error) {
+    logError(`Error sending email to ${to}:`, error);
+    throw error; // Rethrow the error to be handled by the caller
+  }
 }
 
 export default sendEmail;
