@@ -23,7 +23,7 @@ const postSchema = new Schema({
   },
 });
 
-const Post = mongoose.model("Post", postSchema);
+const Post = mongoose.model("posts", postSchema);
 
 export const validatePost = (postObject) => {
   const errorList = [];

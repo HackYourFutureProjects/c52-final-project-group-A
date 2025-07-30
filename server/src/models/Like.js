@@ -15,7 +15,7 @@ const likeSchema = new Schema({
   },
 });
 
-const Like = mongoose.model("Like", likeSchema);
+const Like = mongoose.model("likes", likeSchema);
 
 export const validateLike = (likeObject) => {
   const errorList = [];
