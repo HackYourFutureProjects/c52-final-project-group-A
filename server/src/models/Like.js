@@ -27,10 +27,6 @@ export const validateLike = (likeObject) => {
     errorList.push(validatedKeysMessage);
   }
 
-  if (likeObject.created_at == null) {
-    errorList.push("created_at is a required field");
-  }
-
   if (likeObject.user == null) {
     errorList.push("user is a required field");
   }

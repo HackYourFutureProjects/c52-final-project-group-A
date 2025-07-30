@@ -37,6 +37,10 @@ export const validateFollow = (followObject) => {
     errorList.push("following is a required field");
   }
 
+  if (followObject.follower === followObject.following) {
+    errorList.push("follower and following cannot be the same user");
+  }
+
   return errorList;
 };
 

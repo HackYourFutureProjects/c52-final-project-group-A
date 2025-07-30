@@ -50,10 +50,6 @@ export const validatePost = (postObject) => {
     errorList.push("title is a required field");
   }
 
-  if (postObject.created_at == null) {
-    errorList.push("created_at is a required field");
-  }
-
   if (postObject.author == null) {
     errorList.push("author is a required field");
   }

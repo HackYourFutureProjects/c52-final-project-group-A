@@ -76,10 +76,6 @@ export const validateUser = (userObject) => {
     errorList.push("email is a required field");
   }
 
-  if (userObject.created_at == null) {
-    errorList.push("created_at is a required field");
-  }
-
   return errorList;
 };
 
