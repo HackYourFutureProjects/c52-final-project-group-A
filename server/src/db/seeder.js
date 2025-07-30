@@ -225,7 +225,19 @@ async function seed() {
       followingUser.followers.push(follower);
     }
 
-    await Promise.all(users.map((user) => user.save()));
+    await User.bulkWrite(
+      users.map((user) => ({
+        updateOne: {
+          filter: { _id: user._id },
+          update: {
+            $set: {
+              followers: user.followers,
+              following: user.following,
+            },
+          },
+        },
+      })),
+    );
   }
 
   logInfo("Follows generated");
