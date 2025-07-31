@@ -26,7 +26,7 @@ export const userRegister = async (req, res) => {
       return res.status(409).json({ error: "User already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(password, parseInt(SALT_ROUNDS));
 
     const verificationCode = generateCode();
 
