@@ -1,5 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 import validateAllowedFields from "../util/validateAllowedFields.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const { EMAIL_VALIDATION_EXPIRATION } = process.env;
+if (!EMAIL_VALIDATION_EXPIRATION) {
+  throw new Error("EMAIL_VALIDATION_EXPIRATION is not defined in .env file");
+}
 
 const PendingUserSchema = new Schema({
   email: { type: String, required: true, unique: true },
@@ -8,7 +16,11 @@ const PendingUserSchema = new Schema({
   last_name: { type: String, required: true },
   password: { type: String, required: true },
   verification_code: { type: String, required: true },
-  created_at: { type: Date, default: Date.now, expires: 600 },
+  created_at: {
+    type: Date,
+    default: Date.now,
+    expires: EMAIL_VALIDATION_EXPIRATION,
+  },
 });
 
 const PendingUser = mongoose.model("pendingUsers", PendingUserSchema);

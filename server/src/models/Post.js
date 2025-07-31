@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import validateAllowedFields from "../util/validateAllowedFields.js";
 
-const PostStatus = {
+export const PostStatus = {
   PUBLISHED: "PUBLISHED",
   DRAFT: "DRAFT",
 };

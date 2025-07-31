@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import validateAllowedFields from "../util/validateAllowedFields.js";
 
-const CommentStatus = {
+export const CommentStatus = {
   VISIBLE: "VISIBLE",
   HIDDEN: "HIDDEN",
 };

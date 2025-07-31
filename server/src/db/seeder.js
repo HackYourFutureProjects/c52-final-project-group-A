@@ -12,8 +12,8 @@ import { logInfo, logError } from "../util/logging.js";
 
 dotenv.config();
 
-const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
-if (!SALT_ROUNDS) {
+const saltRounds = Number(process.env.SALT_ROUNDS);
+if (!saltRounds) {
   logError("No SALT_ROUNDS in .env file");
   process.exit(1);
 }
@@ -75,7 +75,7 @@ async function seed() {
     const username = faker.internet.username({ firstName, lastName });
     const email = username + "@gmail.com";
     const password = faker.internet.password({ length: 10 });
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
     const score = Math.floor(Math.random() * 100 + 1);
 
     const user = new User({
