@@ -1,7 +1,7 @@
 import express from "express";
 
 import userRouter from "./routes/user.js";
-import postRouter from "./routes/post.js";
+// import postRouter from "./routes/post.js";
 
 // Create an express server
 const app = express();
@@ -17,6 +17,6 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 
 // Post routes
-app.use("/api/post", postRouter);
+// app.use("/api/post", postRouter);
 
 export default app;
