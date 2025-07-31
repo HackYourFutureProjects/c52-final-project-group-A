@@ -1,7 +1,10 @@
 import express from "express";
+
 import weeklyDigestRouter from "./routes/weeklyDigest.js";
 import postRouter from "./routes/post.js";
 import feedRouter from "./routes/feed.js";
+
+
 
 // Create an express server
 const app = express();
@@ -21,5 +24,6 @@ app.use("/api/post", postRouter);
 app.use("/api/users", weeklyDigestRouter);
 //
 app.use("/api/feed", feedRouter);
+
 
 export default app;
