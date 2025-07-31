@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import validateAllowedFields from "../util/validateAllowedFields.js";
 
-const PostStatus = {
+export const PostStatus = {
   PUBLISHED: "PUBLISHED",
   DRAFT: "DRAFT",
 };
@@ -12,6 +12,7 @@ const postSchema = new Schema({
     enum: Object.values(PostStatus),
     required: true,
   },
+  tags: { type: [String], default: [] },
   title: { type: String, required: true },
   content: { type: String, required: true },
   created_at: { type: Date, default: Date.now },
@@ -22,6 +23,7 @@ const postSchema = new Schema({
     required: true,
   },
   tags: [{ type: String }],
+  score: { type: Number, default: 0 },
 });
 
 const Post = mongoose.model("posts", postSchema);

@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import Post from "../models/Post.js";
 import Like from "../models/Like.js";
 import Follow from "../models/Follow.js";
+import Comment from "../models/Comment.js";
 import mongoose from "mongoose";
 import dbConnect from "./connectDB.js";
 import { faker } from "@faker-js/faker";
@@ -19,8 +20,8 @@ const __dirname = path.dirname(__filename);
 // Now explicitly load the .env from the root of the project
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
-const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
-if (!SALT_ROUNDS) {
+const saltRounds = Number(process.env.SALT_ROUNDS);
+if (!saltRounds) {
   logError("No SALT_ROUNDS in .env file");
   process.exit(1);
 }
@@ -30,7 +31,30 @@ const DROP_DB = true;
 const NUM_USERS = 50;
 const MAX_NUM_POSTS_PER_USER = 10;
 const AVG_NUM_LIKES = 10; // average 10 likes per post
+const AVG_NUM_COMMENTS = 3; // average of 3 comments per post
 const AVG_NUM_FOLLOWS = 5; // average of 5 follows per user
+const TAGS = [
+  "technology",
+  "education",
+  "health",
+  "finance",
+  "sports",
+  "travel",
+  "food",
+  "fashion",
+  "art",
+  "science",
+  "business",
+  "music",
+  "environment",
+  "photography",
+  "lifestyle",
+  "politics",
+  "culture",
+  "history",
+  "movies",
+  "literature",
+];
 
 const TAG_POOL = [
   "travel",
@@ -71,6 +95,7 @@ async function seed() {
     await Post.deleteMany();
     await Like.deleteMany();
     await Follow.deleteMany();
+    await Comment.deleteMany();
   }
 
   // generating users
@@ -83,7 +108,8 @@ async function seed() {
     const username = faker.internet.username({ firstName, lastName });
     const email = username + "@gmail.com";
     const password = faker.internet.password({ length: 10 });
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const score = Math.floor(Math.random() * 100 + 1);
 
     const user = new User({
       username: username,
@@ -95,6 +121,7 @@ async function seed() {
         avatar: faker.image.avatar(),
         bio: faker.lorem.paragraph({ min: 1, max: 5 }),
       },
+      score: score,
     });
 
     const savedUser = await user.save();
@@ -116,15 +143,18 @@ async function seed() {
       i++
     ) {
       const isPublished = Math.random() > 0.2; // 80% of posts will be published
+      const score = Math.floor(Math.random() * 100 + 1);
 
       const post = new Post({
         status: isPublished ? "PUBLISHED" : "DRAFT",
+        tags: faker.helpers.arrayElements(TAGS, { min: 1, max: 3 }),
         title: faker.lorem.sentence({ min: 1, max: 8 }),
         content: faker.lorem.paragraph({ min: 1, max: 10 }),
         created_at: faker.date.past(),
         published_at: isPublished ? faker.date.recent() : null,
         author: user._id,
         tags: getRandomTags(),
+        score: score,
       });
 
       const savedPost = await post.save();
@@ -200,6 +230,59 @@ async function seed() {
     await User.bulkWrite(usersBulk);
     logInfo(`Updated ${usersBulk.length} users with new likes`);
   }
+
+  logInfo("Generating comments...");
+  const numComments = posts.length * AVG_NUM_COMMENTS;
+
+  const comments = [];
+  const userCommentUpdates = new Map();
+
+  for (let i = 0; i < numComments; i++) {
+    const randomUser = users[Math.floor(Math.random() * users.length)];
+    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+
+    const comment = new Comment({
+      created_at: faker.date.recent(),
+      user: randomUser._id,
+      post: randomPost._id,
+      content: faker.lorem.paragraph({ min: 1, max: 3 }),
+    });
+
+    comments.push(comment);
+
+    if (!userCommentUpdates.has(randomUser._id)) {
+      userCommentUpdates.set(randomUser._id, []);
+    }
+
+    userCommentUpdates.get(randomUser._id).push(comment);
+  }
+
+  // saving comments in bulk
+  let insertedComments = [];
+  if (comments.length > 0) {
+    insertedComments = await Comment.insertMany(comments);
+    logInfo(`Created ${insertedComments.length} comments`);
+  } else {
+    logInfo("No new comments created");
+  }
+
+  // updating users with newly created comments
+  const usersCommentsBulk = [];
+  for (const [userId, comments] of userCommentUpdates.entries()) {
+    const commentIds = comments.map((comment) => comment._id);
+    usersCommentsBulk.push({
+      updateOne: {
+        filter: { _id: userId },
+        update: { $push: { comments: { $each: commentIds } } },
+      },
+    });
+  }
+
+  if (usersCommentsBulk.length > 0) {
+    await User.bulkWrite(usersCommentsBulk);
+    logInfo(`Updated ${usersCommentsBulk.length} users with new comments`);
+  }
+
   // generating follows
   logInfo("Generating follows...");
   const numFollows = users.length * AVG_NUM_FOLLOWS;
