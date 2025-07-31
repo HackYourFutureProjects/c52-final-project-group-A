@@ -1,6 +1,6 @@
 import PendingUser from "../models/PendingUser.js";
 import User, { validateUser } from "../models/User.js";
-import { LogError } from "concurrently";
+import { LogError } from "../utils/logger.js";
 
 export const verifyEmail = async (req, res) => {
   const { email, verificationCode } = req.body;

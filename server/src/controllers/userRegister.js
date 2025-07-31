@@ -3,7 +3,7 @@ import generateCode from "../util/codeGenerator.js";
 import User from "../models/User.js";
 import PendingUser from "../models/PendingUser.js";
 import bcrypt from "bcryptjs";
-import { LogError } from "concurrently";
+import { LogError } from "../utils/logger.js";
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS) || 10;
 
