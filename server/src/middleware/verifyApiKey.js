@@ -1,4 +1,4 @@
-import { logError } from "../util/logging";
+import { logError } from "../util/logging.js";
 
 export default function verifyApiKey(req, res, next) {
   const clientKey = req.headers["x-api-key"];
