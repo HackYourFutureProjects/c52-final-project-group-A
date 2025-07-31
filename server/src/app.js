@@ -1,5 +1,5 @@
 import express from "express";
-import digestRouter from "./routes/weeklyDigest.js";
+import weeklyDigestRouter from "./routes/weeklyDigest.js";
 import postRouter from "./routes/post.js";
 import feedRouter from "./routes/feed.js";
 
@@ -18,7 +18,7 @@ app.use(express.json());
 // Post routes
 app.use("/api/post", postRouter);
 //
-app.use("/api/users", digestRouter);
+app.use("/api/users", weeklyDigestRouter);
 //
 app.use("/api/feed", feedRouter);
 

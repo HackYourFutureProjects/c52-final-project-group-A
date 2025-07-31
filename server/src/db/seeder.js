@@ -48,7 +48,11 @@ const TAG_POOL = [
 ];
 
 function getRandomTags() {
-  const shuffled = TAG_POOL.sort(() => 0.5 - Math.random());
+  const shuffled = [...TAG_POOL];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
   const count = Math.floor(Math.random() * 3) + 1; // returns 1 to 3 tags
   return shuffled.slice(0, count);
 }
