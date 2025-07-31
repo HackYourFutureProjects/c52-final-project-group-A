@@ -15,6 +15,7 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   created_at: { type: Date, default: Date.now },
   profile: profileSchema,
+  score: { type: Number, default: 0 },
   posts: [
     {
       type: Schema.Types.ObjectId,
@@ -25,6 +26,12 @@ const userSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Like",
+    },
+  ],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment",
     },
   ],
   following: [
@@ -52,8 +59,10 @@ export const validateUser = (userObject) => {
     "email",
     "created_at",
     "profile",
+    "score",
     "posts",
     "likes",
+    "comments",
     "following",
     "followers",
   ];
@@ -74,6 +83,17 @@ export const validateUser = (userObject) => {
 
   if (userObject.email == null) {
     errorList.push("email is a required field");
+  }
+
+  if (userObject.profile) {
+    if (userObject.profile.first_name == null) {
+      errorList.push("profile.first_name is a required field");
+    }
+    if (userObject.profile.last_name == null) {
+      errorList.push("profile.last_name is a required field");
+    }
+  } else {
+    errorList.push("profile is a required field");
   }
 
   return errorList;

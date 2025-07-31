@@ -12,6 +12,7 @@ const postSchema = new Schema({
     enum: Object.values(PostStatus),
     required: true,
   },
+  tags: { type: [String], default: [] },
   title: { type: String, required: true },
   content: { type: String, required: true },
   created_at: { type: Date, default: Date.now },
@@ -21,6 +22,7 @@ const postSchema = new Schema({
     ref: "User",
     required: true,
   },
+  score: { type: Number, default: 0 },
 });
 
 const Post = mongoose.model("posts", postSchema);
