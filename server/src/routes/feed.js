@@ -38,6 +38,19 @@ router.get("/", async (req, res) => {
           let: { userId: "$_id" },
           pipeline: [
             { $match: { $expr: { $eq: ["$author", "$$userId"] } } },
+            {
+              $lookup: {
+                from: "likes",
+                localField: "_id",
+                foreignField: "post",
+                as: "postLikes",
+              },
+            },
+            {
+              $addFields: {
+                likeCount: { $size: "$postLikes" },
+              },
+            },
             { $sort: { likeCount: -1 } },
             { $limit: 1 },
             {
