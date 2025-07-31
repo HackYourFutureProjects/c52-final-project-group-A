@@ -56,7 +56,7 @@ export const getFeed = async (req, res) => {
                 title: 1,
                 content: 1,
                 likeCount: 1,
-                createdAt: 1,
+                created_at: 1,
               },
             },
           ],
