@@ -9,7 +9,15 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import { logInfo, logError } from "../util/logging.js";
 
-dotenv.config();
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Add this to help resolve the correct path
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Now explicitly load the .env from the root of the project
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
 if (!SALT_ROUNDS) {
@@ -23,6 +31,27 @@ const NUM_USERS = 50;
 const MAX_NUM_POSTS_PER_USER = 10;
 const AVG_NUM_LIKES = 10; // average 10 likes per post
 const AVG_NUM_FOLLOWS = 5; // average of 5 follows per user
+
+const TAG_POOL = [
+  "travel",
+  "health",
+  "education",
+  "technology",
+  "food",
+  "sports",
+  "music",
+  "lifestyle",
+  "fashion",
+  "books",
+  "nature",
+  "photography",
+];
+
+function getRandomTags() {
+  const shuffled = TAG_POOL.sort(() => 0.5 - Math.random());
+  const count = Math.floor(Math.random() * 3) + 1; // returns 1 to 3 tags
+  return shuffled.slice(0, count);
+}
 
 async function seed() {
   logInfo("Starting database seeding...");
@@ -91,6 +120,7 @@ async function seed() {
         created_at: faker.date.past(),
         published_at: isPublished ? faker.date.recent() : null,
         author: user._id,
+        tags: getRandomTags(),
       });
 
       const savedPost = await post.save();

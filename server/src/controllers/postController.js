@@ -1,4 +1,4 @@
-import { Post } from "../models/User.js"; // TODO update the path after model is setted
+import Post from "../models/User.js"; // TODO update the path after model is setted
 // import jwt from "jsonwebtoken";
 
 //

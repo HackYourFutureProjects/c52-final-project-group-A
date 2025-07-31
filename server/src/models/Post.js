@@ -21,6 +21,7 @@ const postSchema = new Schema({
     ref: "User",
     required: true,
   },
+  tags: [{ type: String }],
 });
 
 const Post = mongoose.model("posts", postSchema);
@@ -34,6 +35,7 @@ export const validatePost = (postObject) => {
     "created_at",
     "published_at",
     "author",
+    "tags",
   ];
 
   const validatedKeysMessage = validateAllowedFields(postObject, allowedKeys);
