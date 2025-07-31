@@ -22,7 +22,7 @@ const postSchema = new Schema({
     ref: "User",
     required: true,
   },
-  tags: [{ type: String }],
+  // tags: [{ type: String }],
   score: { type: Number, default: 0 },
 });
 

@@ -31,7 +31,7 @@ export const getWeeklyDigest = async (req, res) => {
     const recentPosts = await Post.aggregate([
       {
         $match: {
-          created_at: { $gte: oneWeekAgo },
+          published_at: { $gte: oneWeekAgo },
           tags: { $exists: true, $ne: [] },
         },
       },

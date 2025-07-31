@@ -1,4 +1,3 @@
-
 import Post from "../models/Post.js";
 //import jwt from "jsonwebtoken";
 
