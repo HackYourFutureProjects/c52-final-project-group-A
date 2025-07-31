@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { LogError } from "concurrently";
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
 export const userRegister = async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
@@ -25,7 +26,7 @@ export const userRegister = async (req, res) => {
       return res.status(409).json({ error: "User already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
     const verificationCode = generateCode();
 
