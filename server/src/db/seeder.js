@@ -10,7 +10,15 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import { logInfo, logError } from "../util/logging.js";
 
-dotenv.config();
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Add this to help resolve the correct path
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Now explicitly load the .env from the root of the project
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const saltRounds = Number(process.env.SALT_ROUNDS);
 if (!saltRounds) {
@@ -47,6 +55,31 @@ const TAGS = [
   "movies",
   "literature",
 ];
+
+// const TAG_POOL = [
+//   "travel",
+//   "health",
+//   "education",
+//   "technology",
+//   "food",
+//   "sports",
+//   "music",
+//   "lifestyle",
+//   "fashion",
+//   "books",
+//   "nature",
+//   "photography",
+// ];
+
+// function getRandomTags() {
+//   const shuffled = [...TAG_POOL];
+//   for (let i = shuffled.length - 1; i > 0; i--) {
+//     const j = Math.floor(Math.random() * (i + 1));
+//     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+//   }
+//   const count = Math.floor(Math.random() * 3) + 1; // returns 1 to 3 tags
+//   return shuffled.slice(0, count);
+// }
 
 async function seed() {
   logInfo("Starting database seeding...");
@@ -120,6 +153,7 @@ async function seed() {
         created_at: faker.date.past(),
         published_at: isPublished ? faker.date.recent() : null,
         author: user._id,
+        // tags: getRandomTags(),
         score: score,
       });
 

@@ -22,6 +22,7 @@ const postSchema = new Schema({
     ref: "User",
     required: true,
   },
+  // tags: [{ type: String }],
   score: { type: Number, default: 0 },
 });
 
@@ -36,6 +37,7 @@ export const validatePost = (postObject) => {
     "created_at",
     "published_at",
     "author",
+    "tags",
   ];
 
   const validatedKeysMessage = validateAllowedFields(postObject, allowedKeys);
