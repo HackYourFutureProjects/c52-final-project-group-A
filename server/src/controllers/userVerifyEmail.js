@@ -1,6 +1,6 @@
 import PendingUser from "../models/PendingUser.js";
 import User, { validateUser } from "../models/User.js";
-import { LogError } from "../utils/logger.js";
+import { logError } from "../util/logging.js";
 
 export const verifyEmail = async (req, res) => {
   const { email, verificationCode } = req.body;
@@ -46,7 +46,7 @@ export const verifyEmail = async (req, res) => {
       .status(201)
       .json({ message: "Email verified and user created successfully" });
   } catch (err) {
-    LogError("Error:", err);
+    logError("Error:", err);
     return res.status(500).json({ error: "Server error" });
   }
 };
