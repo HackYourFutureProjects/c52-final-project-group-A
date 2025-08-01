@@ -1,0 +1,43 @@
+import getEnvVariable from "./util/getEnvVariable.js";
+
+const config = {
+  // server configuration
+  SALT_ROUNDS: getEnvVariable("SALT_ROUNDS", 10, Number),
+  MONGODB_URL: getEnvVariable("MONGODB_URL", ""),
+  PORT: getEnvVariable("PORT", 3000, Number),
+  // database seeding configuration
+  DROP_DB: getEnvVariable("DROP_DB", false, (val) => val === "true"),
+  NUM_USERS: getEnvVariable("NUM_USERS", 50, Number),
+  MAX_NUM_POSTS_PER_USER: getEnvVariable("MAX_NUM_POSTS_PER_USER", 10, Number),
+  AVG_NUM_LIKES: getEnvVariable("AVG_NUM_LIKES", 5, Number),
+  AVG_NUM_COMMENTS: getEnvVariable("AVG_NUM_COMMENTS", 3, Number),
+  AVG_NUM_FOLLOWS: getEnvVariable("AVG_NUM_FOLLOWS", 5, Number),
+  TAGS: [
+    "technology",
+    "education",
+    "health",
+    "finance",
+    "sports",
+    "travel",
+    "food",
+    "fashion",
+    "art",
+    "science",
+    "business",
+    "music",
+    "environment",
+    "photography",
+    "lifestyle",
+    "politics",
+    "culture",
+    "history",
+    "movies",
+    "literature",
+  ],
+  // email configuration
+  EMAIL_PROVIDER: getEnvVariable("EMAIL_PROVIDER", "gmail"),
+  EMAIL: getEnvVariable("EMAIL", ""),
+  EMAIL_PASSWORD: getEnvVariable("EMAIL_PASSWORD", ""),
+};
+
+export default config;
