@@ -19,31 +19,31 @@ const userSchema = new Schema({
   posts: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Post",
+      ref: "posts",
     },
   ],
   likes: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Like",
+      ref: "likes",
     },
   ],
   comments: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Comment",
+      ref: "comments",
     },
   ],
   following: [
     {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
     },
   ],
   followers: [
     {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
     },
   ],
 });

@@ -1,13 +1,14 @@
 import nodemailer from "nodemailer";
-import { logError } from "./logger.js";
-import OUR_EMAIL from "../config/emailConfig.js";
-import OUR_APP_PASSWORD from "../config/appPasswordConfig.js";
+import { logError } from "./logging.js";
+import config from "../config.js";
+
+const { EMAIL, EMAIL_PASSWORD, EMAIL_PROVIDER } = config;
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: EMAIL_PROVIDER,
   auth: {
-    user: OUR_EMAIL, // Use environment variables or a config file for security
-    pass: OUR_APP_PASSWORD, // Use environment variables or a config file for security
+    user: EMAIL, // Use environment variables or a config file for security
+    pass: EMAIL_PASSWORD, // Use environment variables or a config file for security
   },
 });
 

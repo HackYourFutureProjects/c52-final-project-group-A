@@ -5,81 +5,24 @@ import Follow from "../models/Follow.js";
 import Comment from "../models/Comment.js";
 import mongoose from "mongoose";
 import dbConnect from "./connectDB.js";
-import { faker } from "@faker-js/faker";
-import bcrypt from "bcrypt";
-import dotenv from "dotenv";
 import { logInfo, logError } from "../util/logging.js";
+import seedUser from "../util/seedUser.js";
+import seedPost from "../util/seedPost.js";
+import seedlike from "../util/seedLike.js";
+import seedComment from "../util/seedComment.js";
+import seedFollow from "../util/seedFollow.js";
+import config from "../config.js";
 
-import path from "path";
-import { fileURLToPath } from "url";
-
-// Add this to help resolve the correct path
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Now explicitly load the .env from the root of the project
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
-
-const saltRounds = Number(process.env.SALT_ROUNDS);
-if (!saltRounds) {
-  logError("No SALT_ROUNDS in .env file");
-  process.exit(1);
-}
-
-// ADJUST GLOBAL VARIABLES TO YOUR NEEDS
-const DROP_DB = true;
-const NUM_USERS = 50;
-const MAX_NUM_POSTS_PER_USER = 10;
-const AVG_NUM_LIKES = 10; // average 10 likes per post
-const AVG_NUM_COMMENTS = 3; // average of 3 comments per post
-const AVG_NUM_FOLLOWS = 5; // average of 5 follows per user
-const TAGS = [
-  "technology",
-  "education",
-  "health",
-  "finance",
-  "sports",
-  "travel",
-  "food",
-  "fashion",
-  "art",
-  "science",
-  "business",
-  "music",
-  "environment",
-  "photography",
-  "lifestyle",
-  "politics",
-  "culture",
-  "history",
-  "movies",
-  "literature",
-];
-
-// const TAG_POOL = [
-//   "travel",
-//   "health",
-//   "education",
-//   "technology",
-//   "food",
-//   "sports",
-//   "music",
-//   "lifestyle",
-//   "fashion",
-//   "books",
-//   "nature",
-//   "photography",
-// ];
-
-// function getRandomTags() {
-//   const shuffled = [...TAG_POOL];
-//   for (let i = shuffled.length - 1; i > 0; i--) {
-//     const j = Math.floor(Math.random() * (i + 1));
-//     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-//   }
-//   const count = Math.floor(Math.random() * 3) + 1; // returns 1 to 3 tags
-//   return shuffled.slice(0, count);
-// }
+const {
+  SALT_ROUNDS,
+  DROP_DB,
+  NUM_USERS,
+  MAX_NUM_POSTS_PER_USER,
+  TAGS,
+  AVG_NUM_LIKES,
+  AVG_NUM_COMMENTS,
+  AVG_NUM_FOLLOWS,
+} = config;
 
 async function seed() {
   logInfo("Starting database seeding...");
@@ -100,262 +43,23 @@ async function seed() {
 
   // generating users
   logInfo("Generating users...");
-  const users = [];
-
-  for (let i = 0; i < NUM_USERS; i++) {
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.lastName();
-    const username = faker.internet.username({ firstName, lastName });
-    const email = username + "@gmail.com";
-    const password = faker.internet.password({ length: 10 });
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const score = Math.floor(Math.random() * 100 + 1);
-
-    const user = new User({
-      username: username,
-      password: hashedPassword,
-      email: email,
-      profile: {
-        first_name: firstName,
-        last_name: lastName,
-        avatar: faker.image.avatar(),
-        bio: faker.lorem.paragraph({ min: 1, max: 5 }),
-      },
-      score: score,
-    });
-
-    const savedUser = await user.save();
-    users.push(savedUser);
-    if (i % 10 === 0 || i === NUM_USERS - 1)
-      logInfo(`${i + 1}/${NUM_USERS} users created`);
-  }
+  const users = await seedUser(NUM_USERS, SALT_ROUNDS);
 
   // generating posts
   logInfo("Generating posts...");
-  const posts = [];
-
-  for (const user of users) {
-    const userPostIds = [];
-
-    for (
-      let i = 0;
-      i < Math.floor(Math.random() * (MAX_NUM_POSTS_PER_USER + 1));
-      i++
-    ) {
-      const isPublished = Math.random() > 0.2; // 80% of posts will be published
-      const score = Math.floor(Math.random() * 100 + 1);
-
-      const post = new Post({
-        status: isPublished ? "PUBLISHED" : "DRAFT",
-        tags: faker.helpers.arrayElements(TAGS, { min: 1, max: 3 }),
-        title: faker.lorem.sentence({ min: 1, max: 8 }),
-        content: faker.lorem.paragraph({ min: 1, max: 10 }),
-        created_at: faker.date.past(),
-        published_at: isPublished ? faker.date.recent() : null,
-        author: user._id,
-        // tags: getRandomTags(),
-        score: score,
-      });
-
-      const savedPost = await post.save();
-      posts.push(savedPost);
-
-      userPostIds.push(savedPost._id);
-    }
-    if (userPostIds.length > 0) {
-      user.posts.push(...userPostIds);
-      await user.save();
-    }
-  }
+  const posts = await seedPost(users, MAX_NUM_POSTS_PER_USER, TAGS);
   logInfo(`Created ${posts.length} posts`);
 
   // generating likes
   logInfo("Generating likes...");
-  const numLikes = users.length * AVG_NUM_LIKES;
-
-  // getting existing likes to avoid duplication
-  const existingLikes = await Like.find({}, { user: 1, post: 1 }).lean();
-  const existingLikeSet = new Set(
-    existingLikes.map((like) => `${like.user}-${like.post}`),
-  );
-
-  const likes = [];
-  const userLikeUpdates = new Map();
-
-  for (let i = 0; i < numLikes; i++) {
-    const randomUser = users[Math.floor(Math.random() * users.length)];
-    const randomPost = posts[Math.floor(Math.random() * posts.length)];
-    const likeKey = `${randomUser._id}-${randomPost._id}`;
-
-    // checking for duplicates
-    if (!existingLikeSet.has(likeKey)) {
-      existingLikeSet.add(likeKey);
-
-      const like = new Like({
-        user: randomUser._id,
-        post: randomPost._id,
-        created_at: faker.date.recent(),
-      });
-
-      likes.push(like);
-      if (!userLikeUpdates.has(randomUser._id)) {
-        userLikeUpdates.set(randomUser._id, []);
-      }
-
-      userLikeUpdates.get(randomUser._id).push(like);
-    }
-  }
-  // saving likes in bulk
-  let insertedLikes = [];
-  if (likes.length > 0) {
-    insertedLikes = await Like.insertMany(likes);
-    logInfo(`Created ${insertedLikes.length} likes`);
-  } else {
-    logInfo("No new likes created");
-  }
-
-  // updating users with newly created likes
-  const usersBulk = [];
-  for (const [userId, likes] of userLikeUpdates.entries()) {
-    const likeIds = likes.map((like) => like._id);
-    usersBulk.push({
-      updateOne: {
-        filter: { _id: userId },
-        update: { $push: { likes: { $each: likeIds } } },
-      },
-    });
-  }
-
-  if (usersBulk.length > 0) {
-    await User.bulkWrite(usersBulk);
-    logInfo(`Updated ${usersBulk.length} users with new likes`);
-  }
+  await seedlike(users, posts, AVG_NUM_LIKES);
 
   logInfo("Generating comments...");
-  const numComments = posts.length * AVG_NUM_COMMENTS;
-
-  const comments = [];
-  const userCommentUpdates = new Map();
-
-  for (let i = 0; i < numComments; i++) {
-    const randomUser = users[Math.floor(Math.random() * users.length)];
-    const randomPost = posts[Math.floor(Math.random() * posts.length)];
-
-    const comment = new Comment({
-      created_at: faker.date.recent(),
-      user: randomUser._id,
-      post: randomPost._id,
-      content: faker.lorem.paragraph({ min: 1, max: 3 }),
-    });
-
-    comments.push(comment);
-
-    if (!userCommentUpdates.has(randomUser._id)) {
-      userCommentUpdates.set(randomUser._id, []);
-    }
-
-    userCommentUpdates.get(randomUser._id).push(comment);
-  }
-
-  // saving comments in bulk
-  let insertedComments = [];
-  if (comments.length > 0) {
-    insertedComments = await Comment.insertMany(comments);
-    logInfo(`Created ${insertedComments.length} comments`);
-  } else {
-    logInfo("No new comments created");
-  }
-
-  // updating users with newly created comments
-  const usersCommentsBulk = [];
-  for (const [userId, comments] of userCommentUpdates.entries()) {
-    const commentIds = comments.map((comment) => comment._id);
-    usersCommentsBulk.push({
-      updateOne: {
-        filter: { _id: userId },
-        update: { $push: { comments: { $each: commentIds } } },
-      },
-    });
-  }
-
-  if (usersCommentsBulk.length > 0) {
-    await User.bulkWrite(usersCommentsBulk);
-    logInfo(`Updated ${usersCommentsBulk.length} users with new comments`);
-  }
+  await seedComment(users, posts, AVG_NUM_COMMENTS);
 
   // generating follows
   logInfo("Generating follows...");
-  const numFollows = users.length * AVG_NUM_FOLLOWS;
-  const followSet = new Set();
-  const potentialFollows = [];
-
-  for (let i = 0; i < numFollows; i++) {
-    const followerIndex = Math.floor(Math.random() * users.length);
-    let followingIndex;
-
-    // making sure users don't follow themselves
-    do {
-      followingIndex = Math.floor(Math.random() * users.length);
-    } while (followerIndex === followingIndex);
-
-    const follower = users[followerIndex];
-    const following = users[followingIndex];
-
-    const followKey = `${follower._id}-${following._id}`;
-
-    if (!followSet.has(followKey)) {
-      followSet.add(followKey);
-      potentialFollows.push({
-        follower: follower._id,
-        following: following._id,
-      });
-    }
-  }
-
-  // pre-filtering duplicates
-  const existingFollows = await Follow.find({
-    $or: potentialFollows.map(({ follower, following }) => ({
-      follower,
-      following,
-    })),
-  });
-
-  const existingFollowSet = new Set(
-    existingFollows.map((follow) => `${follow.follower}-${follow.following}`),
-  );
-
-  const newFollows = potentialFollows.filter(
-    ({ follower, following }) =>
-      !existingFollowSet.has(`${follower}-${following}`),
-  );
-
-  // inserting new follows in bulk
-  if (newFollows.length > 0) {
-    await Follow.insertMany(newFollows);
-
-    // updating user references
-    for (const { follower, following } of newFollows) {
-      const followerUser = users.find((user) => user._id.equals(follower));
-      const followingUser = users.find((user) => user._id.equals(following));
-
-      followerUser.following.push(following);
-      followingUser.followers.push(follower);
-    }
-
-    await User.bulkWrite(
-      users.map((user) => ({
-        updateOne: {
-          filter: { _id: user._id },
-          update: {
-            $set: {
-              followers: user.followers,
-              following: user.following,
-            },
-          },
-        },
-      })),
-    );
-  }
+  await seedFollow(users, AVG_NUM_FOLLOWS);
 
   logInfo("Follows generated");
 }

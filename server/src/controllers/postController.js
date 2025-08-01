@@ -1,5 +1,4 @@
 import Post from "../models/Post.js";
-//import jwt from "jsonwebtoken";
 
 export const getAllPosts = async (req, res) => {
   try {

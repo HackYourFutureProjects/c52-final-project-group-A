@@ -4,12 +4,12 @@ import validateAllowedFields from "../util/validateAllowedFields.js";
 const followSchema = new Schema({
   follower: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     required: true,
   },
   following: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     required: true,
   },
 });
