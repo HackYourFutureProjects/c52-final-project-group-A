@@ -1,9 +1,13 @@
 import User from "../models/User.js";
-import { calculateUserScore } from "../util/score.js";
+import Post from "../models/Post.js";
+import Follow from "../models/Follow.js";
+import { calculateUserScore, calculatePostScore } from "../util/score.js";
 import { logError } from "../util/logging.js";
 
 export const getFeed = async (req, res) => {
   try {
+    const userId = req.user._id;
+    // top creators
     const ranked = await User.aggregate([
       {
         $lookup: {
@@ -66,7 +70,7 @@ export const getFeed = async (req, res) => {
       { $unwind: { path: "$topPost", preserveNullAndEmptyArrays: true } },
     ]);
 
-    const usersWithScore = ranked.map((user) => {
+    const topCreators = ranked.map((user) => {
       const likesCount = user.likesReceived.length;
       const followersCount = user.followerCount.length;
 
@@ -77,9 +81,72 @@ export const getFeed = async (req, res) => {
       };
     });
 
-    usersWithScore.sort((a, b) => b.score - a.score);
+    topCreators.sort((a, b) => b.score - a.score);
 
-    res.json(usersWithScore);
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    // Get list of users the logged-in user follows
+    const following = await Follow.find({ follower: userId }).select(
+      "following",
+    );
+    const followingIds = following.map((f) => f.following);
+
+    // Get posts by followed users from last 7 days
+    const recentPosts = await Post.aggregate([
+      {
+        $match: {
+          author: { $in: followingIds },
+          published_at: { $gte: oneWeekAgo },
+        },
+      },
+      {
+        $lookup: {
+          from: "likes",
+          localField: "_id",
+          foreignField: "post",
+          as: "likes",
+        },
+      },
+      {
+        $addFields: {
+          likeCount: { $size: "$likes" },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          content: 1,
+          tags: 1,
+          likeCount: 1,
+          published_at: 1,
+        },
+      },
+    ]);
+
+    // Get the logged-in user’s tag preference (based on their own posts)
+    const userPosts = await Post.find({ author: userId });
+    const tagFrequency = {};
+    userPosts.forEach((post) => {
+      post.tags?.forEach((tag) => {
+        tagFrequency[tag] = (tagFrequency[tag] || 0) + 1;
+      });
+    });
+
+    // Score each post based on user interests
+    const homeFeed = recentPosts.map((post) => ({
+      ...post,
+      score: calculatePostScore(post.likeCount, post.tags, tagFrequency),
+    }));
+
+    homeFeed.sort((a, b) => b.score - a.score);
+
+    //  Return both feeds
+    res.json({
+      homeFeed: homeFeed.slice(0, 10), // personalized for logged-in user
+      topCreators: topCreators.slice(0, 5), // global trending creators
+    });
   } catch (err) {
     logError("Error generating feed:", err.message);
     res.status(500).json({ error: "Failed to generate feed" });

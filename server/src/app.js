@@ -20,7 +20,7 @@ app.use(express.json());
 app.use("/api/post", postRouter);
 
 //
-app.use("/api/users/:id", weeklyDigestRouter);
+app.use("/api/weekly-digest", weeklyDigestRouter);
 //
 app.use("/api/feed", feedRouter);
 
