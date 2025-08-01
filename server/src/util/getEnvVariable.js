@@ -4,7 +4,7 @@ dotenv.config();
 
 function getEnvVariable(variable, defaultValue, transformFn = (val) => val) {
   const value = process.env[variable];
-  if (!value) return defaultValue;
+  if (value === undefined || value === null) return defaultValue;
   return transformFn(value);
 }
 
