@@ -19,10 +19,9 @@ const postSchema = new Schema({
   published_at: Date,
   author: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     required: true,
   },
-  // tags: [{ type: String }],
   score: { type: Number, default: 0 },
 });
 

@@ -1,11 +1,12 @@
-import { sendEmail } from "../util/emailService.js";
+import sendEmail from "../util/mailer.js";
 import generateCode from "../util/codeGenerator.js";
 import User from "../models/User.js";
 import PendingUser from "../models/PendingUser.js";
-import bcrypt from "bcryptjs";
-import { LogError } from "../utils/logger.js";
+import bcrypt from "bcrypt";
+import { logError } from "../util/logging.js";
+import config from "../config.js";
 
-const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS) || 10;
+const { SALT_ROUNDS } = config;
 
 export const userRegister = async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
@@ -45,7 +46,7 @@ export const userRegister = async (req, res) => {
       message: "Verification code sent to email",
     });
   } catch (err) {
-    LogError("Error:", err);
+    logError("Error:", err);
     return res.status(500).json({ error: "Server error" });
   }
 };
