@@ -8,6 +8,18 @@
   box-sizing: border-box;
 }
 
+:root {
+  --font-sans: Urbanist, sans-serif;
+  --font-mono: Roboto Mono, monospace;
+  --color-white: rgb(255, 255, 255);
+  --color-semi-transparent-white: rgba(255, 255, 255, 0.5);
+  --color-black: #0d0d0d;
+  --color-border: #ccc;
+  --color-orange: #fe4a22;
+  --color-yellow: #ffd026;
+  --color-dark-grey: #1a1a1aff;
+}
+
 ol,
 ul,
 menu {
@@ -15,5 +27,7 @@ menu {
 }
 
 body {
+  font-family: "Urbanist", sans-serif;
+  font-weight: 400;
   padding: 20px;
 }

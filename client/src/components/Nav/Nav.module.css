@@ -1,0 +1,39 @@
+.nav {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    background: var(--color-semi-transparent-white);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--color-border);
+    border-radius: 150px;
+}
+.svg {
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.logo {
+    position: relative;
+    margin: 0 10px;
+    width: 200px;
+}
+.navButton {
+    padding: 32px 60px 40px 60px;
+}
+.nav a {
+    color: var(--color-black);
+    text-decoration: none;
+    font-size: 2.5rem;
+    font-weight: 500;
+    border-radius: 150px;
+}
+.nav a:hover {
+    background: var(--color-yellow);
+}
