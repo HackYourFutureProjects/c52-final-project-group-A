@@ -1,9 +1,10 @@
 import PendingUser from "../models/PendingUser.js";
-import User, { validateUser } from "../models/User.js";
+import User from "../models/User.js";
 import { logError } from "../util/logging.js";
 
 export const verifyEmail = async (req, res) => {
   const { email, verificationCode } = req.body;
+
   if (!email || !verificationCode) {
     return res
       .status(400)
@@ -32,11 +33,6 @@ export const verifyEmail = async (req, res) => {
       },
       password: pending.password,
     };
-    // Validate user data
-    const validationErrors = validateUser(userData);
-    if (validationErrors.length > 0) {
-      return res.status(400).json({ errors: validationErrors });
-    }
 
     const newUser = new User(userData);
     await newUser.save();
