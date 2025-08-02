@@ -5,8 +5,11 @@ import User from "../models/User.js";
 
 export const getWeeklyDigest = async (req, res) => {
   try {
-    const users = await User.find();
-    const digestByUser = [];
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 50;
+    const skip = (page - 1) * limit;
+
+    const users = await User.find().skip(skip).limit(limit);
     // Posts from the last 7 days
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
@@ -39,12 +42,17 @@ export const getWeeklyDigest = async (req, res) => {
           tags: 1,
           likeCount: 1,
           published_at: 1,
+          author: 1,
         },
       },
     ]);
 
+    const digestByUser = [];
+
     for (const user of users) {
-      const userPosts = await Post.find({ author: user._id });
+      const userPosts = recentPosts.filter(
+        (post) => post.author?.toString() === user._id.toString(),
+      );
       const tagFrequency = {};
 
       userPosts.forEach((post) => {

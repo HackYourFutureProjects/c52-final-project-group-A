@@ -126,7 +126,7 @@ export const getFeed = async (req, res) => {
     ]);
 
     // Get the logged-in user’s tag preference (based on their own posts)
-    const userPosts = await Post.find({ author: userId });
+    const userPosts = await Post.find({ author: userId }).select("tags");
     const tagFrequency = {};
     userPosts.forEach((post) => {
       post.tags?.forEach((tag) => {
