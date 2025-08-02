@@ -18,8 +18,11 @@ app.use(express.json());
 
 // Post routes
 app.use("/api/post", postRouter);
-app.use("/api/users/:id", weeklyDigestRouter);
+//
+app.use("/api/weekly-digest", weeklyDigestRouter);
+//
 app.use("/api/feed", feedRouter);
+
 app.use("/api/register", registerRouter);
 
 export default app;
