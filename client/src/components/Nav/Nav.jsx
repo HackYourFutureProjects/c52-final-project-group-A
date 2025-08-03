@@ -43,7 +43,6 @@ const Nav = () => {
     </div>
     // TODO: wrap everything in a div, move and adjust style.nav to the div and add a Sign-in button
     // TODO: change hover from buttons to another style and yellow supposed to show where you are in the app
-
   );
 };
 
