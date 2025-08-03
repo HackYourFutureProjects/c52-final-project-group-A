@@ -25,22 +25,25 @@ const Logo = () => {
 
 const Nav = () => {
   return (
+    <div className={style.navContainer}>
+      <ul className={style.nav}>
+        <Link to="#">
+          <li className={style.navButton}>Home</li>
+        </Link>
+        <Link to="#">
+          <li className={style.navButton}>Search</li>
+        </Link>
+        <li className={style.logo}>
+          <Logo />
+        </li>
+        <Link to="#">
+          <li className={style.navButton}>Profile</li>
+        </Link>
+      </ul>
+    </div>
     // TODO: wrap everything in a div, move and adjust style.nav to the div and add a Sign-in button
     // TODO: change hover from buttons to another style and yellow supposed to show where you are in the app
-    <ul className={style.nav}>
-      <Link to="#">
-        <li className={style.navButton}>Home</li>
-      </Link>
-      <Link to="#">
-        <li className={style.navButton}>Search</li>
-      </Link>
-      <li className={style.logo}>
-        <Logo />
-      </li>
-      <Link to="#">
-        <li className={style.navButton}>Profile</li>
-      </Link>
-    </ul>
+
   );
 };
 

@@ -6,11 +6,16 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 :root {
+    /* Fonts */
   --font-sans: Urbanist, sans-serif;
   --font-mono: Roboto Mono, monospace;
+
+    /* Colors */
   --color-white: rgb(255, 255, 255);
   --color-semi-transparent-white: rgba(255, 255, 255, 0.5);
   --color-black: #0d0d0d;
@@ -27,7 +32,7 @@ menu {
 }
 
 body {
-  font-family: "Urbanist", sans-serif;
+  font-family: var(--font-sans);
   font-weight: 400;
   padding: 20px;
 }
