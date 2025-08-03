@@ -34,6 +34,11 @@ const config = {
     "movies",
     "literature",
   ],
+  EMAIL_VALIDATION_EXPIRATION: getEnvVariable(
+    "EMAIL_VALIDATION_EXPIRATION",
+    600,
+    Number,
+  ),
   // email configuration
   EMAIL_PROVIDER: getEnvVariable("EMAIL_PROVIDER", "gmail"),
   EMAIL: getEnvVariable("EMAIL", ""),
