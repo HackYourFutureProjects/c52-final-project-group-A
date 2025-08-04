@@ -1,11 +1,16 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import weeklyDigestRouter from "./routes/weeklyDigest.js";
 import postRouter from "./routes/post.js";
 import feedRouter from "./routes/feed.js";
 import registerRouter from "./routes/register.js";
+import loginRouter from "./routes/login.js";
 
 // Create an express server
 const app = express();
+
+// Use cookie parser middleware to handle cookies
+app.use(cookieParser());
 
 // Tell express to use the json middleware
 app.use(express.json());
@@ -24,5 +29,7 @@ app.use("/api/weekly-digest", weeklyDigestRouter);
 app.use("/api/feed", feedRouter);
 
 app.use("/api/register", registerRouter);
+
+app.use("/api/login", loginRouter);
 
 export default app;

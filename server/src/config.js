@@ -5,7 +5,8 @@ const config = {
   NODE_ENV: getEnvVariable("NODE_ENV", "development"),
   // server configuration
   SALT_ROUNDS: getEnvVariable("SALT_ROUNDS", 10, Number),
-  MONGODB_URL: getEnvVariable("MONGODB_URL", ""),
+  JWT_SECRET: getEnvVariable("JWT_SECRET"),
+  MONGODB_URL: getEnvVariable("MONGODB_URL"),
   PORT: getEnvVariable("PORT", 3000, Number),
   // database seeding configuration
   DROP_DB: getEnvVariable("DROP_DB", false, (val) => val === "true"),
@@ -43,8 +44,8 @@ const config = {
   ),
   // email configuration
   EMAIL_PROVIDER: getEnvVariable("EMAIL_PROVIDER", "gmail"),
-  EMAIL: getEnvVariable("EMAIL", ""),
-  EMAIL_PASSWORD: getEnvVariable("EMAIL_PASSWORD", ""),
+  EMAIL: getEnvVariable("EMAIL"),
+  EMAIL_PASSWORD: getEnvVariable("EMAIL_PASSWORD"),
 };
 
 export default config;
