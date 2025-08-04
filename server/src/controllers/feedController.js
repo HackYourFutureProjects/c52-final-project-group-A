@@ -95,7 +95,7 @@ export const getFeed = async (req, res) => {
     const followingIds = following.map((f) => f.following);
     const likedPosts = await Like.find({ user: userId })
       .select("post")
-      .limit(1000);
+      .limit(MAX_LIKED_POSTS_LIMIT);
     const likedPostIds = likedPosts.map((like) => like.post);
 
     // Get posts by followed users from last 7 days
