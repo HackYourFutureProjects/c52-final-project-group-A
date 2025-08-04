@@ -49,9 +49,9 @@ export const userRegister = async (req, res) => {
       username,
       password: hashedPassword,
       email,
-      firstName,
-      lastName,
-      verificationCode,
+      first_name: firstName,
+      last_name: lastName,
+      verification_code: verificationCode,
     });
 
     await pending.save();
@@ -63,6 +63,6 @@ export const userRegister = async (req, res) => {
     });
   } catch (err) {
     logError("Error:", err);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: err });
   }
 };
