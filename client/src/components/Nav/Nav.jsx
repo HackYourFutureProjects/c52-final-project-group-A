@@ -35,10 +35,10 @@ function Nav() {
       <ul className={style.nav}>
         <li
           className={
-            location.pathname === "/" ? style.navButtonActive : style.navButton
+            location.pathname === "/home" ? style.navButtonActive : style.navButton
           }
         >
-          <Link to="/">{mobile ? <HomeIcon /> : "Home"}</Link>
+          <Link to="/home">{mobile ? <HomeIcon /> : "Home"}</Link>
         </li>
         <li className={style.navButton}>
           <Link to="#">{mobile ? <SearchIcon /> : "Search"}</Link>
