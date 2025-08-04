@@ -4,7 +4,7 @@ import User from "../models/User.js";
 import { logError } from "../util/logging.js";
 import config from "../config.js";
 
-const { JWT_SECRET } = config;
+const { JWT_SECRET, NODE_ENV } = config;
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -34,7 +34,7 @@ export const loginUser = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      secure: process.env.NODE_ENV === "production",
+      secure: NODE_ENV === "production",
       sameSite: "strict",
     });
 
