@@ -1,14 +1,16 @@
+/* NavBar */
 .navContainer {
   position: fixed;
-  top: 40px;
+  top: 2rem;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 1.5rem;
 }
 .nav {
   display: flex;
-  gap: 15px;
+  gap: 1rem;
   justify-content: center;
   align-items: center;
   padding: 8px;
@@ -17,18 +19,18 @@
   border: 1px solid var(--color-border);
   border-radius: 150px;
 }
-.svg {
+.logo {
   position: absolute;
   top: -50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  height: 170px;
-  width: 170px;
+  height: 150px;
+  width: 150px;
 }
-.logo {
+.logoContainer {
   position: relative;
   margin: 0 10px;
-  width: 170px;
+  width: 150px;
 }
 .navButton {
   position: relative;
@@ -39,13 +41,52 @@
   display: block;
   width: 100%;
   height: 100%;
-  padding: 20px 35px 25px 35px;
+  padding: 24px 35px 29px 35px;
   border-radius: 150px;
   color: var(--color-black);
   text-decoration: none;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 500;
 }
-.nav .navButton:hover {
+.navButton:hover {
   border: 1px solid var(--color-border);
+}
+.navButtonActive {
+  position: relative;
+  border-radius: 150px;
+  background: var(--color-yellow);
+}
+.navButtonActive a {
+  padding: 25px 36px 30px 36px;
+}
+
+/* Sign-in button */
+
+.signInButton {
+  background: var(--color-orange);
+  color: var(--color-white);
+  border: none;
+  cursor: pointer;
+  padding: 30px 45px 35px 45px;
+  border-radius: 150px;
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* @media */
+@media (max-width: 768px) {
+  .navContainer {
+    top: auto;
+    bottom: 2rem;
+  }
+  .navButton {
+    border: none;
+  }
+  .navButton:hover {
+    border: none;
+  }
+  .nav a {
+    padding: 20px 36px 18px 36px;
+  }
 }

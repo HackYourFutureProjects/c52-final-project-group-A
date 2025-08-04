@@ -1,46 +1,72 @@
 import { Link } from "react-router-dom";
 import style from "./Nav.module.css";
+import Button from "../Button.jsx";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Logo from "../Logo.jsx";
+import HomeIcon from "../HomeIcon.jsx";
+import SearchIcon from "../SearchIcon.jsx";
+import ProfileIcon from "../ProfileIcon.jsx";
 
-const Logo = () => {
-  return (
-    <svg
-      className={style.svg}
-      viewBox="0 0 470 470"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M80.7006 270.881L144.297 207.284C156.013 195.568 175.008 195.568 186.724 207.284L262.515 283.075C274.23 294.79 274.23 313.785 262.515 325.501L186.721 401.295C175.005 413.011 156.01 413.011 144.295 401.295L0 257L33.4101 223.59L80.7006 270.881ZM165.509 355.689L216.908 304.289L165.51 252.89L114.11 304.29L165.509 355.689Z"
-        fill="#1A1A1A"
-      />
-      <path
-        d="M283.075 68.5014C294.791 56.7857 313.786 56.7857 325.502 68.5014L469.796 212.796L436.386 246.206L389.094 198.914L325.498 262.511C313.782 274.226 294.787 274.226 283.071 262.511L207.282 186.722C195.566 175.006 195.566 156.011 207.282 144.295L283.075 68.5014ZM304.285 216.905L355.685 165.505L304.287 114.107L252.887 165.507L304.285 216.905Z"
-        fill="#1A1A1A"
-      />
-    </svg>
-  );
-};
+function Nav() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [mobile, setMobile] = useState(false);
 
-// TODO: add a Sign-in button
-const Nav = () => {
+  const handleSignIn = () => {
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className={style.navContainer}>
       <ul className={style.nav}>
-        <li className={style.navButton}>
-          <Link to="#">Home</Link>
+        <li
+          className={
+            location.pathname === "/" ? style.navButtonActive : style.navButton
+          }
+        >
+          <Link to="/">{mobile ? <HomeIcon /> : "Home"}</Link>
         </li>
         <li className={style.navButton}>
-          <Link to="#">Search</Link>
+          <Link to="#">{mobile ? <SearchIcon /> : "Search"}</Link>
         </li>
-        <li className={style.logo}>
-          <Logo />
-        </li>
-        <li className={style.navButton}>
-          <Link to="#">Profile</Link>
+        {!mobile && (
+          <li className={style.logoContainer}>
+            <Logo className={style.logo} />
+          </li>
+        )}
+        <li
+          className={
+            location.pathname === "/profile"
+              ? style.navButtonActive
+              : style.navButton
+          }
+        >
+          <Link to="/profile">{mobile ? <ProfileIcon /> : "Profile"}</Link>
         </li>
       </ul>
+      {!mobile && (
+        <Button
+          label="Sign-in"
+          onClick={handleSignIn}
+          className={style.signInButton}
+        />
+      )}
     </div>
   );
-};
+}
 
 export default Nav;
