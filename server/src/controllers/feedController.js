@@ -141,7 +141,7 @@ export const getFeed = async (req, res) => {
         tagFrequency[tag] = (tagFrequency[tag] || 0) + 1;
       });
     });
-    // Tags from liked posts
+    // Include tags from liked posts in frequency calculation
 
     likedTaggedPosts.forEach((post) => {
       post.tags?.forEach((tag) => {
