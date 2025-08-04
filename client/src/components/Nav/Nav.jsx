@@ -5,8 +5,6 @@ const Logo = () => {
   return (
     <svg
       className={style.svg}
-      width="200"
-      height="200"
       viewBox="0 0 470 470"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -41,8 +39,7 @@ const Nav = () => {
         </Link>
       </ul>
     </div>
-    // TODO: wrap everything in a div, move and adjust style.nav to the div and add a Sign-in button
-    // TODO: change hover from buttons to another style and yellow supposed to show where you are in the app
+    // TODO: add a Sign-in button
   );
 };
 
