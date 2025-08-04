@@ -1,4 +1,3 @@
-
 function Profile() {
   return <>Profile Page</>;
 }

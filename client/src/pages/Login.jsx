@@ -1,7 +1,7 @@
-import SignIn from '../components/SignIn/SignIn.jsx';
+import SignIn from "../components/SignIn/SignIn.jsx";
 
 function Login() {
-  return <SignIn />
+  return <SignIn />;
 }
 
 export default Login;
