@@ -62,7 +62,7 @@ export const userRegister = async (req, res) => {
       message: "Verification code sent to email",
     });
   } catch (err) {
-    logError("Error:", err);
-    return res.status(500).json({ error: err });
+    logError("Error in userRegister:", err);
+    return res.status(500).json({ error: "An internal server error occurred" });
   }
 };
