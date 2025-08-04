@@ -31,7 +31,7 @@ function Nav() {
   }, []);
 
   return (
-    <div className={style.navContainer}>
+    <nav className={style.navContainer}>
       <ul className={style.nav}>
         <li
           className={
@@ -67,7 +67,7 @@ function Nav() {
           className={style.signInButton}
         />
       )}
-    </div>
+    </nav>
   );
 }
 
