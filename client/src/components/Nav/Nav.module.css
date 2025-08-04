@@ -31,7 +31,7 @@
   width: 170px;
 }
 .navButton {
-  padding: 17px 35px 25px 35px;
+  padding: 20px 35px 25px 35px;
 }
 .nav a {
   color: var(--color-black);
@@ -40,7 +40,6 @@
   font-weight: 500;
   border-radius: 150px;
   border: 1px solid transparent;
-  transition: all 0.1s ease-in-out;
 }
 .nav a:hover {
   border: 1px solid var(--color-border);
