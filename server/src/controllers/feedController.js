@@ -133,9 +133,10 @@ export const getFeed = async (req, res) => {
 
     // Get the logged-in user’s tag preference (based on their own posts)
     const userPosts = await Post.find({ author: userId }).select("tags");
-    const likedTaggedPosts = await Post.find({
-      _id: { $in: likedPostIds },
-    }).select("tags");
+    const likedTaggedPosts = await Post.aggregate([
+      { $match: { _id: { $in: likedPostIds } } },
+      { $project: { tags: 1 } },
+    ]);
 
     const tagFrequency = {};
     userPosts.forEach((post) => {
