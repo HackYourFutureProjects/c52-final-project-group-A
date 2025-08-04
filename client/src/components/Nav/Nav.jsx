@@ -21,25 +21,25 @@ const Logo = () => {
   );
 };
 
+// TODO: add a Sign-in button
 const Nav = () => {
   return (
     <div className={style.navContainer}>
       <ul className={style.nav}>
-        <Link to="#">
-          <li className={style.navButton}>Home</li>
-        </Link>
-        <Link to="#">
-          <li className={style.navButton}>Search</li>
-        </Link>
+        <li className={style.navButton}>
+          <Link to="#">Home</Link>
+        </li>
+        <li className={style.navButton}>
+          <Link to="#">Search</Link>
+        </li>
         <li className={style.logo}>
           <Logo />
         </li>
-        <Link to="#">
-          <li className={style.navButton}>Profile</li>
-        </Link>
+        <li className={style.navButton}>
+          <Link to="#">Profile</Link>
+        </li>
       </ul>
     </div>
-    // TODO: add a Sign-in button
   );
 };
 
