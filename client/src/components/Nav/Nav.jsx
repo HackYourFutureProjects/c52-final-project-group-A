@@ -35,7 +35,9 @@ function Nav() {
       <ul className={style.nav}>
         <li
           className={
-            location.pathname === "/home" ? style.navButtonActive : style.navButton
+            location.pathname === "/home"
+              ? style.navButtonActive
+              : style.navButton
           }
         >
           <Link to="/home">{mobile ? <HomeIcon /> : "Home"}</Link>
