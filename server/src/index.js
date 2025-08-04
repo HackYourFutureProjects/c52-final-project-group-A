@@ -1,26 +1,17 @@
-// Load our .env variables
-import dotenv from "dotenv";
 import express from "express";
-dotenv.config();
-
 import app from "./app.js";
 import { logInfo, logError } from "./util/logging.js";
 import connectDB from "./db/connectDB.js";
 import testRouter from "./testRouter.js";
+import config from "./config.js";
 
-// The environment should set the port
-const port = process.env.PORT;
-
-if (port == null) {
-  // If this fails, make sure you have created a `.env` file in the right place with the PORT set
-  logError(new Error("Cannot find a PORT number, did you create a .env file?"));
-}
+const { PORT, NODE_ENV } = config;
 
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(port, () => {
-      logInfo(`Server started on port ${port}`);
+    app.listen(PORT, () => {
+      logInfo(`Server started on port ${PORT}`);
     });
   } catch (error) {
     logError(error);
@@ -32,7 +23,7 @@ const startServer = async () => {
  * We only want to host our client code when in production mode as we then want to use the production build that is built in the dist folder.
  * When not in production, don't host the files, but the development version of the app can connect to the backend itself.
  */
-if (process.env.NODE_ENV === "production") {
+if (NODE_ENV === "production") {
   app.use(
     express.static(new URL("../../client/dist", import.meta.url).pathname),
   );
@@ -45,7 +36,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 /****** For cypress we want to provide an endpoint to seed our data ******/
-if (process.env.NODE_ENV !== "production") {
+if (NODE_ENV !== "production") {
   app.use("/api/test", testRouter);
 }
 

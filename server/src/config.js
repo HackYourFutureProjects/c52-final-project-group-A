@@ -1,6 +1,8 @@
 import getEnvVariable from "./util/getEnvVariable.js";
 
 const config = {
+  // node env production | development
+  NODE_ENV: getEnvVariable("NODE_ENV", "development"),
   // server configuration
   SALT_ROUNDS: getEnvVariable("SALT_ROUNDS", 10, Number),
   MONGODB_URL: getEnvVariable("MONGODB_URL", ""),
