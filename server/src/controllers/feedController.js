@@ -84,7 +84,7 @@ export const getFeed = async (req, res) => {
 
     topCreators.sort((a, b) => b.score - a.score);
 
-    // login feed...
+    // logged-in feed...
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
