@@ -75,6 +75,7 @@
 }
 
 /* @media */
+/* TODO: write more media starting from mobile and scaling upwards */
 @media (max-width: 768px) {
   .navContainer {
     top: auto;
