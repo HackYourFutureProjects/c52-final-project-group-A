@@ -19,7 +19,7 @@ function SignIn() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ formValues }),
+      body: JSON.stringify(formValues),
     };
     performFetch(options);
   };
@@ -37,6 +37,7 @@ function SignIn() {
         <form onSubmit={handleSubmit} className={style.form}>
           <InputField
             name={"email"}
+            type={"email"}
             placeholder={"Email"}
             value={formValues.email}
             onChange={handleChange}
@@ -45,6 +46,7 @@ function SignIn() {
           />
           <InputField
             name={"password"}
+            type={"password"}
             placeholder={"Password"}
             value={formValues.password}
             onChange={handleChange}

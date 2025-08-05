@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 function InputField({
   name,
+  type,
   placeholder,
   value,
   onChange,
@@ -13,7 +14,7 @@ function InputField({
     <label htmlFor={name} className={style.label}>
       <input
         id={name}
-        type={name}
+        type={type}
         name={name}
         value={value}
         onChange={onChange}
@@ -28,6 +29,7 @@ function InputField({
 
 InputField.propTypes = {
   name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   value: PropTypes.string,
   onChange: PropTypes.func,
