@@ -5,15 +5,15 @@ import useFetch from "../../hooks/useFetch.js";
 import { useState } from "react";
 import GoogleButton from "../GoogleButton/GoogleButton.jsx";
 import InputField from "../InputField/InputField.jsx";
-import config from "../../config.js";
+import { config } from "dotenv";
 
 function SignIn() {
   const [formValues, setFormValues] = useState({ email: "", password: "" });
   const handleChange = (e) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
-  const { VITE_BACKEND_URL } = config;
-  const { performFetch } = useFetch(`${VITE_BACKEND_URL}/login`);
+  const { BACKEND_URL } = config;
+  const { performFetch } = useFetch(`${BACKEND_URL}/login`);
   const handleSubmit = (e) => {
     e.preventDefault();
     const options = {

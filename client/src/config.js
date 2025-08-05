@@ -1,8 +1,8 @@
 import getEnv from "./util/getEnv.js";
 
 const config = {
-  VITE_BACKEND_URL: getEnv("VITE_BACKEND_URL"),
-  VITE_CLIENT_ID: getEnv("VITE_CLIENT_ID"),
+  BACKEND_URL: getEnv("VITE_BACKEND_URL", "http://localhost:3000"),
+  CLIENT_ID: getEnv("VITE_CLIENT_ID", "defaultClientId"),
 };
 
 export default config;

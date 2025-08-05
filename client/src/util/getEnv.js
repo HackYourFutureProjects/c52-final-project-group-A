@@ -1,6 +1,6 @@
-function getEnv(variable, transformFn = (val) => val) {
+function getEnv(variable, defaultValue, transformFn = (val) => val) {
   const value = import.meta.env[variable];
-  if (value === undefined || value === null) return;
+  if (value === undefined || value === null) return defaultValue;
   return transformFn(value);
 }
 

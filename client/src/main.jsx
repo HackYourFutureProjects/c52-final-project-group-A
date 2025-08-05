@@ -5,11 +5,11 @@ import AppWrapper from "./AppWrapper";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import config from "./config.js";
 
-const { VITE_CLIENT_ID } = config;
+const { CLIENT_ID } = config;
 
 createRoot(document.getElementById("root")).render(
   <AppWrapper>
-    <GoogleOAuthProvider clientId={VITE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={CLIENT_ID}>
       <App />
     </GoogleOAuthProvider>
   </AppWrapper>,
