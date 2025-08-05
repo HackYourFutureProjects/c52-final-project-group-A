@@ -6,6 +6,7 @@ import { logError } from "../util/logging.js";
 import Like from "../models/Like.js";
 import config from "../config.js";
 
+const { MAX_LIKED_POSTS_LIMIT } = config;
 // ...
 
 export const getFeed = async (req, res) => {
@@ -98,7 +99,7 @@ export const getFeed = async (req, res) => {
     const followingIds = following.map((f) => f.following);
     const likedPosts = await Like.find({ user: userId })
       .select("post")
-      .limit(config.MAX_LIKED_POSTS_LIMIT);
+      .limit(MAX_LIKED_POSTS_LIMIT);
     const likedPostIds = likedPosts.map((like) => like.post);
 
     // Get posts by followed users from last 7 days
