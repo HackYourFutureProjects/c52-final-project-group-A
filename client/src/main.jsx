@@ -3,16 +3,13 @@ import "./index.css";
 import App from "./App.jsx";
 import AppWrapper from "./AppWrapper";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import config from "./config.js";
 
-const clientId = import.meta.env.VITE_CLIENT_ID;
-
-if (!clientId) {
-  throw new Error("VITE_CLIENT_ID environment variable is not defined.");
-}
+const { VITE_CLIENT_ID } = config;
 
 createRoot(document.getElementById("root")).render(
   <AppWrapper>
-    <GoogleOAuthProvider clientId={clientId}>
+    <GoogleOAuthProvider clientId={VITE_CLIENT_ID}>
       <App />
     </GoogleOAuthProvider>
   </AppWrapper>,
