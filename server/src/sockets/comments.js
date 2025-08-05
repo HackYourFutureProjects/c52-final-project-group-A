@@ -1,8 +1,9 @@
 import Comment, { validateComment } from "../models/Comment.js";
+import { logInfo } from "../util/logging.js";
 
 export default function initCommentSocket(io) {
   io.on("connection", (socket) => {
-    console.log("WS connected:", socket.id);
+    logInfo(`WS connected: ${socket.id}`);
 
     // Subscribe to the post room
     socket.on("join_post", (postId) => {

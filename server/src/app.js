@@ -1,7 +1,5 @@
 import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
-
 import cors from "cors";
 import weeklyDigestRouter from "./routes/weeklyDigest.js";
 import postRouter from "./routes/post.js";
@@ -9,7 +7,6 @@ import feedRouter from "./routes/feed.js";
 import registerRouter from "./routes/register.js";
 import commentsRouter from "./routes/comments.js";
 import loginRouter from "./routes/login.js";
-import commentsRouter from "./routes/comments.js";
 
 // Create an express server
 const app = express();
@@ -39,7 +36,6 @@ if (process.env.NODE_ENV !== "production") {
     }),
   );
 }
-
 
 // Tell express to use the json middleware
 app.use(express.json());
