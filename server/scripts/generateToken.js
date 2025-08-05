@@ -14,8 +14,12 @@
 // // 🔍 TEST that env is loaded
 // console.log("✅ process.env.JWT_SECRET =", process.env.JWT_SECRET);
 
-// // ✅ Use a real seeded user ID
-// const seededUserId = "688ca9becc799a751a915894"; // Replace with actual ID from DB
+// // ✅ Use a real seeded user ID from environment variable
+// const seededUserId = process.env.SEEDED_USER_ID;
+// if (!seededUserId) {
+//   console.error("❌ SEEDED_USER_ID environment variable not set. Please set it in your .env file.");
+//   process.exit(1);
+// }
 
 // // ✅ Generate JWT
 // const token = jwt.sign({ _id: seededUserId }, config.JWT_SECRET, {
