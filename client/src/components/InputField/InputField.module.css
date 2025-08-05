@@ -1,0 +1,20 @@
+.label {
+  display: flex;
+  position: relative;
+}
+.input {
+  flex: 1;
+  padding: 1.3rem 0.8rem 0.5rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  font-size: 1rem;
+}
+.placeholder {
+  position: absolute;
+  top: 25%;
+  left: 5%;
+  transform: translateY(-50%);
+  color: var(--color-dark-grey);
+  font-size: 0.8rem;
+  pointer-events: none;
+}

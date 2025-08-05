@@ -23,6 +23,13 @@
   --color-orange: #fe4a22;
   --color-yellow: #ffd026;
   --color-dark-grey: #1a1a1aff;
+
+  /* Other */
+  --pill-border-radius: 9.375rem;
+}
+
+html {
+  font-size: 100%;
 }
 
 ol,
@@ -31,7 +38,26 @@ menu {
   list-style: none;
 }
 
+a {
+  text-decoration: none;
+}
+
+button,
+input {
+  font-family: inherit;
+  font-weight: inherit;
+  border: none;
+  background: none;
+  outline: none;
+}
+
 body {
   font-family: var(--font-sans);
-  font-weight: 400;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 80%;
+  }
 }
