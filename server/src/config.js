@@ -8,6 +8,8 @@ const config = {
   JWT_SECRET: getEnvVariable("JWT_SECRET"),
   MONGODB_URL: getEnvVariable("MONGODB_URL"),
   PORT: getEnvVariable("PORT", 3000, Number),
+  // feed logic
+  MAX_LIKED_POSTS_LIMIT: getEnvVariable("MAX_LIKED_POSTS_LIMIT", 1000, Number),
   // database seeding configuration
   DROP_DB: getEnvVariable("DROP_DB", false, (val) => val === "true"),
   NUM_USERS: getEnvVariable("NUM_USERS", 50, Number),

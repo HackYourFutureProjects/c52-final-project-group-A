@@ -3,6 +3,10 @@ import Post from "../models/Post.js";
 import Follow from "../models/Follow.js";
 import { calculateUserScore, calculatePostScore } from "../util/score.js";
 import { logError } from "../util/logging.js";
+import Like from "../models/Like.js";
+import config from "../config.js";
+
+// ...
 
 export const getFeed = async (req, res) => {
   try {
@@ -83,6 +87,7 @@ export const getFeed = async (req, res) => {
 
     topCreators.sort((a, b) => b.score - a.score);
 
+    // logged-in feed...
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
@@ -91,6 +96,10 @@ export const getFeed = async (req, res) => {
       "following",
     );
     const followingIds = following.map((f) => f.following);
+    const likedPosts = await Like.find({ user: userId })
+      .select("post")
+      .limit(config.MAX_LIKED_POSTS_LIMIT);
+    const likedPostIds = likedPosts.map((like) => like.post);
 
     // Get posts by followed users from last 7 days
     const recentPosts = await Post.aggregate([
@@ -127,8 +136,20 @@ export const getFeed = async (req, res) => {
 
     // Get the logged-in user’s tag preference (based on their own posts)
     const userPosts = await Post.find({ author: userId }).select("tags");
+    const likedTaggedPosts = await Post.aggregate([
+      { $match: { _id: { $in: likedPostIds } } },
+      { $project: { tags: 1 } },
+    ]);
+
     const tagFrequency = {};
     userPosts.forEach((post) => {
+      post.tags?.forEach((tag) => {
+        tagFrequency[tag] = (tagFrequency[tag] || 0) + 1;
+      });
+    });
+    // Include tags from liked posts in frequency calculation
+
+    likedTaggedPosts.forEach((post) => {
       post.tags?.forEach((tag) => {
         tagFrequency[tag] = (tagFrequency[tag] || 0) + 1;
       });
