@@ -5,10 +5,6 @@ import CreateUser from "./pages/User/CreateUser";
 import UserList from "./pages/User/UserList";
 import Post from "./pages/Post/Post.jsx";
 
-import CreateUser from "./pages/User/CreateUser";
-import UserList from "./pages/User/UserList";
-import Post from "./pages/Post/Post.jsx";
-
 const App = () => {
   return (
     <>
