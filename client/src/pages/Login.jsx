@@ -1,7 +1,7 @@
-import SignIn from "../components/SignIn/SignIn.jsx";
+import AuthForm from "../components/AuthForm/AuthForm.jsx";
 
 function Login() {
-  return <SignIn />;
+  return <AuthForm type="signIn" />;
 }
 
 export default Login;
