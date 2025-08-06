@@ -1,0 +1,64 @@
+.singlePost {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+}
+
+.authorBlock {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.authorInfo {
+  margin-left: 12px;
+  flex-grow: 1;
+}
+
+.username {
+  color: #888;
+  font-size: 14px;
+}
+
+.followBtn {
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.postTitle {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.postContent p {
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.tagList {
+  margin-top: 24px;
+}
+
+.tag {
+  background: #f0f0f0;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  margin-right: 6px;
+}

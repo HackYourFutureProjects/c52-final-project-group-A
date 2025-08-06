@@ -14,9 +14,10 @@ export const getPostById = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate(
       "author",
-      "username email",
+      "username profile",
     );
     if (!post) return res.status(404).json({ message: "Post not found" });
+
     res.json(post);
   } catch (error) {
     res.status(500).json({ error: error.message });
