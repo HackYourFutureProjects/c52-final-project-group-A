@@ -26,7 +26,7 @@ export const search = async (req, res) => {
         ],
       })
         .select("username profile")
-        .limit(5) //
+        .limit(5)
         .lean();
     }
 
@@ -49,7 +49,7 @@ export const search = async (req, res) => {
 
     return res.status(200).json({ users, posts });
   } catch (err) {
-    LogError(" Error in search controller:", err);
+    LogError("Error in search controller:", err);
     return res.status(500).json({ message: "Server error" });
   }
 };
