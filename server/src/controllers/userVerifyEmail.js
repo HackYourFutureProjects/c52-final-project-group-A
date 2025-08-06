@@ -5,12 +5,6 @@ import { logError } from "../util/logging.js";
 export const verifyEmail = async (req, res) => {
   const { email, verificationCode } = req.body;
 
-  if (!email || !verificationCode) {
-    return res
-      .status(400)
-      .json({ error: "Email and verification code are required" });
-  }
-
   try {
     const pending = await PendingUser.findOne({ email });
 
