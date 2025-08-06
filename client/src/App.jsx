@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import Nav from "./components/Nav/Nav.jsx";
-import Home from "./pages/Home/Home";
 import PostPage from "./pages/PostPage/PostPage.jsx";
 import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
@@ -12,7 +11,6 @@ const App = () => {
     <>
       <Nav />
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/posts/:id" element={<PostPage />} />
 
         <Route path="/" element={<Landing />} />
