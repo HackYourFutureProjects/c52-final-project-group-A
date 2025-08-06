@@ -55,6 +55,6 @@ import Post from "../models/Post.js";
     return res.status(200).json({ users, posts });
   } catch (err) {
     LogError(" Error in search controller:", err);
-    return res.status(500).json({ message: "Server error" });
+    LogError("Error in search controller:", err);
   }
 };
