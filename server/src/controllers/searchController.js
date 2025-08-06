@@ -1,7 +1,6 @@
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 import { LogError } from "concurrently";
-
 export const search = async (req, res) => {
   try {
     const { q, type } = req.query;
