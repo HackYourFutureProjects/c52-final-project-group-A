@@ -154,7 +154,7 @@ function AuthForm({ type }) {
 }
 
 AuthForm.propTypes = {
-  type: PropTypes.oneOf(["signIn, signUp"]).isRequired,
+  type: PropTypes.oneOf(["signIn", "signUp"]).isRequired,
 };
 
 export default AuthForm;
