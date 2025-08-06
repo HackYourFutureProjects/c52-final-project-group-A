@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Nav from "./components/Nav/Nav.jsx";
 import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 
 const App = () => {
   // TODO: Adjust routes and their components
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/home" element={<div>Home Page</div>} />
         <Route path="/profile" element={<div>Profile Page</div>} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </>
   );
