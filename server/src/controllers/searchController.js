@@ -26,6 +26,8 @@ export const search = async (req, res) => {
       })
         .select("username profile")
         .limit(5) //
+        .select("username profile")
+        .limit(5) // Limit results to 5 for suggestion/autocomplete functionality
         .lean();
     }
 
