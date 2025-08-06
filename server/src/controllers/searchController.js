@@ -48,7 +48,10 @@ import Post from "../models/Post.js";
       ...post,
       content: post.content?.slice(0, 100) + "...", // trim content to 100 chars
     }));
-
+    posts = posts.map((post) => ({
+      ...post,
+      content: post.content?.length > 100 ? post.content.slice(0, 100) + "..." : post.content, // trim content to 100 chars if needed
+    }));
     return res.status(200).json({ users, posts });
   } catch (err) {
     LogError(" Error in search controller:", err);
