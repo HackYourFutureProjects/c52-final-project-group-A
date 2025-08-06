@@ -30,7 +30,9 @@ import Post from "../models/Post.js";
         .select("username profile")
         .limit(5) // Limit results to 5 for suggestion/autocomplete functionality
         .lean();
-    }
+        .select("username profile")
+        .limit(5) // Limit results for autocomplete suggestions
+        .lean();
 
     //  Search for posts (only if type=post or not specified)
     if (type === "post" || !type) {
