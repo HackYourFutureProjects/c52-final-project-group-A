@@ -34,8 +34,7 @@ export const validateFollow = (followObject) => {
   // Validate follower and following
   if (follower === null || following === null) {
     errorList.push("follower and following are required fields");
-  }
-  if (
+  } else if (
     !mongoose.Types.ObjectId.isValid(follower) ||
     !mongoose.Types.ObjectId.isValid(following)
   ) {
@@ -43,7 +42,7 @@ export const validateFollow = (followObject) => {
   }
 
   // Validate the unique follower-following pairs
-  if (followObject.follower === followObject.following) {
+  if (follower === following) {
     errorList.push("follower and following cannot be the same user");
   }
 

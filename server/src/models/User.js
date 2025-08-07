@@ -119,12 +119,15 @@ export const validateUser = (userObject) => {
   // Validate username
   if (username == null) {
     errorList.push("username is a required field");
-  }
-  if (username.length < 6 || username.length > 20) {
-    errorList.push("username must be between 6 and 20 characters");
-  }
-  if (!/^[a-zA-Z0-9]+$/.test(username)) {
-    errorList.push("username must contain only letters and numbers");
+  } else {
+    if (username.length < 6 || username.length > 32) {
+      errorList.push("username must be between 6 and 32 characters");
+    }
+    if (!/^[a-z0-9]+$/.test(username)) {
+      errorList.push(
+        "username must contain only lowercase letters and numbers",
+      );
+    }
   }
 
   // Validate password
@@ -143,8 +146,7 @@ export const validateUser = (userObject) => {
   // Validate email
   if (email == null) {
     errorList.push("email is a required field");
-  }
-  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+  } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
     errorList.push("email must be a valid email address");
   }
 
