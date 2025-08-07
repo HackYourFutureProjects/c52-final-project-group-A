@@ -3,6 +3,7 @@ import Nav from "./components/Nav/Nav.jsx";
 import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
+import PostPage from "./pages/Post/PostPage.jsx";
 
 const App = () => {
   // TODO: Adjust routes and their components
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/profile" element={<div>Profile Page</div>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/post/:id" element={<PostPage />} />
       </Routes>
     </>
   );

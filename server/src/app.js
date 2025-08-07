@@ -5,9 +5,12 @@ import postRouter from "./routes/post.js";
 import feedRouter from "./routes/feed.js";
 import registerRouter from "./routes/register.js";
 import loginRouter from "./routes/login.js";
+import cors from "cors";
 
 // Create an express server
 const app = express();
+// CORS
+app.use(cors());
 
 // Use cookie parser middleware to handle cookies
 app.use(cookieParser());
@@ -23,6 +26,7 @@ app.use(express.json());
 
 // Post routes
 app.use("/api/post", postRouter);
+
 //
 app.use("/api/weekly-digest", weeklyDigestRouter);
 //
