@@ -4,10 +4,9 @@ import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import PostPage from "./pages/Post/PostPage.jsx";
-import TestPage from "./PostTestPage/PostTestPage";
+import TestPage from "./pages/PostTestPage/PostTestPage";
 
 const App = () => {
-  // TODO: Adjust routes and their components
   return (
     <>
       <Nav />
