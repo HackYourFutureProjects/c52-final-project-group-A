@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import { logInfo } from "./logging.js";
+import usernameGenerator from "./usernameGenerator.js";
 
 async function seedUser(NUM_USERS, saltRounds = 10) {
   const users = [];
@@ -9,8 +10,8 @@ async function seedUser(NUM_USERS, saltRounds = 10) {
   for (let i = 0; i < NUM_USERS; i++) {
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
-    const username = faker.internet.username({ firstName, lastName });
-    const email = username + "@gmail.com";
+    const username = usernameGenerator();
+    const email = faker.internet.email({ firstName, lastName });
     const password = faker.internet.password({ length: 10 });
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const score = Math.floor(Math.random() * 100 + 1);
