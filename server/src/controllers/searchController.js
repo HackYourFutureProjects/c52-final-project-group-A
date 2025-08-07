@@ -36,6 +36,10 @@ export const search = async (req, res) => {
           { email: regex },
           { "profile.first_name": regex },
           { "profile.last_name": regex },
+        $or: [
+          { username: regex },
+          { "profile.first_name": regex },
+          { "profile.last_name": regex },
         ],
       })
         .select("username profile")
