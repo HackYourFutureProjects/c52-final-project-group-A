@@ -21,7 +21,7 @@ export const userRegister = async (req, res) => {
     });
 
     if (existingUser) {
-      return res.status(409).json({ error: "User already exists" });
+      return res.status(409).json({ msg: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
@@ -63,6 +63,6 @@ export const userRegister = async (req, res) => {
     });
   } catch (err) {
     logError("Error in userRegister:", err);
-    return res.status(500).json({ error: "An internal server error occurred" });
+    return res.status(500).json({ msg: "An internal server error occurred" });
   }
 };

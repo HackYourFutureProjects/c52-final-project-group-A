@@ -11,19 +11,19 @@ export const verifyEmail = async (req, res) => {
     if (!pending) {
       return res
         .status(404)
-        .json({ error: "No pending registration found or expired" });
+        .json({ msg: "No pending registration found or expired" });
     }
 
     if (pending.verificationCode !== verificationCode) {
-      return res.status(400).json({ error: "Invalid verification code" });
+      return res.status(400).json({ msg: "Invalid verification code" });
     }
 
     const userData = {
       email: pending.email,
       username: pending.username,
       profile: {
-        first_name: pending.firstName,
-        last_name: pending.lastName,
+        first_name: pending.first_name,
+        last_name: pending.last_name,
       },
       password: pending.password,
     };
@@ -36,7 +36,7 @@ export const verifyEmail = async (req, res) => {
       .status(201)
       .json({ message: "Email verified and user created successfully" });
   } catch (err) {
-    logError("Error:", err);
-    return res.status(500).json({ error: "Server error" });
+    logError("User verification error:", err);
+    return res.status(500).json({ msg: "Server error" });
   }
 };
