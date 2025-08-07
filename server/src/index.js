@@ -23,16 +23,19 @@ const startServer = async () => {
  * We only want to host our client code when in production mode as we then want to use the production build that is built in the dist folder.
  * When not in production, don't host the files, but the development version of the app can connect to the backend itself.
  */
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 if (NODE_ENV === "production") {
-  app.use(
-    express.static(new URL("../../client/dist", import.meta.url).pathname),
-  );
-  // Redirect * requests to give the client data
-  app.get("/*file", (req, res) =>
-    res.sendFile(
-      new URL("../../client/dist/index.html", import.meta.url).pathname,
-    ),
-  );
+  const clientPath = path.join(__dirname, "../../client/dist");
+  app.use(express.static(clientPath));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(clientPath, "index.html"));
+  });
 }
 
 /****** For cypress we want to provide an endpoint to seed our data ******/
