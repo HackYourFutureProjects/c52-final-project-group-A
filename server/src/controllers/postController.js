@@ -12,14 +12,16 @@ export const getAllPosts = async (req, res) => {
 // Get Post By ID endpoint
 export const getPostById = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate(
-      "author",
-      "username email",
-    );
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    const post = await Post.findById(req.params.id).populate("author");
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
     res.json(post);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching post by ID:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 

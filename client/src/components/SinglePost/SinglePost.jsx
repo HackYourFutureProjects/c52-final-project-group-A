@@ -13,12 +13,12 @@ const SinglePost = () => {
     const fetchPost = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/post/${id}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/post/${id}`,
         );
         setPost(res.data);
       } catch (err) {
-        console.error("Ошибка при запросе поста:", err);
-        setError("Ошибка при загрузке поста.");
+        console.error("Error fetching post:", err);
+        setError("Error loading post.");
       } finally {
         setLoading(false);
       }
@@ -27,16 +27,16 @@ const SinglePost = () => {
     fetchPost();
   }, [id]);
 
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
-  if (!post) return <p>Пост не найден.</p>;
+  if (!post) return <p>Post not found.</p>;
 
   return (
     <div className={styles.wrapper}>
       <div className="single-post">
         <h1>{post.title}</h1>
         <p>
-          <strong>Author:</strong> {post.author?.username}
+          <strong>Author:</strong> {post.author?.username ?? "—"}
         </p>
         <p>
           <strong>Date:</strong>{" "}
