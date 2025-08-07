@@ -75,23 +75,144 @@ export const validateUser = (userObject) => {
     errorList.push(validatedKeysMessage);
   }
 
-  if (userObject.username == null) {
+  const validateArrayOfIds = (array, ref) => {
+    if (!Array.isArray(array)) {
+      errorList.push(`${ref} must be an array`);
+      return;
+    }
+    for (const id of array) {
+      if (typeof id !== "string") {
+        errorList.push(`${ref} must be an array of strings`);
+        return;
+      }
+    }
+  };
+
+  const {
+    admin,
+    username,
+    password,
+    email,
+    google_id,
+    created_at,
+    profile,
+    score,
+    posts,
+    likes,
+    comments,
+    following,
+    followers,
+  } = userObject;
+
+  // Validate password or google_id is present
+  if (!password && !google_id) {
+    errorList.push("password or google_id is required");
+  }
+
+  // Validate admin
+  if (admin) {
+    if (typeof admin !== "boolean") {
+      errorList.push("admin must be a boolean");
+    }
+  }
+
+  // Validate username
+  if (username == null) {
     errorList.push("username is a required field");
   }
-
-  if (userObject.email == null) {
-    errorList.push("email is a required field");
+  if (username.length < 6 || username.length > 20) {
+    errorList.push("username must be between 6 and 20 characters");
+  }
+  if (!/^[a-zA-Z0-9]+$/.test(username)) {
+    errorList.push("username must contain only letters and numbers");
   }
 
-  if (userObject.profile) {
-    if (userObject.profile.first_name == null) {
+  // Validate password
+  if (password) {
+    if (password.length < 8) {
+      errorList.push("password must be at least 8 characters long");
+    }
+    if (password.length > 50) {
+      errorList.push("password must be at most 50 characters long");
+    }
+    if (password.includes(" ")) {
+      errorList.push("password cannot contain spaces");
+    }
+  }
+
+  // Validate email
+  if (email == null) {
+    errorList.push("email is a required field");
+  }
+  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    errorList.push("email must be a valid email address");
+  }
+
+  // Validate google_id
+  if (google_id) {
+    if (typeof google_id !== "string") {
+      errorList.push("google_id must be a string");
+    }
+  }
+
+  // Validate created_at
+  if (created_at) {
+    if (!(created_at instanceof Date)) {
+      errorList.push("created_at must be a Date object");
+    }
+    if (created_at.getTime() > Date.now()) {
+      errorList.push("created_at cannot be in the future");
+    }
+  }
+
+  // Validate profile
+  if (profile) {
+    if (profile.first_name == null) {
       errorList.push("profile.first_name is a required field");
     }
-    if (userObject.profile.last_name == null) {
+    if (profile.last_name == null) {
       errorList.push("profile.last_name is a required field");
     }
   } else {
     errorList.push("profile is a required field");
+  }
+
+  // Validate score
+  if (score) {
+    if (typeof score !== "number") {
+      errorList.push("score must be a number");
+    }
+    if (score < 0) {
+      errorList.push("score cannot be negative");
+    }
+    if (score > 100) {
+      errorList.push("score cannot be greater than 100");
+    }
+  }
+
+  // Validate posts
+  if (posts) {
+    validateArrayOfIds(posts, "posts");
+  }
+
+  // Validate likes
+  if (likes) {
+    validateArrayOfIds(likes, "likes");
+  }
+
+  // Validate comments
+  if (comments) {
+    validateArrayOfIds(comments, "comments");
+  }
+
+  // Validate following
+  if (following) {
+    validateArrayOfIds(following, "following");
+  }
+
+  // Validate followers
+  if (followers) {
+    validateArrayOfIds(followers, "followers");
   }
 
   return errorList;
