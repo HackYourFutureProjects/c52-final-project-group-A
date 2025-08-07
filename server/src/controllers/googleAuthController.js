@@ -1,24 +1,27 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import { logError } from "../util/logging.js";
 import config from "../config.js";
 
 const { JWT_SECRET, NODE_ENV } = config;
 
-export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+export const googleAuth = async (req, res) => {
+  const { email, firstName, lastName, username } = req.user;
 
   try {
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ msg: "Invalid email or password" });
-    }
+      user = new User({
+        username,
+        email,
+        profile: {
+          first_name: firstName,
+          last_name: lastName,
+        },
+      });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ msg: "Invalid email or password" });
+      await user.save();
     }
 
     const token = jwt.sign(
@@ -29,16 +32,16 @@ export const loginUser = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
       secure: NODE_ENV === "production",
       sameSite: "strict",
     });
 
     return res.status(200).json({
-      message: "Login successful",
+      message: "Google login successful",
     });
   } catch (err) {
-    logError("Login error:", err);
+    logError("Google auth controller error:", err);
     return res.status(500).json({ msg: "Server error" });
   }
 };

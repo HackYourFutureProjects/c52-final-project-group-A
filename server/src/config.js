@@ -48,6 +48,8 @@ const config = {
   EMAIL_PROVIDER: getEnvVariable("EMAIL_PROVIDER", "gmail"),
   EMAIL: getEnvVariable("EMAIL"),
   EMAIL_PASSWORD: getEnvVariable("EMAIL_PASSWORD"),
+  // Google OAuth configuration
+  CLIENT_ID: getEnvVariable("CLIENT_ID"),
 };
 
 export default config;
