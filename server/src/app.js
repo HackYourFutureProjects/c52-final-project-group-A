@@ -8,37 +8,21 @@ import loginRouter from "./routes/login.js";
 import cors from "cors";
 import config from "./config.js";
 
-// Create an express server
 const app = express();
 
 // CORS
-if (config.NODE_ENV === "production") {
-  const allowedOrigins = process.env.CORS_ORIGIN
-    ? process.env.CORS_ORIGIN.split(",")
-    : [];
+app.use(
+  cors({
+    origin:
+      config.NODE_ENV === "production"
+        ? process.env.CORS_ORIGIN?.split(",") || []
+        : true,
+    credentials: true,
+  }),
+);
 
-  app.use(
-    cors({
-      origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-          return callback(null, true);
-        } else {
-          return callback(new Error("Not allowed by CORS"));
-        }
-      },
-      credentials: true,
-    }),
-  );
-} else {
-  // For development
-  app.use(cors());
-}
-
-// Use cookie parser middleware to handle cookies
+// CORS и другие middleware
 app.use(cookieParser());
-
-// Tell express to use the json middleware
 app.use(express.json());
 
 /****** Attach routes ******/
