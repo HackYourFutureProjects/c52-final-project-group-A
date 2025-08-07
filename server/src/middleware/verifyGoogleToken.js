@@ -2,16 +2,15 @@ import { OAuth2Client } from "google-auth-library";
 import { logError } from "../util/logging.js";
 import config from "../config.js";
 import generateUsername from "../util/usernameGenerator.js";
-import { jwtDecode } from "jwt-decode";
 import { validateUser } from "../models/User.js";
 
 const { CLIENT_ID } = config;
 const client = new OAuth2Client(CLIENT_ID);
 
 export const verifyGoogleToken = async (req, res, next) => {
-  const { access_token } = req.body;
+  const { credential } = req.body;
 
-  if (!access_token || typeof access_token !== "string") {
+  if (!credential || typeof credential !== "string") {
     return res
       .status(400)
       .json({ msg: "No token provided or token is invalid type" });
@@ -19,11 +18,11 @@ export const verifyGoogleToken = async (req, res, next) => {
 
   try {
     const ticket = await client.verifyIdToken({
-      idToken: access_token,
+      idToken: credential,
       audience: CLIENT_ID,
     });
 
-    const payload = jwtDecode(ticket.getPayload());
+    const payload = ticket.getPayload();
 
     if (!payload) {
       return res
