@@ -9,38 +9,40 @@ import { fileURLToPath } from "url";
 import fs from "fs/promises";
 
 const { PORT, NODE_ENV } = config;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const startServer = async () => {
   try {
     await connectDB();
 
+    // development
+    if (NODE_ENV !== "production") {
+      app.use("/api/test", testRouter);
+    }
+
+    // production
     if (NODE_ENV === "production") {
       const clientPath = path.join(__dirname, "../../client/dist");
 
       try {
         await fs.access(clientPath);
+        console.log("Serving static files from:", clientPath);
+
         app.use(express.static(clientPath));
 
         app.get("*", (req, res) => {
           res.sendFile(path.join(clientPath, "index.html"));
         });
       } catch (err) {
-        console.error("Client files not found:", err);
+        logError("Client files not found:", err);
       }
     }
 
-    if (NODE_ENV !== "production") {
-      app.use("/api/test", testRouter);
-    }
-
     app.listen(PORT, () => {
-      logInfo(`Server started on port ${PORT}`);
+      logInfo(`Server running on port ${PORT} in ${NODE_ENV} mode`);
     });
   } catch (error) {
-    logError(error);
+    logError("Server failed to start:", error);
   }
 };
 
