@@ -1,0 +1,21 @@
+.avatarContainer {
+  position: relative;
+  max-width: max-content;
+  align-self: flex-start;
+}
+.avatar {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 100%;
+}
+.score {
+  position: absolute;
+  bottom: 0.2rem;
+  right: 0.2rem;
+  background: var(--color-orange);
+  color: var(--color-white);
+  padding: 0.5rem;
+  font-size: 2rem;
+  font-weight: 500;
+  border-radius: 100%;
+}

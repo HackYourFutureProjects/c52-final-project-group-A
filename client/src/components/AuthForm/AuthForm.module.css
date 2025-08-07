@@ -48,12 +48,6 @@
   font-weight: 500;
   font-size: 1rem;
 }
-.noAccContainer a {
-  color: var(--color-orange);
-}
-.noAccContainer a:hover {
-  text-decoration: underline;
-}
 
 @media (max-width: 768px) {
   .wrapper {
