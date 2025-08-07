@@ -44,28 +44,89 @@ export const validatePendingUser = (pendingUserObject) => {
     errorList.push(validatedKeysMessage);
   }
 
-  if (pendingUserObject.email == null) {
+  const {
+    email,
+    username,
+    first_name,
+    last_name,
+    password,
+    verification_code,
+    created_at,
+  } = pendingUserObject;
+
+  // Validate email
+  if (email == null) {
     errorList.push("email is a required field");
+  } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    errorList.push("email must be a valid email address");
   }
 
-  if (pendingUserObject.username == null) {
+  // Validate username
+  if (username == null) {
     errorList.push("username is a required field");
+  } else {
+    if (username.length < 6 || username.length > 32) {
+      errorList.push("username must be between 6 and 32 characters");
+    }
+    if (!/^[a-z0-9]+$/.test(username)) {
+      errorList.push(
+        "username must contain only lowercase letters and numbers",
+      );
+    }
   }
 
-  if (pendingUserObject.first_name == null) {
-    errorList.push("first_name is a required field");
+  // Validate first_name and last_name
+  if (first_name == null || last_name == null) {
+    errorList.push("first_name and last_name are required fields");
+  } else {
+    if (typeof first_name !== "string" || typeof last_name !== "string") {
+      errorList.push("first_name and last_name must be a string");
+    }
+    if (
+      !/^[a-zA-Z]+(?:[' -][a-zA-Z]+)*$/.test(first_name) ||
+      !/^[a-zA-Z]+(?:[' -][a-zA-Z]+)*$/.test(last_name)
+    ) {
+      errorList.push(
+        "first_name and last_name must contain only letters, spaces, and apostrophes",
+      );
+    }
   }
 
-  if (pendingUserObject.last_name == null) {
-    errorList.push("last_name is a required field");
-  }
-
-  if (pendingUserObject.password == null) {
+  // Validate password
+  if (password == null) {
     errorList.push("password is a required field");
+  } else {
+    if (password.length < 8) {
+      errorList.push("password must be at least 8 characters long");
+    }
+    if (password.length > 50) {
+      errorList.push("password must be at most 50 characters long");
+    }
+    if (password.includes(" ")) {
+      errorList.push("password cannot contain spaces");
+    }
   }
 
-  if (pendingUserObject.verification_code == null) {
+  // Validate verification_code
+  if (verification_code == null) {
     errorList.push("verification_code is a required field");
+  } else {
+    if (typeof verification_code !== "string") {
+      errorList.push("verification_code must be a string");
+    }
+    if (verification_code.length !== 6) {
+      errorList.push("verification_code must be exactly 6 characters long");
+    }
+  }
+
+  // Validate created_at
+  if (created_at) {
+    if (!(created_at instanceof Date)) {
+      errorList.push("created_at must be a Date object");
+    }
+    if (created_at.getTime() > Date.now()) {
+      errorList.push("created_at cannot be in the future");
+    }
   }
 
   return errorList;

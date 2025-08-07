@@ -44,16 +44,47 @@ export const validateComment = (commentObject) => {
     errorList.push(validatedKeysMessage);
   }
 
-  if (commentObject.user == null) {
+  const { status, created_at, user, post, content } = commentObject;
+
+  // Validate status
+  if (status) {
+    if (typeof status !== "string") {
+      errorList.push("status must be a string");
+    }
+    if (!Object.values(CommentStatus).includes(status)) {
+      errorList.push("status must be one of: " + Object.values(CommentStatus));
+    }
+  }
+
+  // Validate created_at
+  if (created_at) {
+    if (!(created_at instanceof Date)) {
+      errorList.push("created_at must be a Date object");
+    }
+    if (created_at.getTime() > Date.now()) {
+      errorList.push("created_at cannot be in the future");
+    }
+  }
+
+  // Validate user
+  if (user == null) {
     errorList.push("user is a required field");
+  } else if (!mongoose.Types.ObjectId.isValid(user)) {
+    errorList.push("user must be a valid ObjectId");
   }
 
-  if (commentObject.post == null) {
+  // Validate post
+  if (post == null) {
     errorList.push("post is a required field");
+  } else if (!mongoose.Types.ObjectId.isValid(post)) {
+    errorList.push("post must be a valid ObjectId");
   }
 
-  if (commentObject.content == null) {
+  // Validate content
+  if (content == null) {
     errorList.push("content is a required field");
+  } else if (typeof content !== "string") {
+    errorList.push("content must be a string");
   }
 
   return errorList;

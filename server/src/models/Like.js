@@ -27,12 +27,30 @@ export const validateLike = (likeObject) => {
     errorList.push(validatedKeysMessage);
   }
 
-  if (likeObject.user == null) {
-    errorList.push("user is a required field");
+  const { created_at, user, post } = likeObject;
+
+  // Validate created_at
+  if (created_at) {
+    if (!(created_at instanceof Date)) {
+      errorList.push("created_at must be a Date object");
+    }
+    if (created_at.getTime() > Date.now()) {
+      errorList.push("created_at cannot be in the future");
+    }
   }
 
-  if (likeObject.post == null) {
+  // Validate user
+  if (user == null) {
+    errorList.push("user is a required field");
+  } else if (!mongoose.Types.ObjectId.isValid(user)) {
+    errorList.push("user must be a valid ObjectId");
+  }
+
+  // Validate post
+  if (post == null) {
     errorList.push("post is a required field");
+  } else if (!mongoose.Types.ObjectId.isValid(post)) {
+    errorList.push("post must be a valid ObjectId");
   }
 
   return errorList;
