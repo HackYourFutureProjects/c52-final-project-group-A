@@ -6,21 +6,25 @@ import config from "../config.js";
 const { JWT_SECRET, NODE_ENV } = config;
 
 export const googleAuth = async (req, res) => {
-  const { email, firstName, lastName, username } = req.user;
+  const { email, profile, google_id, username } = req.user;
 
   try {
-    let user = await User.findOne({ email });
+    let user = await User.findOne({
+      $or: [{ email }, { google_id }],
+    });
 
     if (!user) {
-      user = new User({
-        username,
+      const userData = {
         email,
-        profile: {
-          first_name: firstName,
-          last_name: lastName,
-        },
-      });
+        username,
+        profile,
+        google_id,
+      };
 
+      user = new User(userData);
+      await user.save();
+    } else if (!user.google_id) {
+      user.google_id = google_id;
       await user.save();
     }
 
