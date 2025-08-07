@@ -29,14 +29,20 @@ export const validateFollow = (followObject) => {
     errorList.push(validatedKeysMessage);
   }
 
-  if (followObject.follower == null) {
-    errorList.push("follower is a required field");
+  const { follower, following } = followObject;
+
+  // Validate follower and following
+  if (follower === null || following === null) {
+    errorList.push("follower and following are required fields");
+  }
+  if (
+    !mongoose.Types.ObjectId.isValid(follower) ||
+    !mongoose.Types.ObjectId.isValid(following)
+  ) {
+    errorList.push("follower and following must be valid ObjectId");
   }
 
-  if (followObject.following == null) {
-    errorList.push("following is a required field");
-  }
-
+  // Validate the unique follower-following pairs
   if (followObject.follower === followObject.following) {
     errorList.push("follower and following cannot be the same user");
   }

@@ -31,12 +31,13 @@ export const validatePost = (postObject) => {
   const errorList = [];
   const allowedKeys = [
     "status",
+    "tags",
     "title",
     "content",
     "created_at",
     "published_at",
     "author",
-    "tags",
+    "score",
   ];
 
   const validatedKeysMessage = validateAllowedFields(postObject, allowedKeys);
@@ -45,16 +46,109 @@ export const validatePost = (postObject) => {
     errorList.push(validatedKeysMessage);
   }
 
-  if (postObject.status == null) {
+  const {
+    status,
+    tags,
+    title,
+    content,
+    created_at,
+    published_at,
+    author,
+    score,
+  } = postObject;
+
+  // Validate status
+  if (status == null) {
     errorList.push("status is a required field");
   }
-
-  if (postObject.title == null) {
-    errorList.push("title is a required field");
+  if (typeof status !== "string") {
+    errorList.push("status must be a string");
+  }
+  if (!Object.values(PostStatus).includes(status)) {
+    errorList.push("status must be one of: " + Object.values(PostStatus));
   }
 
-  if (postObject.author == null) {
+  // Validate tags
+  if (tags === null) {
+    errorList.push("tags is a required field");
+  }
+  if (!Array.isArray(tags)) {
+    errorList.push("tags must be an array");
+  }
+  for (const tag of tags) {
+    if (typeof tag !== "string") {
+      errorList.push("tags must be an array of strings");
+    }
+  }
+
+  // Validate title
+  if (title == null) {
+    errorList.push("title is a required field");
+  }
+  if (typeof title !== "string") {
+    errorList.push("title must be a string");
+  }
+  if (title.length < 1 || title.length > 100) {
+    errorList.push("title must be between 1 and 100 characters");
+  }
+
+  // Validate content
+  if (content == null) {
+    errorList.push("content is a required field");
+  }
+  if (typeof content !== "string") {
+    errorList.push("content must be a string");
+  }
+  if (content.length < 1 || content.length > 10000) {
+    errorList.push("content must be between 1 and 10000 characters");
+  }
+
+  // Validate created_at
+  if (created_at) {
+    if (!(created_at instanceof Date)) {
+      errorList.push("created_at must be a Date object");
+    }
+    if (created_at.getTime() > Date.now()) {
+      errorList.push("created_at cannot be in the future");
+    }
+  }
+
+  // Validate published_at
+  if (published_at) {
+    if (!(published_at instanceof Date)) {
+      errorList.push("published_at must be a Date object");
+    }
+    if (published_at.getTime() > Date.now()) {
+      errorList.push("published_at cannot be in the future");
+    }
+  }
+
+  // Validate that published_at is not before created_at
+  if (published_at && created_at) {
+    if (published_at.getTime() < created_at.getTime()) {
+      errorList.push("published_at cannot be before created_at");
+    }
+  }
+
+  // Validate author
+  if (author == null) {
     errorList.push("author is a required field");
+  }
+  if (!mongoose.Types.ObjectId.isValid(author)) {
+    errorList.push("author must be a valid ObjectId");
+  }
+
+  // Validate score
+  if (score) {
+    if (typeof score !== "number") {
+      errorList.push("score must be a number");
+    }
+    if (score < 0) {
+      errorList.push("score cannot be negative");
+    }
+    if (score > 100) {
+      errorList.push("score cannot be greater than 100");
+    }
   }
 
   return errorList;
