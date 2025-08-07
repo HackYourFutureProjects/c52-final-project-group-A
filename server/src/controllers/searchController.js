@@ -11,14 +11,12 @@ export const search = async (req, res) => {
     const SEARCH_QUERY_MAX_LENGTH = 100;
 
     if (!q) {
-      return res
-        .status(400)
-        .json({ message: "Search query is required" });
+      return res.status(400).json({ message: "Search query is required" });
     }
     if (q.length > SEARCH_QUERY_MAX_LENGTH) {
-      return res
-        .status(400)
-        .json({ message: "Search query exceeds maximum length of 100 characters" });
+      return res.status(400).json({
+        message: "Search query exceeds maximum length of 100 characters",
+      });
     }
     const safeQ = escapeRegex(q);
     const regex = { $regex: safeQ, $options: "i" };
