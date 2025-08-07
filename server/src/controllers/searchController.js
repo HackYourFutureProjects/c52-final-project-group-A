@@ -1,7 +1,6 @@
 import User from "../models/User.js";
 import Post from "../models/Post.js";
-import { LogError } from "concurrently";
-
+import { LogError } from "../util/logging.js";
 export const search = async (req, res) => {
   try {
     const { q, type } = req.query;
@@ -41,12 +40,13 @@ export const search = async (req, res) => {
         .lean();
     }
 
-    // Optional: Shorten post content preview
     posts = posts.map((post) => ({
       ...post,
-      content: post.content?.slice(0, 100) + "...", // trim content to 100 chars
+      content:
+        post.content?.length > 100
+          ? post.content.slice(0, 100) + "..."
+          : post.content, // trim content to 100 chars if needed
     }));
-
     return res.status(200).json({ users, posts });
   } catch (err) {
     LogError("Error in search controller:", err);
