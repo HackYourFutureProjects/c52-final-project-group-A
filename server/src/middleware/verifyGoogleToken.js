@@ -61,6 +61,6 @@ export const verifyGoogleToken = async (req, res, next) => {
     next();
   } catch (err) {
     logError("Google token verification error:", err);
-    return res.status(401).json({ msg: err });
+    return res.status(401).json({ msg: "Invalid Google token" });
   }
 };

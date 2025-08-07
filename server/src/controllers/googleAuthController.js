@@ -23,7 +23,7 @@ export const googleAuth = async (req, res) => {
 
       user = new User(userData);
       await user.save();
-    } else if (!user.google_id) {
+    } else if (user.google_id == null || user.google_id === "") {
       user.google_id = google_id;
       await user.save();
     }
