@@ -1,18 +1,9 @@
-import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 import { logError } from "../util/logging.js";
+import config from "../config.js";
 
-const createSessionToken = (user) => {
-  return jwt.sign(
-    {
-      id: user._id,
-      email: user.email,
-      username: user.username,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" },
-  );
-};
+const { JWT_SECRET, NODE_ENV } = config;
 
 export const googleAuth = async (req, res) => {
   const { email, firstName, lastName, username } = req.user;
@@ -33,11 +24,21 @@ export const googleAuth = async (req, res) => {
       await user.save();
     }
 
-    const token = createSessionToken(user);
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: "7d" },
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      secure: NODE_ENV === "production",
+      sameSite: "strict",
+    });
 
     return res.status(200).json({
-      message: "Authentication successful",
-      token,
+      message: "Google login successful",
     });
   } catch (err) {
     logError("Google auth controller error:", err);
