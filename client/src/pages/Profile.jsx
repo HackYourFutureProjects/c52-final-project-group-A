@@ -1,5 +1,7 @@
+import ProfileDash from "../components/ProfileDash/ProfileDash.jsx";
+
 function Profile() {
-  return <>Profile Page</>;
+  return <ProfileDash />;
 }
 
 export default Profile;
