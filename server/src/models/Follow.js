@@ -32,7 +32,7 @@ export const validateFollow = (followObject) => {
   const { follower, following } = followObject;
 
   // Validate follower and following
-  if (follower === null || following === null) {
+  if (follower == null || following == null) {
     errorList.push("follower and following are required fields");
   } else if (
     !mongoose.Types.ObjectId.isValid(follower) ||
