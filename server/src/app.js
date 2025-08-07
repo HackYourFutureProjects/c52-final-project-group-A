@@ -5,6 +5,7 @@ import postRouter from "./routes/post.js";
 import feedRouter from "./routes/feed.js";
 import registerRouter from "./routes/register.js";
 import loginRouter from "./routes/login.js";
+import searchRouter from "./routes/search.js";
 
 // Create an express server
 const app = express();
@@ -31,5 +32,7 @@ app.use("/api/feed", feedRouter);
 app.use("/api/register", registerRouter);
 
 app.use("/api/login", loginRouter);
+
+app.use("/api/search", searchRouter);
 
 export default app;
