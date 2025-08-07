@@ -20,6 +20,7 @@ export const getPostById = async (req, res) => {
 
     res.json(post);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error fetching post by ID:", error);
     res.status(500).json({ message: "Server error" });
   }

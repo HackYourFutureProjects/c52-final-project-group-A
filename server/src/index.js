@@ -4,8 +4,13 @@ import { logInfo, logError } from "./util/logging.js";
 import connectDB from "./db/connectDB.js";
 import testRouter from "./testRouter.js";
 import config from "./config.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const { PORT, NODE_ENV } = config;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const startServer = async () => {
   try {
@@ -23,18 +28,13 @@ const startServer = async () => {
  * We only want to host our client code when in production mode as we then want to use the production build that is built in the dist folder.
  * When not in production, don't host the files, but the development version of the app can connect to the backend itself.
  */
-import { fileURLToPath } from "url";
-import path from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 if (NODE_ENV === "production") {
   const clientPath = path.join(__dirname, "../../client/dist");
   app.use(express.static(clientPath));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(clientPath, "index.html"));
+    res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
   });
 }
 
