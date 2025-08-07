@@ -21,21 +21,24 @@ const startServer = async () => {
     }
 
     // production
+    let clientPath;
+
     if (NODE_ENV === "production") {
-      const clientPath = path.join(__dirname, "../../client/dist");
+      clientPath = path.join(__dirname, "../../client/dist");
 
       try {
         await fs.access(clientPath);
         console.log("Serving static files from:", clientPath);
-
         app.use(express.static(clientPath));
-
-        app.get("*", (req, res) => {
-          res.sendFile(path.join(clientPath, "index.html"));
-        });
       } catch (err) {
         logError("Client files not found:", err);
       }
+    }
+
+    if (NODE_ENV === "production") {
+      app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
+      });
     }
 
     app.listen(PORT, () => {
