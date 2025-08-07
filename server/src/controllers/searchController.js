@@ -51,6 +51,8 @@ export const search = async (req, res) => {
     if (type === "post" || !type) {
       posts = await Post.find({
         $or: [{ title: regex }, { content: regex }, { tags: regex }],
+      posts = await Post.find({
+        $or: [{ title: regex }, { tags: regex }],
       })
         .select("title content author tags")
         .populate("author", "username")
