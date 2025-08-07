@@ -41,7 +41,11 @@ menu {
 }
 
 a {
+  color: var(--color-orange);
   text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 
 button,
@@ -56,6 +60,7 @@ input {
 body {
   font-family: var(--font-sans);
   font-weight: 500;
+  padding: 1rem;
 }
 
 @media (max-width: 768px) {
