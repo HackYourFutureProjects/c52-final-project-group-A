@@ -60,47 +60,49 @@ export const validatePost = (postObject) => {
   // Validate status
   if (status == null) {
     errorList.push("status is a required field");
-  }
-  if (typeof status !== "string") {
-    errorList.push("status must be a string");
-  }
-  if (!Object.values(PostStatus).includes(status)) {
-    errorList.push("status must be one of: " + Object.values(PostStatus));
+  } else {
+    if (typeof status !== "string") {
+      errorList.push("status must be a string");
+    }
+    if (!Object.values(PostStatus).includes(status)) {
+      errorList.push("status must be one of: " + Object.values(PostStatus));
+    }
   }
 
   // Validate tags
-  if (tags === null) {
-    errorList.push("tags is a required field");
-  }
-  if (!Array.isArray(tags)) {
-    errorList.push("tags must be an array");
-  }
-  for (const tag of tags) {
-    if (typeof tag !== "string") {
-      errorList.push("tags must be an array of strings");
+  if (tags) {
+    if (!Array.isArray(tags)) {
+      errorList.push("tags must be an array");
+    }
+    for (const tag of tags) {
+      if (typeof tag !== "string") {
+        errorList.push("tags must be an array of strings");
+      }
     }
   }
 
   // Validate title
   if (title == null) {
     errorList.push("title is a required field");
-  }
-  if (typeof title !== "string") {
-    errorList.push("title must be a string");
-  }
-  if (title.length < 1 || title.length > 100) {
-    errorList.push("title must be between 1 and 100 characters");
+  } else {
+    if (typeof title !== "string") {
+      errorList.push("title must be a string");
+    }
+    if (title.length < 1 || title.length > 100) {
+      errorList.push("title must be between 1 and 100 characters");
+    }
   }
 
   // Validate content
   if (content == null) {
     errorList.push("content is a required field");
-  }
-  if (typeof content !== "string") {
-    errorList.push("content must be a string");
-  }
-  if (content.length < 1 || content.length > 10000) {
-    errorList.push("content must be between 1 and 10000 characters");
+  } else {
+    if (typeof content !== "string") {
+      errorList.push("content must be a string");
+    }
+    if (content.length < 1 || content.length > 10000) {
+      errorList.push("content must be between 1 and 10000 characters");
+    }
   }
 
   // Validate created_at
@@ -133,8 +135,7 @@ export const validatePost = (postObject) => {
   // Validate author
   if (author == null) {
     errorList.push("author is a required field");
-  }
-  if (!mongoose.Types.ObjectId.isValid(author)) {
+  } else if (!mongoose.Types.ObjectId.isValid(author)) {
     errorList.push("author must be a valid ObjectId");
   }
 

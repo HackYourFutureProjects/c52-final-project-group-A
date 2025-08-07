@@ -42,16 +42,14 @@ export const validateLike = (likeObject) => {
   // Validate user
   if (user == null) {
     errorList.push("user is a required field");
-  }
-  if (!mongoose.Types.ObjectId.isValid(user)) {
+  } else if (!mongoose.Types.ObjectId.isValid(user)) {
     errorList.push("user must be a valid ObjectId");
   }
 
   // Validate post
   if (post == null) {
     errorList.push("post is a required field");
-  }
-  if (!mongoose.Types.ObjectId.isValid(post)) {
+  } else if (!mongoose.Types.ObjectId.isValid(post)) {
     errorList.push("post must be a valid ObjectId");
   }
 

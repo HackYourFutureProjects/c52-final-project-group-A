@@ -67,26 +67,23 @@ export const validateComment = (commentObject) => {
   }
 
   // Validate user
-  if (commentObject.user == null) {
+  if (user == null) {
     errorList.push("user is a required field");
-  }
-  if (!mongoose.Types.ObjectId.isValid(user)) {
+  } else if (!mongoose.Types.ObjectId.isValid(user)) {
     errorList.push("user must be a valid ObjectId");
   }
 
   // Validate post
-  if (commentObject.post == null) {
+  if (post == null) {
     errorList.push("post is a required field");
-  }
-  if (!mongoose.Types.ObjectId.isValid(post)) {
+  } else if (!mongoose.Types.ObjectId.isValid(post)) {
     errorList.push("post must be a valid ObjectId");
   }
 
   // Validate content
-  if (commentObject.content == null) {
+  if (content == null) {
     errorList.push("content is a required field");
-  }
-  if (typeof content !== "string") {
+  } else if (typeof content !== "string") {
     errorList.push("content must be a string");
   }
 
