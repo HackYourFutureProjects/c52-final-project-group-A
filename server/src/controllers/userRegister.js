@@ -34,7 +34,7 @@ export const userRegister = async (req, res) => {
         first_name: firstName,
         last_name: lastName,
       },
-      password: hashedPassword,
+      password,
     };
 
     const validationErrors = validateUser(userData);
@@ -60,7 +60,7 @@ export const userRegister = async (req, res) => {
     await sendEmail(email, verificationCode);
 
     return res.status(200).json({
-      message: "Verification code sent to email",
+      message: `Verification code sent to ${email}`,
     });
   } catch (err) {
     logError("Error in userRegister:", err);

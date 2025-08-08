@@ -3,6 +3,10 @@ import style from "./GoogleButton.module.css";
 import Button from "../Button.jsx";
 
 function GoogleButton() {
+  const handleLoginSuccess = (response) => {
+    console.log("Login Success:", response);
+  };
+
   const GoogleLogo = () => {
     return (
       <svg
@@ -31,7 +35,7 @@ function GoogleButton() {
     );
   };
   const googleLogin = useGoogleLogin({
-    onSuccess: console.log,
+    onSuccess: (response) => handleLoginSuccess(response),
     onError: console.error,
   });
 
