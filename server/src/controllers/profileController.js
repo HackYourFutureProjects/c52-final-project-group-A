@@ -14,18 +14,19 @@ export const getProfile = async (req, res) => {
         msg: "You need to be logged in to view this page",
       });
     }
-    const tokenData = jwt.verify(bq_token, JWT_SECRET);
-    if (!tokenData || !tokenData.userId) {
+
+    let tokenData;
+    try {
+      tokenData = jwt.verify(bq_token, JWT_SECRET);
+    } catch (err) {
+      logError(err);
       return res.status(400).json({
         success: false,
         msg: "Token is invalid",
       });
     }
 
-    const user = await User.find(
-      { _id: tokenData.userId },
-      { username: 1, profile: 1, score: 1 },
-    );
+    const user = await User.findById(tokenData.userId, { password: 0 });
     res.status(200).json({ success: true, result: user });
   } catch (err) {
     logError(err);
