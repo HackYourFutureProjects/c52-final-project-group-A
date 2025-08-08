@@ -14,7 +14,7 @@ export const verifyEmail = async (req, res) => {
         .json({ msg: "No pending registration found or expired" });
     }
 
-    if (pending.verificationCode !== verificationCode) {
+    if (pending.verification_code !== verificationCode) {
       return res.status(400).json({ msg: "Invalid verification code" });
     }
 
