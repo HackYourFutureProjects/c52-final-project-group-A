@@ -7,6 +7,7 @@ import registerRouter from "./routes/register.js";
 import loginRouter from "./routes/login.js";
 import cors from "cors";
 import config from "./config.js";
+import searchRouter from "./routes/search.js";
 
 const app = express();
 
@@ -42,5 +43,7 @@ app.use("/api/feed", feedRouter);
 app.use("/api/register", registerRouter);
 
 app.use("/api/login", loginRouter);
+
+app.use("/api/search", searchRouter);
 
 export default app;
