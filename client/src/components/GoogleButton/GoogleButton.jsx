@@ -1,10 +1,31 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import style from "./GoogleButton.module.css";
 import Button from "../Button.jsx";
+import useFetch from "../../hooks/useFetch.js";
 
 function GoogleButton() {
-  const handleLoginSuccess = (response) => {
-    console.log("Login Success:", response);
+  const { performFetch, isLoading, error } = useFetch(
+    "/login/Google_Auth",
+    (data) => {
+      console.log("Google login successful:", data);
+      window.location.href = "/home"; // Redirect to landing page on success
+    },
+  );
+
+  const handleLoginSuccess = async (response) => {
+    console.log("Google OAuth Success:", response);
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        access_token: response.access_token,
+      }),
+    };
+
+    performFetch(options);
   };
 
   const GoogleLogo = () => {
@@ -34,17 +55,25 @@ function GoogleButton() {
       </svg>
     );
   };
+
   const googleLogin = useGoogleLogin({
-    onSuccess: (response) => handleLoginSuccess(response),
-    onError: console.error,
+    onSuccess: handleLoginSuccess,
+    onError: (error) => {
+      console.error("Google login error:", error);
+    },
   });
+
+  if (error) {
+    console.error("Fetch error:", error);
+  }
 
   return (
     <Button
-      label="Continue with Google"
+      label={isLoading ? "Signing in..." : "Continue with Google"}
       onClick={googleLogin}
       icon={<GoogleLogo />}
       className={style.googleButton}
+      disabled={isLoading}
     />
   );
 }
