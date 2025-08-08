@@ -17,6 +17,7 @@ import * as readline from "node:readline";
 const {
   SALT_ROUNDS,
   DROP_DB,
+  CREATE_ADMIN,
   NUM_USERS,
   MAX_NUM_POSTS_PER_USER,
   TAGS,
@@ -62,7 +63,7 @@ async function seed() {
 
     // generating users
     logInfo("Generating users...");
-    const users = await seedUser(NUM_USERS, SALT_ROUNDS);
+    const users = await seedUser(NUM_USERS, CREATE_ADMIN, SALT_ROUNDS);
 
     // generating posts
     logInfo("Generating posts...");
@@ -81,7 +82,6 @@ async function seed() {
     await seedFollow(users, AVG_NUM_FOLLOWS);
 
     logInfo("Follows generated");
-    rl.close();
   } catch (error) {
     logError("Error seeding database: " + error);
   } finally {
