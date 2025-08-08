@@ -1,6 +1,6 @@
 import express from "express";
-import { userRegister } from "../controllers/userRegister.js";
-import { verifyEmail } from "../controllers/userVerifyEmail.js";
+import { userRegister } from "../controllers/userRegisterController.js";
+import { verifyEmail } from "../controllers/userVerifyEmailController.js";
 import validateRegisterBody from "../middleware/validateRegisterBody.js";
 import validateVerifyEmailBody from "../middleware/validateVerifyEmailBody.js";
 

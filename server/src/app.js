@@ -7,6 +7,7 @@ import registerRouter from "./routes/register.js";
 import loginRouter from "./routes/login.js";
 import searchRouter from "./routes/search.js";
 import getUserRoute from "./routes/getUser.js";
+import profileRouter from "./routes/profile.js";
 
 // Create an express server
 const app = express();
@@ -23,18 +24,13 @@ app.use(express.json());
  * As we also host our client code on heroku we want to separate the API endpoints.
  */
 
-// Post routes
 app.use("/api/post", postRouter);
-//
 app.use("/api/weekly-digest", weeklyDigestRouter);
-//
 app.use("/api/feed", feedRouter);
-
 app.use("/api/register", registerRouter);
-
 app.use("/api/login", loginRouter);
-
 app.use("/api/search", searchRouter);
+app.use("/api/profile", profileRouter);
 
 app.use("/api/user", getUserRoute);
 
