@@ -1,5 +1,6 @@
 import sendEmail from "../util/mailer.js";
 import generateCode from "../util/codeGenerator.js";
+import generateUsername from "../util/usernameGenerator.js";
 import User, { validateUser } from "../models/User.js";
 import PendingUser from "../models/PendingUser.js";
 import bcrypt from "bcrypt";
@@ -10,7 +11,7 @@ const { SALT_ROUNDS } = config;
 
 export const userRegister = async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
-  const username = email.split("@")[0].toLowerCase();
+  const username = generateUsername();
 
   try {
     const existingUser = await User.findOne({
