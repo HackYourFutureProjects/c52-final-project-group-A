@@ -1,7 +1,7 @@
 import style from "./Avatar.module.css";
 import PropTypes from "prop-types";
 
-function Avatar({ avatar, size, score }) {
+function Avatar({ avatar, score }) {
   const AvatarPlaceholder = () => {
     return (
       <svg
@@ -36,13 +36,14 @@ function Avatar({ avatar, size, score }) {
       </svg>
     );
   };
-  if (size === "sm") {
-    return <AvatarPlaceholder size="sm" />;
-  }
 
   return (
     <div className={style.avatarContainer}>
-      {avatar ? <img src={avatar} alt="Avatar" /> : <AvatarPlaceholder />}
+      {avatar ? (
+        <img src={avatar} className={style.avatar} alt="Avatar" />
+      ) : (
+        <AvatarPlaceholder />
+      )}
       <span className={style.score}>{score ? score : "00"}</span>
     </div>
   );
@@ -50,7 +51,6 @@ function Avatar({ avatar, size, score }) {
 
 Avatar.propTypes = {
   avatar: PropTypes.string,
-  size: PropTypes.oneOf(["sm", "md", "lg"]),
   score: PropTypes.number,
 };
 
