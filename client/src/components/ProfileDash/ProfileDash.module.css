@@ -1,11 +1,11 @@
-.dash {
+.dash_lg {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--color-border);
   border-radius: var(--outer-border-radius);
   padding: 1.25rem;
-
   margin-top: 10rem;
+  font-size: 3rem;
 }
 .mainContainer {
   display: flex;

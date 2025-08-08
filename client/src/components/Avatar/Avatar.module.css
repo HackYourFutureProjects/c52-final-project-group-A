@@ -4,8 +4,8 @@
   align-self: flex-start;
 }
 .avatar {
-  width: 10rem;
-  height: 10rem;
+  width: 10em;
+  height: 10em;
   border-radius: 100%;
 }
 .score {
@@ -15,7 +15,7 @@
   background: var(--color-orange);
   color: var(--color-white);
   padding: 0.5rem;
-  font-size: 2rem;
+  font-size: 2em;
   font-weight: 500;
   border-radius: 100%;
 }

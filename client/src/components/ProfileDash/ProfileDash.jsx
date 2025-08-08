@@ -5,23 +5,27 @@ import Avatar from "../Avatar/Avatar.jsx";
 import { Link } from "react-router-dom";
 
 function ProfileDash({ size, user }) {
-  const { username, profile, score } = user;
+  const sizeClass = style[`dash_${size}`];
+  const username = user?.username ?? "username";
+  const score = user?.score ?? "00";
+  const profile = user?.profile ?? { first_name: "Full", last_name: "Name" };
+  const fullName = profile.first_name + " " + profile.last_name;
 
   return (
-    <section className={style.dash}>
+    <section className={sizeClass}>
       <div className={style.mainContainer}>
-        <Avatar size={size} avatar={profile.avatar} score={score} />
+        <Avatar score={score} />
         <div className={style.wrapper}>
           <div className={style.nameAndBtnContainer}>
             <div className={style.nameContainer}>
-              <h1 className={style.fullName}>Full Name</h1>
+              <h1 className={style.fullName}>{fullName}</h1>
               <p className={style.username}>
-                <Link to={`user/${username}`}>@{username}</Link>
+                <Link to={`../user/${username}`}>@{username}</Link>
               </p>
             </div>
             <Button label="Follow" className={style.followBtn} />
           </div>
-          <p>
+          <p className={style.bio}>
             Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
             faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
             pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
@@ -37,7 +41,7 @@ function ProfileDash({ size, user }) {
 }
 
 ProfileDash.propTypes = {
-  size: PropTypes.oneOf(["sm", "md", "lg"]),
+  size: PropTypes.oneOf(["sm", "md", "lg"]).isRequired,
   user: PropTypes.object,
 };
 
