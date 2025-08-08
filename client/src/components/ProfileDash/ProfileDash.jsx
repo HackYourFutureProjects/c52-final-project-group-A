@@ -5,35 +5,41 @@ import Avatar from "../Avatar/Avatar.jsx";
 import { Link } from "react-router-dom";
 
 function ProfileDash({ size, user }) {
-  const sizeClass = style[`dash_${size}`];
+  const dashSize = style[`dash_${size}`];
+  const followBtnSize = style[`followBtn_${size}`];
   const username = user?.username ?? "username";
   const score = user?.score ?? "00";
   const profile = user?.profile ?? { first_name: "Full", last_name: "Name" };
   const fullName = profile.first_name + " " + profile.last_name;
 
   return (
-    <section className={sizeClass}>
+    <section className={style.dash + " " + dashSize}>
       <div className={style.mainContainer}>
         <Avatar score={score} />
         <div className={style.wrapper}>
           <div className={style.nameAndBtnContainer}>
             <div className={style.nameContainer}>
               <h1 className={style.fullName}>{fullName}</h1>
-              <p className={style.username}>
-                <Link to={`../user/${username}`}>@{username}</Link>
-              </p>
+              <Link to={`../user/${username}`} className={style.username}>
+                @{username}
+              </Link>
             </div>
-            <Button label="Follow" className={style.followBtn} />
+            <Button
+              label="Follow"
+              className={style.followBtn + " " + followBtnSize}
+            />
           </div>
-          <p className={style.bio}>
-            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-            faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-            pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-            tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-            Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-            hendrerit semper vel class aptent taciti sociosqu. Ad litora
-            torquent per conubia nostra inceptos himenaeos.
-          </p>
+          {size === "lg" && (
+            <p className={style.bio}>
+              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+              faucibus ex sapien vitae pellentesque sem placerat. In id cursus
+              mi pretium tellus duis convallis. Tempus leo eu aenean sed diam
+              urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum
+              egestas. Iaculis massa nisl malesuada lacinia integer nunc
+              posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+              litora torquent per conubia nostra inceptos himenaeos.
+            </p>
+          )}
         </div>
       </div>
     </section>
@@ -41,7 +47,7 @@ function ProfileDash({ size, user }) {
 }
 
 ProfileDash.propTypes = {
-  size: PropTypes.oneOf(["sm", "md", "lg"]).isRequired,
+  size: PropTypes.oneOf(["sm", "lg"]).isRequired,
   user: PropTypes.object,
 };
 
