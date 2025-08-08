@@ -12,20 +12,9 @@ export const verifyGoogleToken = async (req, res, next) => {
   }
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000); // 5 seconds timeout
-    let response;
-
-    try {
-      response = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timeout);
-    }
+    const response = await fetch(
+      `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${access_token}`,
+    );
 
     if (!response.ok) {
       return res.status(401).json({ msg: "Invalid access token" });

@@ -2,15 +2,13 @@ import { useGoogleLogin } from "@react-oauth/google";
 import style from "./GoogleButton.module.css";
 import Button from "../Button.jsx";
 import useFetch from "../../hooks/useFetch.js";
-import { useNavigate } from "react-router-dom";
 
 function GoogleButton() {
-  const navigate = useNavigate();
   const { performFetch, isLoading, error } = useFetch(
     "/login/Google_Auth",
     (data) => {
       console.log("Google login successful:", data);
-      navigate("/home"); // Redirect to landing page on success
+      window.location.href = "/home"; // Redirect to landing page on success
     },
   );
 
