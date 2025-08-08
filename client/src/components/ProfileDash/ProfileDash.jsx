@@ -15,7 +15,7 @@ function ProfileDash({ size, user }) {
   return (
     <section className={style.dash + " " + dashSize}>
       <div className={style.mainContainer}>
-        <Avatar score={score} />
+        <Avatar avatar={profile.avatar ?? null} score={score} />
         <div className={style.wrapper}>
           <div className={style.nameAndBtnContainer}>
             <div className={style.nameContainer}>
@@ -31,13 +31,7 @@ function ProfileDash({ size, user }) {
           </div>
           {size === "lg" && (
             <p className={style.bio}>
-              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-              faucibus ex sapien vitae pellentesque sem placerat. In id cursus
-              mi pretium tellus duis convallis. Tempus leo eu aenean sed diam
-              urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum
-              egestas. Iaculis massa nisl malesuada lacinia integer nunc
-              posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
-              litora torquent per conubia nostra inceptos himenaeos.
+              {profile.bio ?? "This user has not set a bio yet."}
             </p>
           )}
         </div>
@@ -48,7 +42,18 @@ function ProfileDash({ size, user }) {
 
 ProfileDash.propTypes = {
   size: PropTypes.oneOf(["sm", "lg"]).isRequired,
-  user: PropTypes.object,
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    username: PropTypes.string,
+    profile: {
+      first_name: PropTypes.string,
+      last_name: PropTypes.string,
+      avatar: PropTypes.string,
+      bio: PropTypes.string,
+      _id: PropTypes.string,
+    },
+    score: PropTypes.number,
+  }),
 };
 
 export default ProfileDash;

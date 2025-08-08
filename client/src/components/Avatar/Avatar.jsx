@@ -44,7 +44,7 @@ function Avatar({ avatar, score }) {
       ) : (
         <AvatarPlaceholder />
       )}
-      <span className={style.score}>{score ? score : "00"}</span>
+      <span className={style.score}>{score || "00"}</span>
     </div>
   );
 }
