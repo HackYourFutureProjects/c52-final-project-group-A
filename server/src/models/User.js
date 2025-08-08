@@ -123,9 +123,9 @@ export const validateUser = (userObject) => {
     if (username.length < 6 || username.length > 32) {
       errorList.push("username must be between 6 and 32 characters");
     }
-    if (!/^[a-z0-9._-]+$/.test(username)) {
+    if (!/^[a-z0-9]+$/.test(username)) {
       errorList.push(
-        "username must contain only lowercase letters, numbers, dots, underscores, and hyphens",
+        "username must contain only lowercase letters and numbers",
       );
     }
   }
