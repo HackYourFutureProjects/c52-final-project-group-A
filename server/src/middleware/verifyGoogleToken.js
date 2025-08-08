@@ -1,41 +1,32 @@
-import { OAuth2Client } from "google-auth-library";
 import { logError } from "../util/logging.js";
-import config from "../config.js";
 import generateUsername from "../util/usernameGenerator.js";
 import { validateUser } from "../models/User.js";
 
-const { CLIENT_ID } = config;
-const client = new OAuth2Client(CLIENT_ID);
-
 export const verifyGoogleToken = async (req, res, next) => {
-  const { credential } = req.body;
+  const { access_token } = req.body;
 
-  if (!credential || typeof credential !== "string") {
+  if (!access_token || typeof access_token !== "string") {
     return res
       .status(400)
-      .json({ msg: "No token provided or token is invalid type" });
+      .json({ msg: "No access token provided or token is invalid type" });
   }
 
   try {
-    const ticket = await client.verifyIdToken({
-      idToken: credential,
-      audience: CLIENT_ID,
-    });
+    const response = await fetch(
+      `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${access_token}`,
+    );
 
-    const payload = ticket.getPayload();
-
-    if (!payload) {
-      return res
-        .status(401)
-        .json({ msg: "Token verification failed: no payload" });
+    if (!response.ok) {
+      return res.status(401).json({ msg: "Invalid access token" });
     }
 
-    const { email, given_name, family_name, sub } = payload;
+    const userInfo = await response.json();
+    const { email, given_name, family_name, id } = userInfo;
 
-    if (!email || !sub || !given_name || !family_name) {
+    if (!email || !id || !given_name || !family_name) {
       return res
         .status(422)
-        .json({ msg: "Token payload missing required user info" });
+        .json({ msg: "Missing required user info from Google" });
     }
 
     const userData = {
@@ -44,23 +35,20 @@ export const verifyGoogleToken = async (req, res, next) => {
         first_name: given_name,
         last_name: family_name,
       },
-      google_id: sub,
+      google_id: id,
       username: generateUsername(),
     };
 
     const isValidUser = validateUser(userData);
 
     if (isValidUser.length > 0) {
-      return res
-        .status(400)
-        .json({ msg: "Invalid user data from Google token" });
+      return res.status(400).json({ msg: "Invalid user data from Google" });
     }
 
     req.user = userData;
-
     next();
   } catch (err) {
     logError("Google token verification error:", err);
-    return res.status(401).json({ msg: "Invalid Google token" });
+    return res.status(401).json({ msg: "Failed to verify Google token" });
   }
 };
