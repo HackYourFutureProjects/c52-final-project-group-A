@@ -8,6 +8,7 @@ import loginRouter from "./routes/login.js";
 import searchRouter from "./routes/search.js";
 import getUserRoute from "./routes/getUser.js";
 import profileRouter from "./routes/profile.js";
+import getUserRoute from "./routes/getUser.js";
 
 // Create an express server
 const app = express();
