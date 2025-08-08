@@ -4,29 +4,35 @@ import User from "../models/User.js";
 import { logInfo } from "./logging.js";
 import usernameGenerator from "./usernameGenerator.js";
 
-async function seedUser(NUM_USERS, saltRounds = 10) {
+async function seedUser(NUM_USERS, CREATE_ADMIN, saltRounds = 10) {
   const users = [];
 
   for (let i = 0; i < NUM_USERS; i++) {
+    const admin = CREATE_ADMIN && i === 0; // create an admin user if requested and it's the first user
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
-    const username = usernameGenerator();
-    const email = faker.internet.email({ firstName, lastName });
-    const password = faker.internet.password({ length: 10 });
+    const username = admin ? "admin" : usernameGenerator();
+    const email = admin
+      ? "admin@gmail.com"
+      : faker.internet.email({ firstName, lastName });
+    const password = admin
+      ? "admin123"
+      : faker.internet.password({ length: 10 });
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const score = Math.floor(Math.random() * 100 + 1);
 
     const user = new User({
-      username: username,
+      admin,
+      username,
       password: hashedPassword,
-      email: email,
+      email,
       profile: {
         first_name: firstName,
         last_name: lastName,
         avatar: faker.image.avatar(),
         bio: faker.lorem.paragraph({ min: 1, max: 5 }),
       },
-      score: score,
+      score,
     });
 
     const savedUser = await user.save();
