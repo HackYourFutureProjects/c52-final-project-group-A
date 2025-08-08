@@ -1,34 +1,44 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import useFetch from "../../hooks/useFetch";
 import styles from "./SinglePost.module.css";
 
 const SinglePost = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  const { isLoading, error, performFetch, cancelFetch } = useFetch(
+    `/post/${id}`,
+    (data) => {
+      setPost(data);
+    },
+  );
 
   useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/post/${id}`,
-        );
-        setPost(res.data);
-      } catch (err) {
-        console.error("Error fetching post:", err);
-        setError("Error loading post.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    performFetch();
 
-    fetchPost();
+    return () => {
+      cancelFetch();
+    };
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  useEffect(() => {
+    if (error) {
+      try {
+        const maybePost = JSON.parse(
+          error.toString().replace(/^.*Received:\s*/, ""),
+        );
+        if (maybePost && maybePost._id && maybePost.title) {
+          setPost(maybePost);
+        }
+      } catch {
+        // ignore parsing errors — not a valid JSON post
+      }
+    }
+  }, [error]);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (!post && error) return <p>{error.toString()}</p>;
   if (!post) return <p>Post not found.</p>;
 
   return (
