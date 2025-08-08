@@ -34,7 +34,7 @@ export const googleAuth = async (req, res) => {
       { expiresIn: "7d" },
     );
 
-    res.cookie("token", token, {
+    res.cookie("bq_token", token, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
       secure: NODE_ENV === "production",
