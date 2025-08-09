@@ -1,11 +1,11 @@
 import sendEmail from "../util/mailer.js";
 import generateCode from "../util/codeGenerator.js";
-import generateUsername from "../util/usernameGenerator.js";
 import User, { validateUser } from "../models/User.js";
 import PendingUser from "../models/PendingUser.js";
 import bcrypt from "bcrypt";
 import { logError } from "../util/logging.js";
 import config from "../config.js";
+import generateUsername from "../util/usernameGenerator.js";
 
 const { SALT_ROUNDS } = config;
 

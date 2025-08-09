@@ -1,7 +1,11 @@
+import config from "../config.js";
+
+const { NODE_ENV } = config;
+
 export const logoutUser = (req, res) => {
-  res.clearCookie("token", {
+  res.clearCookie("bq_token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: NODE_ENV === "production",
     sameSite: "Strict",
   });
 
