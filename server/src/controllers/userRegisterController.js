@@ -5,12 +5,13 @@ import PendingUser from "../models/PendingUser.js";
 import bcrypt from "bcrypt";
 import { logError } from "../util/logging.js";
 import config from "../config.js";
+import { generateUsername } from "../util/usernameGenerator.js";
 
 const { SALT_ROUNDS } = config;
 
 export const userRegister = async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
-  const username = email.split("@")[0].toLowerCase();
+  const username = generateUsername();
 
   try {
     const existingUser = await User.findOne({
