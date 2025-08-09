@@ -13,7 +13,12 @@ export const verifyGoogleToken = async (req, res, next) => {
 
   try {
     const response = await fetch(
-      `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${access_token}`,
+      "https://www.googleapis.com/oauth2/v2/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      },
     );
 
     if (!response.ok) {
