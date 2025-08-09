@@ -34,8 +34,16 @@ export const loginUser = async (req, res) => {
       sameSite: "strict",
     });
 
+    const userResponse = Object.fromEntries(
+      Object.entries(user).filter(
+        ([key]) => key !== "password" && key !== "__v",
+      ),
+    );
+
     return res.status(200).json({
+      success: true,
       message: "Login successful",
+      user: userResponse,
     });
   } catch (err) {
     logError("Login error:", err);
