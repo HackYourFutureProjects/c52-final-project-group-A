@@ -11,7 +11,7 @@ const { SALT_ROUNDS } = config;
 
 export const userRegister = async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
-  const username = generateUsername();
+  const username = email.split("@")[0].toLowerCase();
 
   try {
     const existingUser = await User.findOne({
@@ -34,7 +34,7 @@ export const userRegister = async (req, res) => {
         first_name: firstName,
         last_name: lastName,
       },
-      password,
+      password: hashedPassword,
     };
 
     const validationErrors = validateUser(userData);
@@ -60,7 +60,7 @@ export const userRegister = async (req, res) => {
     await sendEmail(email, verificationCode);
 
     return res.status(200).json({
-      message: `Verification code sent to ${email}`,
+      message: "Verification code sent to email",
     });
   } catch (err) {
     logError("Error in userRegister:", err);
