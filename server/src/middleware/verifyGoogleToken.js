@@ -1,5 +1,5 @@
 import { logError } from "../util/logging.js";
-import { generateUsername } from "../util/usernameGenerator.js";
+import generateUsername from "../util/usernameGenerator.js";
 import { validateUser } from "../models/User.js";
 
 export const verifyGoogleToken = async (req, res, next) => {
