@@ -1,0 +1,21 @@
+.avatarContainer {
+  position: relative;
+  width: 3em;
+  height: 3em;
+}
+.avatar {
+  width: 3em;
+  height: 3em;
+  border-radius: 100%;
+}
+.score {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--color-orange);
+  color: var(--color-white);
+  padding: 0.3em;
+  font-size: 0.6em;
+  font-weight: 500;
+  border-radius: 100%;
+}
