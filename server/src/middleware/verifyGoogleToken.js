@@ -1,5 +1,5 @@
 import { logError } from "../util/logging.js";
-import generateUsername from "../util/usernameGenerator.js";
+import { generateUsername } from "../util/usernameGenerator.js";
 import { validateUser } from "../models/User.js";
 
 export const verifyGoogleToken = async (req, res, next) => {
@@ -12,14 +12,20 @@ export const verifyGoogleToken = async (req, res, next) => {
   }
 
   try {
-    const response = await fetch(
-      "https://www.googleapis.com/oauth2/v2/userinfo",
-      {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000); // 5 seconds timeout
+    let response;
+
+    try {
+      response = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
-      },
-    );
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
 
     if (!response.ok) {
       return res.status(401).json({ msg: "Invalid access token" });
@@ -53,6 +59,10 @@ export const verifyGoogleToken = async (req, res, next) => {
     req.user = userData;
     next();
   } catch (err) {
+    if (err.name === "AbortError") {
+      logError("Google API request timeout:", err);
+      return res.status(408).json({ msg: "Request to Google API timed out" });
+    }
     logError("Google token verification error:", err);
     return res.status(401).json({ msg: "Failed to verify Google token" });
   }
