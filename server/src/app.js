@@ -31,7 +31,7 @@ app.use("/api/register", registerRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/profile", profileRouter);
-
 app.use("/api/user", getUserRoute);
+
 
 export default app;
