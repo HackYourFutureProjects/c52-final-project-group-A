@@ -1,0 +1,57 @@
+.post {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.title {
+  margin: 0 0 12px;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+}
+.content {
+  line-height: 1.7;
+  color: #111827;
+}
+
+.commentsBlock {
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+  margin-top: 24px;
+}
+.commentsTitle {
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+
+.form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.textarea {
+  flex: 1;
+  resize: vertical;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px;
+  font: inherit;
+}
+.button {
+  border: none;
+  background: #111827;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #dc2626;
+  margin-bottom: 8px;
+}
+.muted {
+  color: #6b7280;
+}

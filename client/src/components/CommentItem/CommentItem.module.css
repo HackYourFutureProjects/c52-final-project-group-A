@@ -1,0 +1,36 @@
+.item {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  object-fit: cover;
+  flex: 0 0 32px;
+}
+.body {
+  flex: 1;
+  min-width: 0;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.username {
+  font-weight: 600;
+}
+.meta {
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap;
+}
+.content {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
