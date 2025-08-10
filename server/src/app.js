@@ -1,5 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import weeklyDigestRouter from "./routes/weeklyDigest.js";
 import postRouter from "./routes/post.js";
 import feedRouter from "./routes/feed.js";
@@ -11,6 +12,14 @@ import commentsRouter from "./routes/comments.js";
 
 // Create an express server
 const app = express();
+
+// CORS
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  }),
+);
 
 // Use cookie parser middleware to handle cookies
 app.use(cookieParser());

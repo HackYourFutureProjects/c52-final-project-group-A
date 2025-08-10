@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import CommentItem from "@/components/CommentItem/CommentItem.jsx";
+import { io as ioClient } from "socket.io-client";
+import CommentItem from "../CommentItem/CommentItem.jsx";
 import styles from "./postItem.module.css";
 
 export default function PostItem({ post, currentUser }) {
@@ -10,7 +11,9 @@ export default function PostItem({ post, currentUser }) {
   const [error, setError] = useState("");
   const [text, setText] = useState("");
   const postingRef = useRef(false);
+  const socketRef = useRef(null);
 
+  // Initial load (REST)
   useEffect(() => {
     if (!post?._id) return;
     setLoadingComments(true);
@@ -30,6 +33,52 @@ export default function PostItem({ post, currentUser }) {
     })();
   }, [post?._id, apiBase]);
 
+  // Realtime (WebSocket)
+  useEffect(() => {
+    if (!post?._id) return;
+
+    const nsp = ioClient(`${apiBase}/comments`, {
+      withCredentials: true,
+      transports: ["websocket"],
+      path: "/socket.io",
+    });
+
+    socketRef.current = nsp;
+
+    nsp.on("connect_error", (err) => {
+      if (import.meta.env.DEV) {
+        console.warn("[WS] connect_error:", err?.message || err);
+      }
+    });
+
+    // join this post's room
+    nsp.emit("comments:join", { postId: post._id });
+
+    // listen for newly created comments from the server
+    nsp.on("comments:created", (incoming) => {
+      setComments((prev) =>
+        prev.some((c) => c._id === incoming._id) ? prev : [incoming, ...prev],
+      );
+    });
+
+    return () => {
+      const s = socketRef.current;
+      if (!s) return;
+      try {
+        s.emit("comments:leave", { postId: post._id });
+        s.off("comments:created");
+        s.off("connect_error");
+        s.disconnect();
+      } catch (err) {
+        if (import.meta.env.DEV) {
+          console.warn("[WS cleanup] error:", err);
+        }
+      }
+      socketRef.current = null;
+    };
+  }, [post?._id, apiBase]);
+
+  // Submit (REST)
   async function handleSubmit(e) {
     e.preventDefault();
     if (postingRef.current) return;
@@ -60,6 +109,7 @@ export default function PostItem({ post, currentUser }) {
       if (!res.ok) throw new Error("Failed to send comment");
       const saved = await res.json();
       setComments((prev) => prev.map((c) => (c._id === tempId ? saved : c)));
+      // Other clients will receive it via WS; local list already updated.
     } catch (e) {
       setComments((prev) => prev.filter((c) => c._id !== tempId));
       setError(e.message);
