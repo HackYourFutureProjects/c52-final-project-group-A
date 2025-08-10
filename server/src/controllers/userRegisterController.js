@@ -7,7 +7,7 @@ import { logError } from "../util/logging.js";
 import config from "../config.js";
 import generateUsername from "../util/usernameGenerator.js";
 
-const { SALT_ROUNDS } = config;
+const { SALT_ROUNDS, NODE_ENV } = config;
 
 export const userRegister = async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
@@ -58,6 +58,13 @@ export const userRegister = async (req, res) => {
     await pending.save();
 
     await sendEmail(email, verificationCode);
+
+    res.cookie("bq-registrationEmail", email, {
+      httpOnly: true,
+      secure: NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
 
     return res.status(200).json({
       message: "Verification code sent to email",

@@ -4,8 +4,15 @@ import { logError } from "../util/logging.js";
 
 export const verifyEmail = async (req, res) => {
   const { email, verificationCode } = req.body;
+  const cookieEmail = req.cookies["bq-registrationEmail"];
 
   try {
+    if (cookieEmail && email !== cookieEmail) {
+      return res.status(400).json({
+        msg: "Email mismatch. Try again later.",
+      });
+    }
+
     const pending = await PendingUser.findOne({ email });
 
     if (!pending) {
@@ -31,6 +38,9 @@ export const verifyEmail = async (req, res) => {
     const newUser = new User(userData);
     await newUser.save();
     await PendingUser.deleteOne({ email });
+
+    // Clear the registration email cookie
+    res.clearCookie("bq-registrationEmail");
 
     return res
       .status(201)
