@@ -1,5 +1,5 @@
 import { useState } from "react";
-import UserDataContext from "./userDataContext.js";
+import UserDataContext from "./UserDataContext.js";
 import PropTypes from "prop-types";
 
 const UserDataContextProvider = ({ children }) => {
