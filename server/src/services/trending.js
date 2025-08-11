@@ -42,6 +42,8 @@ export async function getTrendingPosts({
   const scored = rawPosts.map((post) => {
     const hoursAgo =
       (Date.now() - new Date(post.published_at).getTime()) / 36e5;
+    const hoursAgo =
+      (Date.now() - new Date(post.published_at).getTime()) / MILLISECONDS_PER_HOUR;
     const decay = Math.exp(-decayRate * hoursAgo);
     return { ...post, score: post.likeCount * decay };
   });
