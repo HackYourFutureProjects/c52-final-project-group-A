@@ -5,7 +5,7 @@ import style from "./AuthForm.module.css";
 import InputField from "../InputField/InputField.jsx";
 import GoogleButton from "../GoogleButton/GoogleButton.jsx";
 import Button from "../Button.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
@@ -19,10 +19,13 @@ function AuthForm({ type }) {
         passwordConfirmation: "",
       };
 
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const endpoint = isSignIn ? "/login" : "/register";
-  const { performFetch } = useFetch(`${endpoint}`);
+  const { error, performFetch } = useFetch(`${endpoint}`, () => {
+    navigate("/home");
+  });
 
   const handleChange = (e) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
@@ -38,6 +41,9 @@ function AuthForm({ type }) {
     };
     performFetch(options);
   };
+  if (error) {
+    console.error("Fetch error:", error);
+  }
 
   const renderFormFields = () => {
     if (isSignIn) {
