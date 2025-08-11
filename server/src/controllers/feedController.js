@@ -22,6 +22,8 @@ export const getFeed = async (req, res) => {
 
     const since = new Date(Date.now() - 28 * 3600 * 1000);
 
+    const since = new Date(Date.now() - FEED_WINDOW_HOURS * 3600 * 1000);
+
     // Get list of users the logged-in user follows
     const following = await Follow.find({ follower: userId }).select(
       "following",
