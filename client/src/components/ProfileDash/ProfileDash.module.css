@@ -59,6 +59,9 @@
   font-size: 0.8em;
   align-self: center;
 }
+.followBtn_sm:hover {
+  text-decoration: underline;
+}
 .followBtn_md {
   font-size: 0.8em;
   margin: 0.5em;
