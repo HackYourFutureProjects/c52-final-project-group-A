@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import style from "./AuthForm.module.css";
 import InputField from "../InputField/InputField.jsx";
 import GoogleButton from "../GoogleButton/GoogleButton.jsx";
 import Button from "../Button.jsx";
 import { Link, useNavigate } from "react-router-dom";
+import UserDataContext from "../../context/userDataContext/UserDataContext.js";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
@@ -20,10 +21,12 @@ function AuthForm({ type }) {
       };
 
   const navigate = useNavigate();
+  const { setUserData } = useContext(UserDataContext);
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const endpoint = isSignIn ? "/login" : "/register";
-  const { error, performFetch } = useFetch(`${endpoint}`, () => {
+  const { error, performFetch } = useFetch(`${endpoint}`, (res) => {
+    setUserData(res.user._doc);
     navigate("/home");
   });
 

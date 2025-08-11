@@ -1,25 +1,12 @@
 import ProfileDash from "../components/ProfileDash/ProfileDash.jsx";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import UserDataContext from "../context/userDataContext/UserDataContext.js";
-import useFetch from "../hooks/useFetch.js";
 
 function Profile() {
-  const { userData, setUserData } = useContext(UserDataContext);
-
-  const { error, performFetch } = useFetch("/profile", (response) => {
-    setUserData(response.result);
-  });
+  const { userData } = useContext(UserDataContext);
 
   if (!userData) {
     console.log("You are not logged in");
-  }
-
-  useEffect(() => {
-    performFetch();
-  }, []);
-
-  if (error) {
-    console.log("Error fetching profile:", error);
   }
 
   return (
