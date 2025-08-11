@@ -4,6 +4,9 @@ import { logInfo } from "./logging.js";
 import User from "../models/User.js";
 
 async function seedlike(users, posts, AVG_NUM_LIKES = 5) {
+  const now = new Date();
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
   const numLikes = users.length * AVG_NUM_LIKES;
 
   // getting existing likes to avoid duplication
@@ -27,7 +30,7 @@ async function seedlike(users, posts, AVG_NUM_LIKES = 5) {
       const like = new Like({
         user: randomUser._id,
         post: randomPost._id,
-        created_at: faker.date.recent(),
+        created_at: faker.date.between({ from: sevenDaysAgo, to: now }),
       });
 
       likes.push(like);

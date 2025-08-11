@@ -4,6 +4,9 @@ import { faker } from "@faker-js/faker";
 async function seedPost(users, MAX_NUM_POSTS_PER_USER, TAGS) {
   const posts = [];
 
+  const now = new Date();
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // last 7 days
+
   for (const user of users) {
     const userPostIds = [];
 
@@ -13,6 +16,10 @@ async function seedPost(users, MAX_NUM_POSTS_PER_USER, TAGS) {
       i++
     ) {
       const isPublished = Math.random() > 0.2; // 80% of posts will be published
+      const randomRecentDate = faker.date.between({
+        from: sevenDaysAgo,
+        to: now,
+      });
       const score = Math.floor(Math.random() * 100 + 1);
 
       const post = new Post({
@@ -20,8 +27,8 @@ async function seedPost(users, MAX_NUM_POSTS_PER_USER, TAGS) {
         tags: faker.helpers.arrayElements(TAGS, { min: 1, max: 3 }),
         title: faker.lorem.sentence({ min: 1, max: 8 }),
         content: faker.lorem.paragraph({ min: 1, max: 10 }),
-        created_at: faker.date.past(),
-        published_at: isPublished ? faker.date.recent() : null,
+        created_at: randomRecentDate,
+        published_at: isPublished ? randomRecentDate : null,
         author: user._id,
         score: score,
       });
