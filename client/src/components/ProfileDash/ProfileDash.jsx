@@ -3,10 +3,16 @@ import style from "./ProfileDash.module.css";
 import PropTypes from "prop-types";
 import Avatar from "../Avatar/Avatar.jsx";
 import { Link } from "react-router-dom";
+import useWindowWidth from "../../hooks/useWindowWidth.js";
 
-function ProfileDash({ size, user }) {
-  const dashSize = style[`dash_${size}`];
+function ProfileDash({ size, user, followBtn = true }) {
+  const mobile = useWindowWidth(768);
+
+  const dashSize =
+    mobile && size === "lg" ? style[`dash_mobile`] : style[`dash_${size}`];
+  const nameAndBtnContainer = style[`nameAndBtnContainer_${size}`];
   const followBtnSize = style[`followBtn_${size}`];
+
   const username = user?.username ?? "username";
   const score = user?.score ?? "00";
   const profile = user?.profile ?? { first_name: "Full", last_name: "Name" };
@@ -17,17 +23,21 @@ function ProfileDash({ size, user }) {
       <div className={style.mainContainer}>
         <Avatar avatar={profile.avatar ?? null} score={score} />
         <div className={style.wrapper}>
-          <div className={style.nameAndBtnContainer}>
+          <div
+            className={style.nameAndBtnContainer + " " + nameAndBtnContainer}
+          >
             <div className={style.nameContainer}>
               <h1 className={style.fullName}>{fullName}</h1>
               <Link to={`../user/${username}`} className={style.username}>
                 @{username}
               </Link>
             </div>
-            <Button
-              label="Follow"
-              className={style.followBtn + " " + followBtnSize}
-            />
+            {followBtn && (
+              <Button
+                label="Follow"
+                className={style.followBtn + " " + followBtnSize}
+              />
+            )}
           </div>
           {size === "lg" && (
             <p className={style.bio}>
@@ -41,7 +51,7 @@ function ProfileDash({ size, user }) {
 }
 
 ProfileDash.propTypes = {
-  size: PropTypes.oneOf(["sm", "lg"]).isRequired,
+  size: PropTypes.oneOf(["sm", "md", "lg"]).isRequired,
   user: PropTypes.shape({
     _id: PropTypes.string,
     username: PropTypes.string,
@@ -54,6 +64,7 @@ ProfileDash.propTypes = {
     },
     score: PropTypes.number,
   }),
+  followBtn: PropTypes.bool,
 };
 
 export default ProfileDash;

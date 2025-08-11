@@ -1,5 +1,6 @@
 /* NavBar */
 .navContainer {
+  z-index: 50;
   position: fixed;
   top: 2rem;
   width: 100%;
@@ -16,7 +17,7 @@
   align-items: center;
   padding: 0.5rem;
   background: var(--color-semi-transparent-white);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(3px);
   border: 1px solid var(--color-border);
   border-radius: var(--pill-border-radius);
   pointer-events: auto;
