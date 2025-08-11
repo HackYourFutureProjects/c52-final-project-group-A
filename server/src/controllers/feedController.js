@@ -6,6 +6,7 @@ import Like from "../models/Like.js";
 import config from "../config.js";
 import { getTrendingPosts } from "../services/trending.js";
 import { hasUserSignals } from "../util/userSignals.js";
+const { FEED_WINDOW_HOURS } = config;
 
 export const getFeed = async (req, res) => {
   try {
@@ -19,11 +20,7 @@ export const getFeed = async (req, res) => {
       });
       return res.json({ mode: "cold-start", items: trending });
     }
-
-    const since = new Date(Date.now() - 28 * 3600 * 1000);
-
     const since = new Date(Date.now() - FEED_WINDOW_HOURS * 3600 * 1000);
-
     // Get list of users the logged-in user follows
     const following = await Follow.find({ follower: userId }).select(
       "following",

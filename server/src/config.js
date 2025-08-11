@@ -1,6 +1,12 @@
 import getEnvVariable from "./util/getEnvVariable.js";
 
 const config = {
+  FEED_WINDOW_HOURS: 168,
+  // Scoring weights
+  LIKE_WEIGHT: 2,
+  FOLLOWER_WEIGHT: 3,
+  POST_WEIGHT: 1,
+
   // node env production | development
   NODE_ENV: getEnvVariable("NODE_ENV", "development"),
   // server configuration

@@ -37,19 +37,10 @@ export async function getTrendingPosts({
 
   // Score = likes × time decay (half-life = 9h)
   const HALF_LIFE_H = 9;
-  // Score = likes × time decay (half-life = 9h)
-  // The half-life of 9 hours was chosen to balance recency and popularity:
-  // it ensures that new posts can trend quickly, while still allowing popular posts
-  // to remain visible for several hours. This value was determined empirically
-  // to provide a good mix of fresh and engaging content in the trending feed.
-  const HALF_LIFE_H = 9;
   const decayRate = Math.log(2) / HALF_LIFE_H;
 
   const scored = rawPosts.map((post) => {
-    const hoursAgo =
-      (Date.now() - new Date(post.published_at).getTime()) / 36e5;
-    const hoursAgo =
-      (Date.now() - new Date(post.published_at).getTime()) / MILLISECONDS_PER_HOUR;
+    const hoursAgo = Date.now() - new Date(post.published_at).getTime(); //MILLISECONDS_PER_HOUR;
     const decay = Math.exp(-decayRate * hoursAgo);
     return { ...post, score: post.likeCount * decay };
   });
