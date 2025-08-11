@@ -1,14 +1,14 @@
 import { useState } from "react";
-import userDataContext from "./userDataContext.js";
+import UserDataContext from "./userDataContext.js";
 import PropTypes from "prop-types";
 
 const UserDataContextProvider = ({ children }) => {
   const [userData, setUserData] = useState();
 
   return (
-    <userDataContext.Provider value={{ userData, setUserData }}>
+    <UserDataContext.Provider value={{ userData, setUserData }}>
       {children}
-    </userDataContext.Provider>
+    </UserDataContext.Provider>
   );
 };
 
