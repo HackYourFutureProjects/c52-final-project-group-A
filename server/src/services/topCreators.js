@@ -29,7 +29,7 @@ export async function getTopCreators({ windowHours = 168, limit = 5 } = {}) {
         following: authorGroup._id,
       });
 
-      const score = likeCount * 2 + followerCount + authorGroup.postCount;
+      const score = likeCount * LIKE_WEIGHT + followerCount * FOLLOWER_WEIGHT + authorGroup.postCount * POST_WEIGHT;
 
       return {
         authorId: authorGroup._id,
