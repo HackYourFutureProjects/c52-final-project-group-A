@@ -16,7 +16,7 @@ function Profile() {
 
   useEffect(() => {
     performFetch();
-  }, []);
+  }, [performFetch]);
 
   if (error) {
     console.log("Error fetching profile:", error);
