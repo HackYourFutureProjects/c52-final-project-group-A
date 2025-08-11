@@ -10,6 +10,7 @@ import UserDataContext from "../../context/userDataContext/UserDataContext.js";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
+  const Navigate = useNavigate();
   const initialFormValues = isSignIn
     ? { email: "", password: "" }
     : {
@@ -43,6 +44,9 @@ function AuthForm({ type }) {
       body: JSON.stringify(formValues),
     };
     performFetch(options);
+    if (!isSignIn) {
+      Navigate("/verify-email");
+    }
   };
   if (error) {
     console.error("Fetch error:", error);

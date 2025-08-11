@@ -3,22 +3,31 @@ import User from "../models/User.js";
 import { logError } from "../util/logging.js";
 
 export const verifyEmail = async (req, res) => {
-  const { email, verificationCode } = req.body;
+  const { verificationCode } = req.body;
   const cookieEmail = req.cookies["bq-registrationEmail"];
 
   try {
-    if (cookieEmail && email !== cookieEmail) {
+    if (cookieEmail === undefined) {
       return res.status(400).json({
         msg: "Email mismatch. Try again later.",
       });
     }
 
-    const pending = await PendingUser.findOne({ email });
+    const pending = await PendingUser.findOne({ email: cookieEmail });
 
     if (!pending) {
       return res
         .status(404)
         .json({ msg: "No pending registration found or expired" });
+    }
+
+    const now = new Date();
+    const createdAt = new Date(pending.createdAt);
+    const diffMinutes = (now - createdAt) / (1000 * 60);
+
+    if (diffMinutes > 15) {
+      await PendingUser.deleteOne({ email: cookieEmail });
+      return res.status(400).json({ msg: "Verification code expired" });
     }
 
     if (pending.verification_code !== verificationCode) {
@@ -37,8 +46,7 @@ export const verifyEmail = async (req, res) => {
 
     const newUser = new User(userData);
     await newUser.save();
-    await PendingUser.deleteOne({ email });
-
+    await PendingUser.deleteOne({ email: cookieEmail });
     // Clear the registration email cookie
     res.clearCookie("bq-registrationEmail");
 
