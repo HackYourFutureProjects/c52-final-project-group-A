@@ -1,4 +1,4 @@
-import Post from "../models/Post.js";
+import Post, { PostStatus, validatePost } from "../models/Post.js";
 
 export const getAllPosts = async (req, res) => {
   try {
@@ -26,17 +26,56 @@ export const getPostById = async (req, res) => {
 // Create Post endpoint
 export const createPost = async (req, res) => {
   try {
-    const { title, content, status } = req.body;
-
-    const newPost = await Post.create({
+    const {
       title,
       content,
-      status,
-      author: req.user._id,
-    });
+      status = PostStatus.DRAFT,
+      tags = [],
+      published_at,
+      score,
+    } = req.body;
 
+    // Normalize tags: ensure array of trimmed strings
+    const normalizedTags = Array.isArray(tags)
+      ? tags.map((t) => String(t).trim()).filter(Boolean)
+      : [];
+
+    // Convert published_at to Date if provided
+    let pubDate;
+    if (published_at) {
+      const parsed = new Date(published_at);
+      if (!isNaN(parsed.getTime())) {
+        pubDate = parsed;
+      }
+    }
+
+    // Auto-set published_at if status is PUBLISHED and no date was provided
+    if (status === PostStatus.PUBLISHED && !pubDate) {
+      pubDate = new Date();
+    }
+
+    // Build candidate object for validation
+    const candidate = {
+      status,
+      tags: normalizedTags,
+      title: typeof title === "string" ? title.trim() : title,
+      content: typeof content === "string" ? content.trim() : content,
+      published_at: pubDate,
+      author: req.user._id,
+      score: typeof score === "number" ? score : 0,
+    };
+
+    // Validate using custom validatePost function
+    const errors = validatePost(candidate);
+    if (errors.length > 0) {
+      return res.status(400).json({ message: "Validation error", errors });
+    }
+
+    // Save post to database
+    const newPost = await Post.create(candidate);
     res.status(201).json(newPost);
   } catch (error) {
+    console.error("createPost error:", error);
     res.status(400).json({ error: error.message });
   }
 };
