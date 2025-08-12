@@ -1,5 +1,8 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import config from "./config.js";
+
 import weeklyDigestRouter from "./routes/weeklyDigest.js";
 import postRouter from "./routes/post.js";
 import feedRouter from "./routes/feed.js";
@@ -10,21 +13,28 @@ import profileRouter from "./routes/profile.js";
 import exploreRouter from "./routes/explore.js";
 import followingRouter from "./routes/following.js";
 
-// Create an express server
 const app = express();
 
-// Use cookie parser middleware to handle cookies
-app.use(cookieParser());
+// --- CORS ДОЛЖЕН БЫТЬ ПЕРВЫМ ---
+const origins = config.CORS_ORIGINS.split(",").map(s => s.trim()).filter(Boolean);
 
-// Tell express to use the json middleware
+app.use(cors({
+  origin(origin, cb) {
+    if (!origin || origins.includes(origin)) return cb(null, true);
+    return cb(new Error(`Origin ${origin} не разрешён`));
+  },
+  methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"],
+  credentials: config.CORS_CREDENTIALS === "true",
+}));
+
+app.options("*", cors());
+// ---------------------------------
+
+app.use(cookieParser());
 app.use(express.json());
 
-/****** Attach routes ******/
-/**
- * We use /api/ at the start of every route!
- * As we also host our client code on heroku we want to separate the API endpoints.
- */
-
+// Роуты
 app.use("/api/post", postRouter);
 app.use("/api/weekly-digest", weeklyDigestRouter);
 app.use("/api/feed", feedRouter);

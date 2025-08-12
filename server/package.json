@@ -48,5 +48,11 @@
     "mongodb-memory-server": "^10.1.0",
     "mongoose": "^8.3.2",
     "nodemailer": "^7.0.5"
-  }
+  },
+  "resolutions": {
+  "path-to-regexp": "6.2.1"
+},
+"overrides": {
+  "path-to-regexp": "6.2.1"
+}
 }
