@@ -43,11 +43,12 @@ function AuthForm({ type }) {
       },
       body: JSON.stringify(formValues),
     };
+
+    performFetch(options);
     if (!isSignIn) {
-      performFetch(options, { onSuccess: () => Navigate("/verify-email") });
-    } else {
-      performFetch(options);
+      return Navigate("/verify-email");
     }
+    return Navigate("/home");
   };
   if (error) {
     console.error("Fetch error:", error);
