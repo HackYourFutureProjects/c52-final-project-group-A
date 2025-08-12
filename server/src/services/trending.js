@@ -36,8 +36,8 @@ export async function getTrendingPosts({
   ]);
 
   // Score = likes × time decay (half-life = 9h)
-  const HALF_LIFE_H = 9;
-  const decayRate = Math.log(2) / HALF_LIFE_H;
+  const halfLifeHours = 9;
+  const decayRate = Math.log(2) / halfLifeHours;
 
   const scored = rawPosts.map((post) => {
     const hoursAgo = Date.now() - new Date(post.published_at).getTime(); //MILLISECONDS_PER_HOUR;

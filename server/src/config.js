@@ -1,6 +1,8 @@
 import getEnvVariable from "./util/getEnvVariable.js";
 
 const config = {
+  SEED_MODE: getEnvVariable("SEED_MODE", "realistic"), // <-- default to realistic
+  FAKER_SEED: getEnvVariable("FAKER_SEED", null, Number),
   // Feed personalization config
   FEED_WINDOW_HOURS: getEnvVariable("FEED_WINDOW_HOURS", 168, Number),
   LIKE_WEIGHT: getEnvVariable("LIKE_WEIGHT", 2, Number),
