@@ -28,6 +28,7 @@
   --outer-border-radius: 0.625rem;
   --inner-border-radius: 0.5rem;
   --pill-border-radius: 9.375rem;
+  --circle-border-radius: 50%;
 }
 
 html {
@@ -56,11 +57,17 @@ input {
   background: none;
   outline: none;
 }
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: auto;
+}
 
 body {
   font-family: var(--font-sans), sans-serif;
   font-weight: 500;
-  padding: 1rem;
+  padding: 10rem 1rem 1rem 1rem;
 }
 
 @media (max-width: 768px) {

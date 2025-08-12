@@ -12,7 +12,7 @@ function Profile() {
 
   return (
     <>
-      <ProfileDash size="lg" user={userData} />
+      <ProfileDash size="lg" user={userData} followBtn={false} />
       <Post />
     </>
   );
