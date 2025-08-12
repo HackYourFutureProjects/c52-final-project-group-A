@@ -16,17 +16,21 @@ import followingRouter from "./routes/following.js";
 const app = express();
 
 // --- CORS ДОЛЖЕН БЫТЬ ПЕРВЫМ ---
-const origins = config.CORS_ORIGINS.split(",").map(s => s.trim()).filter(Boolean);
+const origins = config.CORS_ORIGINS.split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
 
-app.use(cors({
-  origin(origin, cb) {
-    if (!origin || origins.includes(origin)) return cb(null, true);
-    return cb(new Error(`Origin ${origin} не разрешён`));
-  },
-  methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization"],
-  credentials: config.CORS_CREDENTIALS === "true",
-}));
+app.use(
+  cors({
+    origin(origin, cb) {
+      if (!origin || origins.includes(origin)) return cb(null, true);
+      return cb(new Error(`Origin ${origin} не разрешён`));
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: config.CORS_CREDENTIALS === "true",
+  }),
+);
 
 app.options("*", cors());
 // ---------------------------------

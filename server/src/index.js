@@ -13,17 +13,21 @@ const { PORT, NODE_ENV } = config;
 function printRegisteredRoutes() {
   try {
     console.log("=== REGISTERED ROUTES ===");
-    
+
     // Безопасный способ получения маршрутов
     if (app._router) {
-      app._router.stack.forEach(layer => {
+      app._router.stack.forEach((layer) => {
         if (layer.route) {
-          console.log(`${Object.keys(layer.route.methods).join(', ')} ${layer.route.path}`);
-        } else if (layer.name === 'router') {
+          console.log(
+            `${Object.keys(layer.route.methods).join(", ")} ${layer.route.path}`,
+          );
+        } else if (layer.name === "router") {
           // Для роутеров, подключенных через app.use()
-          layer.handle.stack.forEach(sublayer => {
+          layer.handle.stack.forEach((sublayer) => {
             if (sublayer.route) {
-              console.log(`${Object.keys(sublayer.route.methods).join(', ')} ${layer.regexp.source.replace('\\/?', '')}${sublayer.route.path}`);
+              console.log(
+                `${Object.keys(sublayer.route.methods).join(", ")} ${layer.regexp.source.replace("\\/?", "")}${sublayer.route.path}`,
+              );
             }
           });
         }
@@ -31,7 +35,7 @@ function printRegisteredRoutes() {
     } else {
       console.log("Router not initialized yet");
     }
-    
+
     console.log("========================");
   } catch (error) {
     console.error("Failed to print routes:", error);
@@ -52,18 +56,20 @@ const startServer = async () => {
   });
 
   // Обработка ошибок сервера
-  server.on('error', (error) => {
-    logError('Server error:', error);
+  server.on("error", (error) => {
+    logError("Server error:", error);
   });
 };
 
 // Production-конфигурация
 if (NODE_ENV === "production") {
   const clientPath = new URL("../../client/dist", import.meta.url).pathname;
-  
+
   app.use(express.static(clientPath));
   app.get("*", (_req, res) => {
-    res.sendFile(new URL("../../client/dist/index.html", import.meta.url).pathname);
+    res.sendFile(
+      new URL("../../client/dist/index.html", import.meta.url).pathname,
+    );
   });
 } else {
   // Development-конфигурация
@@ -71,16 +77,16 @@ if (NODE_ENV === "production") {
 }
 
 // Запуск сервера с обработкой неожиданных ошибок
-startServer().catch(error => {
+startServer().catch((error) => {
   logError("Fatal server startup error:", error);
   process.exit(1);
 });
 
 // Обработка неотловленных исключений
-process.on('unhandledRejection', (reason) => {
-  logError('Unhandled Rejection at:', reason);
+process.on("unhandledRejection", (reason) => {
+  logError("Unhandled Rejection at:", reason);
 });
 
-process.on('uncaughtException', (error) => {
-  logError('Uncaught Exception thrown:', error);
+process.on("uncaughtException", (error) => {
+  logError("Uncaught Exception thrown:", error);
 });
