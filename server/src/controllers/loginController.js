@@ -17,7 +17,9 @@ export const loginUser = async (req, res) => {
     }
 
     if (user.google_id) {
-      return res.status(401).json({ msg: "Please use Google login" });
+      return res.status(401).json({
+        msg: "This account is linked to Google. Please sign in using the Google login button.",
+      });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
