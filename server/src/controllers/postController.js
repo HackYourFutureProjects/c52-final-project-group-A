@@ -1,4 +1,4 @@
-import Post from "../models/Post.js";
+import Post, { PostStatus, validatePost } from "../models/Post.js";
 
 export const getAllPosts = async (req, res) => {
   try {
@@ -26,16 +26,50 @@ export const getPostById = async (req, res) => {
 // Create Post endpoint
 export const createPost = async (req, res) => {
   try {
-    const { title, content, status } = req.body;
-
-    const newPost = await Post.create({
+    const {
       title,
       content,
-      status,
-      author: req.user._id,
-    });
+      status = PostStatus.DRAFT,
+      tags = [],
+      score,
+      published_at,
+    } = req.body ?? {};
 
-    res.status(201).json(newPost);
+    const safeTitle = typeof title === "string" ? title.trim() : title;
+    const safeContent = typeof content === "string" ? content.trim() : content;
+
+    const normTags = Array.isArray(tags)
+      ? tags.map((t) => String(t).trim()).filter(Boolean)
+      : [];
+
+    const created_at = new Date();
+
+    let finalPublishedAt;
+    if (status === PostStatus.PUBLISHED) {
+      const maybeDate = published_at ? new Date(published_at) : null;
+      finalPublishedAt =
+        maybeDate && !isNaN(maybeDate.getTime()) ? maybeDate : new Date();
+    }
+
+    const candidate = {
+      title: safeTitle,
+      content: safeContent,
+      status,
+      tags: normTags,
+      score,
+      author: req.user._id,
+      created_at,
+      published_at: finalPublishedAt,
+    };
+
+    const errors = validatePost(candidate);
+    if (errors.length) {
+      return res.status(400).json({ errors });
+    }
+
+    const newPost = await Post.create(candidate);
+    const populated = await newPost.populate("author", "username email");
+    res.status(201).json(populated);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

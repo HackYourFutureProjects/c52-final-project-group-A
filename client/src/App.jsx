@@ -5,6 +5,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import Home from "./pages/Home.jsx";
+import NewPostPage from "./pages/NewPost/NewPost.jsx";
 import UserDataContextProvider from "./context/userDataContext/UserDataContextProvider.jsx";
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/new-post" element={<NewPostPage />} />
         </Routes>
       </UserDataContextProvider>
     </>
