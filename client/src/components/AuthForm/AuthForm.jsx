@@ -45,7 +45,10 @@ function AuthForm({ type }) {
     };
     performFetch(options);
     if (!isSignIn) {
-      Navigate("/verify-email");
+    if (!isSignIn) {
+      performFetch(options, { onSuccess: () => Navigate("/verify-email") });
+    } else {
+      performFetch(options);
     }
   };
   if (error) {
