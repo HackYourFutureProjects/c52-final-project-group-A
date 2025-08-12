@@ -43,8 +43,6 @@ function AuthForm({ type }) {
       },
       body: JSON.stringify(formValues),
     };
-    performFetch(options);
-    if (!isSignIn) {
     if (!isSignIn) {
       performFetch(options, { onSuccess: () => Navigate("/verify-email") });
     } else {
