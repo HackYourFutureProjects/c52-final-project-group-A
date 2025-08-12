@@ -16,6 +16,10 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ msg: "Invalid email or password" });
     }
 
+    if (user.google_id) {
+      return res.status(401).json({ msg: "Please use Google login" });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ msg: "Invalid email or password" });

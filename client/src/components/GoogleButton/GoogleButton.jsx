@@ -3,20 +3,22 @@ import style from "./GoogleButton.module.css";
 import Button from "../Button.jsx";
 import useFetch from "../../hooks/useFetch.js";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import UserDataContext from "../../context/userDataContext/UserDataContext.js";
 
 function GoogleButton() {
   const navigate = useNavigate();
+  const { setUserData } = useContext(UserDataContext);
+
   const { performFetch, isLoading, error } = useFetch(
     "/login/Google_Auth",
-    (data) => {
-      console.log("Google login successful:", data);
+    (res) => {
+      setUserData(res.user._doc);
       navigate("/home"); // Redirect to landing page on success
     },
   );
 
   const handleLoginSuccess = async (response) => {
-    console.log("Google OAuth Success:", response);
-
     const options = {
       method: "POST",
       headers: {
