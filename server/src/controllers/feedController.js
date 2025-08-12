@@ -6,6 +6,7 @@ import Like from "../models/Like.js";
 import config from "../config.js";
 import { getTrendingPosts } from "../services/trending.js";
 import { hasUserSignals } from "../util/userSignals.js";
+
 const { FEED_WINDOW_HOURS } = config;
 
 export const getFeed = async (req, res) => {

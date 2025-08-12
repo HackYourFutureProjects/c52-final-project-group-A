@@ -7,7 +7,7 @@ import registerRouter from "./routes/register.js";
 import loginRouter from "./routes/login.js";
 import searchRouter from "./routes/search.js";
 import profileRouter from "./routes/profile.js";
-import exploreRoutes from "./routes/explore.js";
+import exploreRouter from "./routes/explore.js";
 
 // Create an express server
 const app = express();
@@ -31,6 +31,6 @@ app.use("/api/register", registerRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/profile", profileRouter);
-app.use("/api/explore", exploreRoutes);
+app.use("/api/explore", exploreRouter);
 
 export default app;

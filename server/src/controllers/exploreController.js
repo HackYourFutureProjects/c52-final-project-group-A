@@ -19,6 +19,6 @@ export const getExplore = async (req, res) => {
     });
   } catch (err) {
     logError("Error in getExplore:", err.message);
-    res.status(500).json({ error: "Failed to load explore content" });
+    res.status(500).json({ msg: "Failed to load explore content" });
   }
 };
