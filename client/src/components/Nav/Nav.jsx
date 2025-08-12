@@ -2,13 +2,17 @@ import { Link } from "react-router-dom";
 import style from "./Nav.module.css";
 import Button from "../Button.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import Logo from "../Logo.jsx";
+import UserDataContext from "../../context/userDataContext/UserDataContext.js";
+import useWindowWidth from "../../hooks/useWindowWidth.js";
 
 function Nav() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [mobile, setMobile] = useState(false);
+  const mobile = useWindowWidth(768);
+  const { userData } = useContext(UserDataContext);
+
   const HomeIcon = () => {
     return (
       <svg
@@ -74,19 +78,6 @@ function Nav() {
     navigate("/login");
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    handleResize();
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
     <nav className={style.navContainer}>
       <ul className={style.nav}>
@@ -117,7 +108,7 @@ function Nav() {
           <Link to="/profile">{mobile ? <ProfileIcon /> : "Profile"}</Link>
         </li>
       </ul>
-      {!mobile && (
+      {!mobile && !userData && (
         <Button
           label="Sign-in"
           onClick={handleSignIn}

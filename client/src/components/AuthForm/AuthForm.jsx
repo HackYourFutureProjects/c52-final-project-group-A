@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import style from "./AuthForm.module.css";
 import InputField from "../InputField/InputField.jsx";
 import GoogleButton from "../GoogleButton/GoogleButton.jsx";
 import Button from "../Button.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import UserDataContext from "../../context/userDataContext/UserDataContext.js";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
@@ -19,10 +20,15 @@ function AuthForm({ type }) {
         passwordConfirmation: "",
       };
 
+  const navigate = useNavigate();
+  const { setUserData } = useContext(UserDataContext);
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const endpoint = isSignIn ? "/login" : "/register";
-  const { performFetch } = useFetch(`${endpoint}`);
+  const { error, performFetch } = useFetch(`${endpoint}`, (res) => {
+    setUserData(res.user._doc);
+    navigate("/home");
+  });
 
   const handleChange = (e) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
@@ -38,6 +44,9 @@ function AuthForm({ type }) {
     };
     performFetch(options);
   };
+  if (error) {
+    console.error("Fetch error:", error);
+  }
 
   const renderFormFields = () => {
     if (isSignIn) {
