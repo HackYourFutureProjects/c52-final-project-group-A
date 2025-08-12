@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_BACKEND_URL + "/api/posts";
+const API_URL = import.meta.env.VITE_BACKEND_URL + "/api/post";
 
 /**
  * Create a new post
