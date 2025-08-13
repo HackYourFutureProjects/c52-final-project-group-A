@@ -7,7 +7,6 @@ import Profile from "./pages/Profile.jsx";
 import Home from "./pages/Home.jsx";
 import UserDataContextProvider from "./context/userDataContext/UserDataContextProvider.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
-import CreatePostPage from "./pages/CreatePost/CreatePost.jsx";
 
 const App = () => {
   // TODO: Adjust routes and their components
