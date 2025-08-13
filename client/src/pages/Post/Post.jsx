@@ -19,26 +19,23 @@ export default function PostPage() {
 
   useEffect(() => {
     if (!route) return;
+
     setPost(null);
     performFetch();
-  }, [id]);
 
-  if (isLoading) return <div className="p-4">Loading…</div>;
-    return () => cancelFetch();
-  }, [route, performFetch]);
-  if (isLoading && !post) return <div className="p-4">Loading…</div>;
-  if (error)
-    return (
-      <div className="p-4 text-red-600">
-        Error: {String(error.message || error)}
-      </div>
-    );
+    return () => {
+      cancelFetch && cancelFetch();
+    };
+  }, [route, performFetch, cancelFetch]);
+
+  if (isLoading && !post) return <div>Loading…</div>;
+  if (error) return <div>Error: {String(error.message || error)}</div>;
   if (!post) return null;
 
   return (
-    <div className="p-4 max-w-3xl space-y-3">
-      <h1 className="text-2xl font-semibold">{post.title}</h1>
-      <div className="text-sm text-gray-600">
+    <div>
+      <h1>{post.title}</h1>
+      <div>
         by {post.author?.username || "unknown"} ·{" "}
         {post.created_at && new Date(post.created_at).toLocaleString()}
         {post.status === "PUBLISHED" && post.published_at
@@ -46,15 +43,13 @@ export default function PostPage() {
           : null}
       </div>
       {post.tags?.length ? (
-        <div className="flex flex-wrap gap-2">
+        <div>
           {post.tags.map((t) => (
-            <span key={t} className="px-2 py-1 text-xs border rounded">
-              {t}
-            </span>
+            <span key={t}>{t}</span>
           ))}
         </div>
       ) : null}
-      <div className="whitespace-pre-wrap">{post.content}</div>
+      <div>{post.content}</div>
     </div>
   );
 }

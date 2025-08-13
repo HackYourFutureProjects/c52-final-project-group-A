@@ -9,10 +9,6 @@ import UserDataContextProvider from "./context/userDataContext/UserDataContextPr
 import EmailVerification from "./pages/EmailVerification.jsx";
 import SandboxPage from "./pages/Sandbox/Sandbox.jsx";
 import PostPage from "./pages/Post/Post";
-<<<<<<< HEAD
-=======
-import EmailVerification from "./pages/EmailVerification.jsx";
->>>>>>> 1106dfc (prettir fix)
 
 const App = () => {
   // TODO: Adjust routes and their components
@@ -29,10 +25,7 @@ const App = () => {
           <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/sandbox" element={<SandboxPage />} />
           <Route path="/post/:id" element={<PostPage />} />
-<<<<<<< HEAD
-=======
           <Route path="/verify-email" element={<EmailVerification />} />
->>>>>>> 1106dfc (prettir fix)
         </Routes>
       </UserDataContextProvider>
     </>

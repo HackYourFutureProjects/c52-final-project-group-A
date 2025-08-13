@@ -25,7 +25,17 @@ export default function useFetchWithAuth(url, onSuccess) {
           signal: controller.signal,
           ...options,
         });
-        const json = await res.json().catch(() => ({}));
+
+        let json;
+        try {
+          json = await res.json();
+        } catch (parseError) {
+          console.error("Failed to parse JSON response:", parseError);
+          throw new Error(
+            `Failed to parse JSON response: ${parseError.message}`,
+          );
+        }
+
         if (!res.ok) throw new Error(json?.message || `HTTP ${res.status}`);
 
         setData(json);
