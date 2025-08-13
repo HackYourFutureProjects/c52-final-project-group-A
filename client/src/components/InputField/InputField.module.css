@@ -8,6 +8,11 @@
   border-radius: var(--inner-border-radius);
   border: 1px solid var(--color-border);
   font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+.input:focus,
+.input:hover {
+  border-color: var(--color-dark-grey);
 }
 .placeholder {
   position: absolute;
