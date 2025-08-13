@@ -6,6 +6,8 @@ import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import Home from "./pages/Home.jsx";
 import UserDataContextProvider from "./context/userDataContext/UserDataContextProvider.jsx";
+import SandboxPage from "./pages/Sandbox/Sandbox.jsx";
+import PostPage from "./pages/Post/Post";
 
 const App = () => {
   // TODO: Adjust routes and their components
@@ -19,6 +21,8 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/sandbox" element={<SandboxPage />} />
+          <Route path="/post/:id" element={<PostPage />} />
         </Routes>
       </UserDataContextProvider>
     </>
