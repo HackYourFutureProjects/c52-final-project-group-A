@@ -1,6 +1,20 @@
 import getEnvVariable from "./util/getEnvVariable.js";
 
 const config = {
+  SEED_MODE: getEnvVariable("SEED_MODE", "realistic"), // <-- default to realistic
+  FAKER_SEED: getEnvVariable("FAKER_SEED", null, Number),
+  // Feed personalization config
+  FEED_WINDOW_HOURS: getEnvVariable("FEED_WINDOW_HOURS", 168, Number),
+  LIKE_WEIGHT: getEnvVariable("LIKE_WEIGHT", 2, Number),
+  FOLLOWER_WEIGHT: getEnvVariable("FOLLOWER_WEIGHT", 3, Number),
+  POST_WEIGHT: getEnvVariable("POST_WEIGHT", 1, Number),
+  // Time constant
+  MILLISECONDS_PER_HOUR: getEnvVariable(
+    "MILLISECONDS_PER_HOUR",
+    3600000,
+    Number,
+  ),
+
   // node env production | development
   NODE_ENV: getEnvVariable("NODE_ENV", "development"),
   // server configuration
