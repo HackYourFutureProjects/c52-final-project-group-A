@@ -30,7 +30,8 @@ app.use(
   }),
 );
 
-app.options(/.*/, cors());
+app.use("/api", corsMiddleware);
+app.options(/^\/api\/.*$/, corsMiddleware);
 
 app.use(cookieParser());
 app.use(express.json());
