@@ -17,7 +17,7 @@ export default function PostPage() {
     performFetch();
   }, [id]);
 
-  if (isLoading && !post) return <div className="p-4">Loading…</div>;
+  if (isLoading) return <div className="p-4">Loading…</div>;
   if (error)
     return (
       <div className="p-4 text-red-600">
