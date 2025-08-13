@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import config from "./config.js";
+
 import weeklyDigestRouter from "./routes/weeklyDigest.js";
 import postRouter from "./routes/post.js";
 import feedRouter from "./routes/feed.js";
@@ -18,6 +19,7 @@ const origins = config.CORS_ORIGINS.split(",")
   .map((s) => s.trim())
   .filter(Boolean);
 
+// ✅ делаем отдельный middleware для CORS
 const corsMiddleware = cors({
   origin(origin, cb) {
     if (!origin || origins.includes(origin)) return cb(null, true);
@@ -27,12 +29,15 @@ const corsMiddleware = cors({
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: config.CORS_CREDENTIALS === "true",
 });
+
+// ✅ применяем CORS только к /api и preflight на /api
 app.use("/api", corsMiddleware);
 app.options(/^\/api\/.*$/, corsMiddleware);
 
 app.use(cookieParser());
 app.use(express.json());
 
+// API routes
 app.use("/api/post", postRouter);
 app.use("/api/weekly-digest", weeklyDigestRouter);
 app.use("/api/feed", feedRouter);
