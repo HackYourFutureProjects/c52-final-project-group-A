@@ -6,7 +6,6 @@ export default function PostPage() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
 
-  // ⬇️ если id нет — route = null
   const route = id ? `/post/${id}` : null;
 
   const handleSuccess = useCallback((json) => {
