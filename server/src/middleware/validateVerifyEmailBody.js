@@ -1,10 +1,8 @@
 const validateVerifyEmailBody = (req, res, next) => {
-  const { email, verificationCode } = req.body;
+  const { verificationCode } = req.body;
 
-  if (!email || !verificationCode) {
-    return res
-      .status(400)
-      .json({ msg: "Email and verification code are required" });
+  if (!verificationCode) {
+    return res.status(400).json({ msg: "Verification code is required" });
   }
 
   if (typeof verificationCode !== "string" || verificationCode.trim() === "") {

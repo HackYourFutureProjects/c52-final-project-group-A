@@ -99,9 +99,6 @@ export const validatePendingUser = (pendingUserObject) => {
     if (password.length < 8) {
       errorList.push("password must be at least 8 characters long");
     }
-    if (password.length > 50) {
-      errorList.push("password must be at most 50 characters long");
-    }
     if (password.includes(" ")) {
       errorList.push("password cannot contain spaces");
     }
