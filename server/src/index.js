@@ -1,4 +1,6 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import app from "./app.js";
 import { logInfo, logError } from "./util/logging.js";
 import connectDB from "./db/connectDB.js";
@@ -7,6 +9,10 @@ import config from "./config.js";
 
 const { PORT, NODE_ENV } = config;
 
+// __dirname для ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 /**
  * Выводит список зарегистрированных маршрутов
  */
@@ -14,19 +20,18 @@ function printRegisteredRoutes() {
   try {
     console.log("=== REGISTERED ROUTES ===");
 
-    // Безопасный способ получения маршрутов
     if (app._router) {
       app._router.stack.forEach((layer) => {
         if (layer.route) {
           console.log(
-            `${Object.keys(layer.route.methods).join(", ")} ${layer.route.path}`,
+            `${Object.keys(layer.route.methods).join(", ").toUpperCase()} ${layer.route.path}`,
           );
-        } else if (layer.name === "router") {
+        } else if (layer.name === "router" && layer.handle?.stack) {
           // Для роутеров, подключенных через app.use()
           layer.handle.stack.forEach((sublayer) => {
             if (sublayer.route) {
               console.log(
-                `${Object.keys(sublayer.route.methods).join(", ")} ${layer.regexp.source.replace("\\/?", "")}${sublayer.route.path}`,
+                `${Object.keys(sublayer.route.methods).join(", ").toUpperCase()} ${sublayer.route.path}`,
               );
             }
           });
@@ -52,10 +57,9 @@ const startServer = async () => {
 
   const server = app.listen(PORT, "0.0.0.0", () => {
     logInfo(`Server started on port ${PORT} (env=${NODE_ENV})`);
-    printRegisteredRoutes(); // Печатаем маршруты после старта сервера
+    printRegisteredRoutes();
   });
 
-  // Обработка ошибок сервера
   server.on("error", (error) => {
     logError("Server error:", error);
   });
@@ -63,13 +67,13 @@ const startServer = async () => {
 
 // Production-конфигурация
 if (NODE_ENV === "production") {
-  const clientPath = new URL("../../client/dist", import.meta.url).pathname;
+  const clientPath = path.resolve(__dirname, "../../client/dist");
 
   app.use(express.static(clientPath));
-  app.get("*", (_req, res) => {
-    res.sendFile(
-      new URL("../../client/dist/index.html", import.meta.url).pathname,
-    );
+
+  // Все НЕ /api/** -> index.html (SPA роутинг)
+  app.get(/^(?!\/api\/).*/, (_req, res) => {
+    res.sendFile(path.join(clientPath, "index.html"));
   });
 } else {
   // Development-конфигурация
@@ -82,7 +86,7 @@ startServer().catch((error) => {
   process.exit(1);
 });
 
-// Обработка неотловленных исключений
+// Обработка неотловленных исключений/промисов
 process.on("unhandledRejection", (reason) => {
   logError("Unhandled Rejection at:", reason);
 });

@@ -28,8 +28,7 @@ export default function CreatePostForm() {
 
       await CreatePost(data);
 
-      // Redirect after success
-      navigate("/home");
+      navigate("/home"); // Redirect after success
     } catch (err) {
       setError(err.message);
     }

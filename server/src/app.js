@@ -2,7 +2,6 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import config from "./config.js";
-
 import weeklyDigestRouter from "./routes/weeklyDigest.js";
 import postRouter from "./routes/post.js";
 import feedRouter from "./routes/feed.js";
@@ -15,7 +14,6 @@ import followingRouter from "./routes/following.js";
 
 const app = express();
 
-// --- CORS ДОЛЖЕН БЫТЬ ПЕРВЫМ ---
 const origins = config.CORS_ORIGINS.split(",")
   .map((s) => s.trim())
   .filter(Boolean);
@@ -32,13 +30,11 @@ app.use(
   }),
 );
 
-app.options("*", cors());
-// ---------------------------------
+app.options(/.*/, cors());
 
 app.use(cookieParser());
 app.use(express.json());
 
-// Роуты
 app.use("/api/post", postRouter);
 app.use("/api/weekly-digest", weeklyDigestRouter);
 app.use("/api/feed", feedRouter);

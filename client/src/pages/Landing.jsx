@@ -4,7 +4,7 @@ function Landing() {
   return (
     <div>
       <h1>Landing Page</h1>
-      <Link to="/create">Go to Create Post Page</Link>
+      <Link to="/new-post">Go to Create Post Page</Link>
     </div>
   );
 }
