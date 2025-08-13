@@ -1,5 +1,4 @@
-// client/src/pages/Post/Post.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
 
@@ -7,17 +6,28 @@ export default function PostPage() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
 
-  const route = id ? `/post/${id}` : "/post/__skip__";
-  const { isLoading, error, performFetch } = useFetchWithAuth(route, (json) =>
-    setPost(json),
+  // ⬇️ если id нет — route = null
+  const route = id ? `/post/${id}` : null;
+
+  const handleSuccess = useCallback((json) => {
+    setPost(json);
+  }, []);
+
+  const { isLoading, error, performFetch, cancelFetch } = useFetchWithAuth(
+    route,
+    handleSuccess,
   );
 
   useEffect(() => {
-    if (!id) return;
+    if (!route) return;
+    setPost(null);
     performFetch();
   }, [id]);
 
   if (isLoading) return <div className="p-4">Loading…</div>;
+    return () => cancelFetch();
+  }, [route, performFetch]);
+  if (isLoading && !post) return <div className="p-4">Loading…</div>;
   if (error)
     return (
       <div className="p-4 text-red-600">
