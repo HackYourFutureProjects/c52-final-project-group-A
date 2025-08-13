@@ -1,4 +1,3 @@
-// client/src/hooks/useFetchWithAuth.js
 import { useState, useCallback, useRef } from "react";
 
 export default function useFetchWithAuth(url, onSuccess) {
@@ -9,9 +8,8 @@ export default function useFetchWithAuth(url, onSuccess) {
 
   const performFetch = useCallback(
     async (options = {}) => {
-      if (!url) return; // ⬅️ важная защита
+      if (!url) return;
 
-      // отменяем предыдущий незавершённый запрос
       if (abortControllerRef.current) abortControllerRef.current.abort();
       const controller = new AbortController();
       abortControllerRef.current = controller;
