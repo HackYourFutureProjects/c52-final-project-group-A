@@ -41,14 +41,16 @@ export const googleAuth = async (req, res) => {
       sameSite: "strict",
     });
 
+    const userResponse = Object.fromEntries(
+      Object.entries(user.toObject()).filter(
+        ([key]) => key !== "password" && key !== "__v",
+      ),
+    );
+
     return res.status(200).json({
       success: true,
       message: "Google login successful",
-      user: {
-        id: user._id,
-        email: user.email,
-        username: user.username,
-      },
+      user: userResponse,
     });
   } catch (err) {
     logError("Google auth controller error:", err);

@@ -13,11 +13,13 @@ export const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
+      logError("Login attempt with non-existing email:", email);
       return res.status(401).json({ msg: "Invalid email or password" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      logError("Login attempt with incorrect password for email:", email);
       return res.status(401).json({ msg: "Invalid email or password" });
     }
 

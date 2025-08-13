@@ -6,6 +6,7 @@ import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import Home from "./pages/Home.jsx";
 import UserDataContextProvider from "./context/userDataContext/UserDataContextProvider.jsx";
+import EmailVerification from "./pages/EmailVerification.jsx";
 
 const App = () => {
   // TODO: Adjust routes and their components
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<EmailVerification />} />
         </Routes>
       </UserDataContextProvider>
     </>
