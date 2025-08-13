@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import useFetch from "../../hooks/useFetch";
 import styles from "./EmailVerificationForm.module.css";
 import { useNavigate } from "react-router-dom";
+import Button from "../Button.jsx";
 
 function EmailVerificationForm() {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
@@ -13,10 +14,7 @@ function EmailVerificationForm() {
     isLoading,
     error: fetchError,
     performFetch,
-  } = useFetch("/register/verify", (response) => {
-    console.log(response);
-    response.success && navigate("/login");
-  });
+  } = useFetch("/register/verify");
 
   const handleChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
@@ -53,6 +51,9 @@ function EmailVerificationForm() {
       body: JSON.stringify({
         verificationCode,
       }),
+      onSuccess: () => {
+        navigate("/login");
+      },
     });
   };
 
@@ -62,7 +63,7 @@ function EmailVerificationForm() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <div className={styles.header}>Email Verification</div>
+        <h1 className={styles.header}>Email Verification</h1>
         <p className={styles.subtitle}>
           We&#39;ve sent a 6-digit verification code to your email
         </p>
@@ -87,13 +88,12 @@ function EmailVerificationForm() {
             ))}
           </div>
 
-          <button
+          <Button
+            label={isLoading ? "Verifying..." : "Verify Code"}
             onClick={handleSubmit}
             className={styles.submitBtn}
             disabled={isLoading}
-          >
-            {isLoading ? "Verifying..." : "Verify Code"}
-          </button>
+          />
         </div>
       </div>
     </div>

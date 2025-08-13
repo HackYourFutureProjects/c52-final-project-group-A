@@ -50,9 +50,10 @@ export const verifyEmail = async (req, res) => {
     // Clear the registration email cookie
     res.clearCookie("bq-registrationEmail");
 
-    return res
-      .status(201)
-      .json({ message: "Email verified and user created successfully" });
+    return res.status(201).json({
+      success: true,
+      message: "Email verified and user created successfully",
+    });
   } catch (err) {
     logError("User verification error:", err);
     return res.status(500).json({ msg: "Server error" });
