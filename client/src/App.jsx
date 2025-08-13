@@ -10,7 +10,6 @@ import SandboxPage from "./pages/Sandbox/Sandbox.jsx";
 import PostPage from "./pages/Post/Post";
 import EmailVerification from "./pages/EmailVerification.jsx";
 
-
 const App = () => {
   // TODO: Adjust routes and their components
   return (
@@ -26,7 +25,6 @@ const App = () => {
           <Route path="/sandbox" element={<SandboxPage />} />
           <Route path="/post/:id" element={<PostPage />} />
           <Route path="/verify-email" element={<EmailVerification />} />
-
         </Routes>
       </UserDataContextProvider>
     </>
