@@ -18,19 +18,17 @@ const origins = config.CORS_ORIGINS.split(",")
   .map((s) => s.trim())
   .filter(Boolean);
 
-app.use(
-  cors({
-    origin(origin, cb) {
-      if (!origin || origins.includes(origin)) return cb(null, true);
-      return cb(new Error(`Origin ${origin} не разрешён`));
-    },
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: config.CORS_CREDENTIALS === "true",
-  }),
-);
-
-app.options(/.*/, cors());
+const corsMiddleware = cors({
+  origin(origin, cb) {
+    if (!origin || origins.includes(origin)) return cb(null, true);
+    return cb(new Error(`Origin ${origin} не разрешён`));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: config.CORS_CREDENTIALS === "true",
+});
+app.use("/api", corsMiddleware);
+app.options(/^\/api\/.*$/, corsMiddleware);
 
 app.use(cookieParser());
 app.use(express.json());
