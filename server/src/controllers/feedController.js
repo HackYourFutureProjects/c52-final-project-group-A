@@ -1,96 +1,27 @@
-import User from "../models/User.js";
 import Post from "../models/Post.js";
 import Follow from "../models/Follow.js";
-import { calculateUserScore, calculatePostScore } from "../util/score.js";
+import { calculatePostScore } from "../util/score.js";
 import { logError } from "../util/logging.js";
 import Like from "../models/Like.js";
 import config from "../config.js";
+import { getTrendingPosts } from "../services/trending.js";
+import { hasUserSignals } from "../util/userSignals.js";
 
-// ...
+const { FEED_WINDOW_HOURS } = config;
 
 export const getFeed = async (req, res) => {
   try {
     const userId = req.user._id;
-    // top creators
-    const ranked = await User.aggregate([
-      {
-        $lookup: {
-          from: "posts",
-          localField: "_id",
-          foreignField: "author",
-          as: "userPosts",
-        },
-      },
-      {
-        $lookup: {
-          from: "likes",
-          localField: "userPosts._id",
-          foreignField: "post",
-          as: "likesReceived",
-        },
-      },
-      {
-        $lookup: {
-          from: "follows",
-          localField: "_id",
-          foreignField: "following",
-          as: "followerCount",
-        },
-      },
-      {
-        $lookup: {
-          from: "posts",
-          let: { userId: "$_id" },
-          pipeline: [
-            { $match: { $expr: { $eq: ["$author", "$$userId"] } } },
-            {
-              $lookup: {
-                from: "likes",
-                localField: "_id",
-                foreignField: "post",
-                as: "postLikes",
-              },
-            },
-            {
-              $addFields: {
-                likeCount: { $size: "$postLikes" },
-              },
-            },
-            { $sort: { likeCount: -1 } },
-            { $limit: 1 },
-            {
-              $project: {
-                _id: 1,
-                title: 1,
-                content: 1,
-                likeCount: 1,
-                created_at: 1,
-              },
-            },
-          ],
-          as: "topPost",
-        },
-      },
-      { $unwind: { path: "$topPost", preserveNullAndEmptyArrays: true } },
-    ]);
 
-    const topCreators = ranked.map((user) => {
-      const likesCount = user.likesReceived.length;
-      const followersCount = user.followerCount.length;
-
-      return {
-        username: user.username,
-        topPost: user.topPost,
-        score: calculateUserScore(likesCount, followersCount),
-      };
-    });
-
-    topCreators.sort((a, b) => b.score - a.score);
-
-    // logged-in feed...
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-
+    if (!(await hasUserSignals(userId))) {
+      const trending = await getTrendingPosts({
+        windowHours: 28,
+        limit: 10,
+        capPerAuthor: 2,
+      });
+      return res.json({ mode: "cold-start", items: trending });
+    }
+    const since = new Date(Date.now() - FEED_WINDOW_HOURS * 3600 * 1000);
     // Get list of users the logged-in user follows
     const following = await Follow.find({ follower: userId }).select(
       "following",
@@ -106,7 +37,7 @@ export const getFeed = async (req, res) => {
       {
         $match: {
           author: { $in: followingIds },
-          published_at: { $gte: oneWeekAgo },
+          published_at: { $gte: since },
         },
       },
       {
@@ -165,8 +96,8 @@ export const getFeed = async (req, res) => {
 
     //  Return both feeds
     res.json({
-      homeFeed: homeFeed.slice(0, 10), // personalized for logged-in user
-      topCreators: topCreators.slice(0, 5), // global trending creators
+      mode: "personalized",
+      items: homeFeed,
     });
   } catch (err) {
     logError("Error generating feed:", err.message);

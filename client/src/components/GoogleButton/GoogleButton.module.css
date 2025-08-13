@@ -10,6 +10,9 @@
   cursor: pointer;
   padding: 0.5rem 1rem 0.3rem 1rem;
 }
+.googleButton:hover {
+  border-color: var(--color-dark-grey);
+}
 .googleLogo {
   width: 2rem;
   height: 2rem;

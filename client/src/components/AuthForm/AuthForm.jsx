@@ -10,6 +10,7 @@ import UserDataContext from "../../context/userDataContext/UserDataContext.js";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
+  const Navigate = useNavigate();
   const initialFormValues = isSignIn
     ? { email: "", password: "" }
     : {
@@ -25,9 +26,13 @@ function AuthForm({ type }) {
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const endpoint = isSignIn ? "/login" : "/register";
-  const { error, performFetch } = useFetch(`${endpoint}`, (res) => {
-    setUserData(res.user._doc);
-    navigate("/home");
+  const { error, isLoading, performFetch } = useFetch(`${endpoint}`, (res) => {
+    if (isSignIn) {
+      setUserData(res.user._doc);
+      navigate("/home");
+    } else {
+      navigate("/verify-email");
+    }
   });
 
   const handleChange = (e) => {
@@ -42,10 +47,15 @@ function AuthForm({ type }) {
       },
       body: JSON.stringify(formValues),
     };
+
     performFetch(options);
+    if (!isSignIn) {
+      return Navigate("/verify-email");
+    }
+    return Navigate("/home");
   };
   if (error) {
-    console.error("Fetch error:", error);
+    console.log(error);
   }
 
   const renderFormFields = () => {
@@ -149,6 +159,7 @@ function AuthForm({ type }) {
             type="submit"
             label={isSignIn ? "Log in" : "Continue"}
             className={style.submitBtn}
+            disabled={isLoading}
           />
         </form>
         {isSignIn && (

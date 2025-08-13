@@ -1,7 +1,19 @@
 import Follow from "../models/Follow.js";
 import User from "../models/User.js";
+import config from "../config.js";
+import { faker } from "@faker-js/faker";
 
+// Set the faker seed from config if available
+if (config.FAKER_SEED) {
+  faker.seed(config.FAKER_SEED);
+}
 async function seedFollow(users, AVG_NUM_FOLLOWS = 5) {
+  const HAPPY = config.SEED_MODE === "happy"; // default is "realistic" if not provided
+  const now = new Date();
+  const sinceWindow = new Date(
+    now.getTime() - config.FEED_WINDOW_HOURS * config.MILLISECONDS_PER_HOUR,
+  );
+
   const numFollows = users.length * AVG_NUM_FOLLOWS;
   const followSet = new Set();
   const potentialFollows = [];
@@ -22,9 +34,13 @@ async function seedFollow(users, AVG_NUM_FOLLOWS = 5) {
 
     if (!followSet.has(followKey)) {
       followSet.add(followKey);
+      const created_at = HAPPY
+        ? faker.date.between({ from: sinceWindow, to: now })
+        : faker.date.past();
       potentialFollows.push({
         follower: follower._id,
         following: following._id,
+        created_at,
       });
     }
   }
