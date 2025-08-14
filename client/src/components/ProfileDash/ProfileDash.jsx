@@ -12,11 +12,12 @@ function ProfileDash({ size, user, border = "full", followBtn = true }) {
     mobile && size === "lg" ? style[`dash_mobile`] : style[`dash_${size}`];
   const nameAndBtnContainer = style[`nameAndBtnContainer_${size}`];
   const followBtnSize = style[`followBtn_${size}`];
+  console.log(user);
 
   const username = user?.username ?? "username";
   const score = user?.score ?? "00";
-  const profile = user?.profile ?? { first_name: "Full", last_name: "Name" };
-  const fullName = profile.first_name + " " + profile.last_name;
+  const profile = user?.profile ?? { firstName: "Full", lastName: "Name" };
+  const fullName = profile.firstName + " " + profile.lastName;
 
   return (
     <article
