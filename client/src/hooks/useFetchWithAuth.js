@@ -30,7 +30,14 @@ const useFetchWithAuth = (route, onReceived) => {
     (async () => {
       const url = `/api${route}`;
       const res = await fetch(url, { ...baseOptions, ...options });
-      const json = await res.json().catch(() => ({}));
+
+      // --- Исправленный блок обработки JSON:
+      let json = {};
+      try {
+        json = await res.json();
+      } catch {
+        json = {};
+      }
 
       if (res.ok) {
         onReceived(json);
@@ -44,7 +51,7 @@ const useFetchWithAuth = (route, onReceived) => {
       }
 
       setIsLoading(false);
-    }).catch((e) => {
+    })().catch((e) => {
       const errorMsg = e?.message || String(e);
       setError(errorMsg);
       setIsLoading(false);
