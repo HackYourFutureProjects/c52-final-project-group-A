@@ -1,14 +1,16 @@
 function timeAgoCalc(pastDate) {
   const dateNow = new Date();
-  const now = Date.now();
-  const diffMs = now - pastDate.getTime();
+  const diffMs = Date.now() - pastDate.getTime();
 
   const secondsAgo = Math.floor(diffMs / 1000);
   const minutesAgo = Math.floor(diffMs / (1000 * 60));
   const hoursAgo = Math.floor(diffMs / (1000 * 60 * 60));
   const daysAgo = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   const yearsAgo = dateNow.getFullYear() - pastDate.getFullYear();
-  const monthsAgo = yearsAgo * 12 + (dateNow.getMonth() - pastDate.getMonth());
+  let monthsAgo = yearsAgo * 12 + (dateNow.getMonth() - pastDate.getMonth());
+  if (dateNow.getDate() < pastDate.getDate()) {
+    monthsAgo -= 1;
+  }
 
   return filterTimeAgo(
     secondsAgo,

@@ -23,7 +23,7 @@ export default function PostPage() {
     return () => {
       cancelFetch && cancelFetch();
     };
-  }, []);
+  }, [performFetch, cancelFetch]);
 
   if (isLoading && !post) return <div>Loading…</div>;
   if (error) return <div>Error: {String(error.message || error)}</div>;

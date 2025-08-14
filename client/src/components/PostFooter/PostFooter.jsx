@@ -130,7 +130,7 @@ function PostFooter({ tags }) {
 }
 
 PostFooter.propTypes = {
-  tags: PropTypes.arrayOf(PropTypes.string).required,
+  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 Like.propTypes = {

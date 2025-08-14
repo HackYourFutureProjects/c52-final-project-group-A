@@ -38,7 +38,7 @@ Post.propTypes = {
     title: PropTypes.string,
     __v: PropTypes.number,
     _id: PropTypes.string,
-  }.required,
+  }.isRequired,
 };
 
 export default Post;
