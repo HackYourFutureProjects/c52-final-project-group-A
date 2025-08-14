@@ -33,6 +33,7 @@
 
 html {
   font-size: 100%;
+  color: var(--color-black);
 }
 
 ol,

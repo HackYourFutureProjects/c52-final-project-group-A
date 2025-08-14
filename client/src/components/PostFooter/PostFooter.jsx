@@ -103,8 +103,7 @@ const More = () => {
   );
 };
 
-function PostFooter() {
-  const placeholderTags = ["tag1", "tag2", "tag3"];
+function PostFooter({ tags }) {
   return (
     <footer className={style.footer}>
       <section className={style.wrapper}>
@@ -115,7 +114,7 @@ function PostFooter() {
         </section>
         <section className={style.tagsContainer}>
           <ul>
-            {placeholderTags.map((tag) => {
+            {tags.map((tag) => {
               return (
                 <li key={tag} className={style.tag}>
                   {tag}
@@ -129,6 +128,10 @@ function PostFooter() {
     </footer>
   );
 }
+
+PostFooter.propTypes = {
+  tags: PropTypes.arrayOf(PropTypes.string).required,
+};
 
 Like.propTypes = {
   fill: PropTypes.bool,
