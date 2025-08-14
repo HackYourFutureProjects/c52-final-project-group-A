@@ -29,7 +29,6 @@ if (NODE_ENV === "production") {
 
   app.use(express.static(clientPath));
 
-  // Отдаём index.html для всех маршрутов, КРОМЕ /api/**
   app.get(/^\/(?!api\/).*/, (_req, res) => {
     res.sendFile(path.join(clientPath, "index.html"));
   });
