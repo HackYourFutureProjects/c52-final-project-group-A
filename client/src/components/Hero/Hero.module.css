@@ -1,6 +1,6 @@
 :root {
-  --brand: #ff4d2d;
-  --text: #0f0f10;
+  --brand: var(--color-orange);
+  --text: var(--color-black);
 }
 
 /* Hero section */
@@ -12,7 +12,6 @@
   align-items: center;
   padding: 2rem 1rem;
   box-sizing: border-box;
-  background: radial-gradient(circle at top left, #938a7f, #925050);
   overflow: hidden;
   z-index: 0;
 }
@@ -20,7 +19,7 @@
 /* Hero inner content */
 .hero__inner {
   text-align: center;
-  max-width: 900px;
+  max-width: 56.25rem; /* 900px */
   margin: 0 auto;
   z-index: 1;
   position: relative;
@@ -32,15 +31,15 @@
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--text);
-  font-size: clamp(36px, 6vw, 80px);
-  margin: 0 0 24px;
+  font-size: clamp(2.25rem, 6vw, 5rem); /* 36px to 80px */
+  margin-bottom: 1.5rem;
 }
 
 .hero__line {
   display: block;
   position: relative;
   white-space: nowrap;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .hero__dot {
@@ -49,7 +48,7 @@
   height: 0.25em;
   background: var(--brand);
   border-radius: 50%;
-  margin: 0 0.3em 0 0;
+  margin-right: 0.3em;
   transform: translateY(-0.1em);
 }
 
@@ -66,13 +65,14 @@
   height: 0.1em;
   background: var(--brand);
   bottom: -0.08em;
-  border-radius: 2px;
+  border-radius: 0.125rem; /* 2px */
 }
 
+/* Pill (highlighted word "ideas") */
 .hero__pill {
   background: var(--brand);
   color: #fff;
-  border-radius: 999px;
+  border-radius: var(--pill-border-radius);
   padding: 0.05em 0.6em;
   position: relative;
   display: inline-block;
@@ -84,11 +84,11 @@
 .hero__pill::after {
   content: "";
   position: absolute;
-  right: -20px;
-  width: 14px;
-  height: 4px;
+  right: -1.25rem;
+  width: 0.875rem;
+  height: 0.25rem;
   background: var(--brand);
-  border-radius: 2px;
+  border-radius: 0.125rem; /* 2px */
 }
 
 .hero__pill::before {
@@ -105,138 +105,75 @@
 .hero__subtitle {
   color: #444;
   font-size: 1.1rem;
-  margin: 20px 0 24px;
+  margin: 1.25rem 0 1.5rem;
 }
 
-/* CTA Buttons */
+/* CTA Buttons container */
 .hero__cta {
   display: flex;
-  gap: 12px;
+  gap: 0.75rem;
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 1rem;
 }
 
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
-  border-radius: 12px;
+  padding: 0.625em 1.25em; /* 10px 20px */
+  border-radius: var(--inner-border-radius);
   font-weight: 600;
-  text-decoration: none;
-  border: 1px solid transparent;
   font-size: 1rem;
   cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  border-bottom: 2px solid var(--color-orange);
 }
 
 .btn--primary {
-  background: var(--brand);
+  background: var(--color-orange);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(255, 77, 45, 0.25);
 }
 
 .btn--primary:hover {
   background: #e84324;
+  border-bottom: 2px solid #e84324;
 }
 
 .btn--ghost {
   background: #fff;
   color: var(--text);
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
 }
 
 .btn--ghost:hover {
   background: #f3f3f3;
-}
-
-/* Responsive */
-@media (max-width: 561px) {
-  .hero__line {
-    white-space: normal;
-  }
-
-  .hero__pill::before,
-  .hero__pill::after {
-    display: none;
-  }
-}
-
-/* Entrance Animations */
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-60px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(60px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-left {
-  opacity: 0;
-  animation: fadeInLeft 0.8s ease-out forwards;
-}
-
-.fade-right {
-  opacity: 0;
-  animation: fadeInRight 0.8s ease-out forwards;
-}
-
-.fade-up {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.delay-1 {
-  animation-delay: 0.6s;
-}
-
-.delay-2 {
-  animation-delay: 1s;
+  border-bottom: 2px solid #999;
 }
 
 /* Floating Tag Cloud */
-.tag-cloud {
+.tagCloud {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   overflow: hidden;
-  pointer-events: none; /* So they don't block clicks */
+  pointer-events: none;
+  z-index: 0;
 }
 
-.floating-tag {
+.floatingTag {
   position: absolute;
   font-size: 1rem;
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-orange);
   animation: float 5s infinite linear;
   white-space: nowrap;
+  z-index: 2;
+  transform: translateX(-50%);
 }
 
 @keyframes float {
@@ -247,5 +184,74 @@
   100% {
     transform: translateY(-100vh);
     opacity: 0;
+  }
+}
+
+/* Entrance Animations */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-3.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(3.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeLeft {
+  opacity: 0;
+  animation: fadeInLeft 0.8s ease-out forwards;
+}
+
+.fadeRight {
+  opacity: 0;
+  animation: fadeInRight 0.8s ease-out forwards;
+}
+
+.fadeUp {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.delay1 {
+  animation-delay: 0.6s;
+}
+
+.delay2 {
+  animation-delay: 1s;
+}
+
+/* Responsive */
+@media (max-width: 35.063rem) {
+  .hero__line {
+    white-space: normal;
+  }
+
+  .hero__pill::before,
+  .hero__pill::after {
+    display: none;
   }
 }
