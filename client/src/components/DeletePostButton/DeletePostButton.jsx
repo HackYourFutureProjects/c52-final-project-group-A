@@ -1,37 +1,33 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "../Button.jsx";
+import useFetchWithAuth from "../../hooks/useFetchWithAuth";
 
 function DeletePostButton({ postId, onDelete }) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleDelete = async () => {
-    if (!window.confirm("Delete post?")) return;
-    setLoading(true);
-    setError("");
-    try {
-      const res = await fetch(`/api/post/${postId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Error during deletion");
+  const { isLoading, error, performFetch } = useFetchWithAuth(
+    `/post/${postId}`,
+    () => {
       if (onDelete) onDelete();
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
+    },
+  );
+
+  const handleDelete = () => {
+    if (!postId) return;
+    if (!window.confirm("Delete post?")) return;
+    performFetch({ method: "DELETE" });
   };
 
   return (
     <>
       <Button
-        label={loading ? "Deleting..." : "Delete"}
+        label={isLoading ? "Deleting..." : "Delete"}
         onClick={handleDelete}
-        disabled={loading || !postId}
+        disabled={isLoading || !postId}
       />
-      {error && <div>{error}</div>}
+      {error && (
+        <div style={{ color: "red" }}>
+          {error.message ? error.message : String(error)}
+        </div>
+      )}
     </>
   );
 }
