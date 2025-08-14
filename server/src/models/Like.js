@@ -15,6 +15,8 @@ const likeSchema = new Schema({
   },
 });
 
+likeSchema.index({ user: 1, post: 1 }, { unique: true });
+
 const Like = mongoose.model("likes", likeSchema);
 
 export const validateLike = (likeObject) => {
