@@ -28,7 +28,7 @@ function Post({ post }) {
 }
 
 Post.propTypes = {
-  post: {
+  post: PropTypes.shape({
     author: {
       _id: PropTypes.string,
       username: PropTypes.string,
@@ -43,7 +43,7 @@ Post.propTypes = {
     title: PropTypes.string,
     __v: PropTypes.number,
     _id: PropTypes.string,
-  }.isRequired,
+  }).isRequired,
 };
 
 export default Post;
