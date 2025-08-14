@@ -5,10 +5,11 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import Home from "./pages/Home.jsx";
-import SandboxPage from "./pages/Sandbox/Sandbox.jsx";
-import PostPage from "./pages/Post/Post";
+import NewPostPage from "./pages/NewPost/NewPost.jsx";
 import UserDataContextProvider from "./context/userDataContext/UserDataContextProvider.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
+import SandboxPage from "./pages/Sandbox/Sandbox.jsx";
+import PostPage from "./pages/Post/Post";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<EmailVerification />} />
+          <Route path="/new-post" element={<NewPostPage />} />
           <Route path="/sandbox" element={<SandboxPage />} />
           <Route path="/post/:id" element={<PostPage />} />
         </Routes>
