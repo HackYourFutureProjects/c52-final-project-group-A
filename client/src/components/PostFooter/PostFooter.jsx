@@ -114,13 +114,14 @@ function PostFooter({ tags }) {
         </section>
         <section className={style.tagsContainer}>
           <ul>
-            {tags.map((tag) => {
-              return (
-                <li key={tag} className={style.tag}>
-                  {tag}
-                </li>
-              );
-            })}
+            {tags.length !== 0 &&
+              tags.map((tag) => {
+                return (
+                  <li key={tag} className={style.tag}>
+                    {tag}
+                  </li>
+                );
+              })}
           </ul>
         </section>
       </section>
