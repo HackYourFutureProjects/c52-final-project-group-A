@@ -1,6 +1,7 @@
 import ProfileDash from "../components/ProfileDash/ProfileDash.jsx";
 import { useContext } from "react";
 import UserDataContext from "../context/userDataContext/UserDataContext.js";
+import Post from "../components/Post/Post.jsx";
 
 function Profile() {
   const { userData } = useContext(UserDataContext);
@@ -11,12 +12,8 @@ function Profile() {
 
   return (
     <>
-      <ProfileDash size="lg" user={userData} />
-      <ProfileDash size="lg" />
-      <ProfileDash size="md" user={userData} />
-      <ProfileDash size="md" />
-      <ProfileDash size="sm" user={userData} />
-      <ProfileDash size="sm" />
+      <ProfileDash size="lg" user={userData} followBtn={false} />
+      <Post />
     </>
   );
 }

@@ -136,8 +136,8 @@ function AuthForm({ type }) {
   };
 
   return (
-    <div className={style.wrapper}>
-      <section className={style.container}>
+    <main className={style.wrapper}>
+      <div className={style.container}>
         <h1 className={style.header}>
           {isSignIn ? (
             <>
@@ -168,8 +168,8 @@ function AuthForm({ type }) {
             <Link to="/register">Create one</Link>
           </div>
         )}
-      </section>
-    </div>
+      </div>
+    </main>
   );
 }
 
