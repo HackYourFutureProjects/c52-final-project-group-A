@@ -95,13 +95,6 @@ export const validatePendingUser = (pendingUserObject) => {
   // Validate password
   if (password == null) {
     errorList.push("password is a required field");
-  } else {
-    if (password.length < 8) {
-      errorList.push("password must be at least 8 characters long");
-    }
-    if (password.includes(" ")) {
-      errorList.push("password cannot contain spaces");
-    }
   }
 
   // Validate verification_code
