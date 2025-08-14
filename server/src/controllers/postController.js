@@ -1,4 +1,5 @@
 import Post from "../models/Post.js";
+import mongoose from "mongoose";
 
 export const getAllPosts = async (req, res) => {
   try {
@@ -68,11 +69,17 @@ export const updatePost = async (req, res) => {
 // Delete Post endpoint
 export const deletePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid post ID" });
+    }
 
+    const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
 
-    // Compare the author with the current user
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
     if (post.author.toString() !== req.user._id.toString()) {
       return res
         .status(403)
@@ -80,7 +87,6 @@ export const deletePost = async (req, res) => {
     }
 
     await post.deleteOne();
-
     res.json({ message: "Post deleted" });
   } catch (error) {
     res.status(500).json({ error: error.message });

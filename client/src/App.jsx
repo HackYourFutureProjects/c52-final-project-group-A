@@ -5,6 +5,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import Home from "./pages/Home.jsx";
+import SandboxDeletePage from "./pages/Sandbox/Sandbox.jsx";
 import UserDataContextProvider from "./context/userDataContext/UserDataContextProvider.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
 
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<EmailVerification />} />
+          <Route path="/sandbox" element={<SandboxDeletePage />} />
         </Routes>
       </UserDataContextProvider>
     </>
