@@ -16,8 +16,8 @@ function ProfileDash({ size, user, border = "full", followBtn = true }) {
 
   const username = user?.username ?? "username";
   const score = user?.score ?? "00";
-  const profile = user?.profile ?? { firstName: "Full", lastName: "Name" };
-  const fullName = profile.firstName + " " + profile.lastName;
+  const profile = user?.profile ?? { first_name: "Full", last_name: "Name" };
+  const fullName = profile.first_name + " " + profile.last_name;
 
   return (
     <article
