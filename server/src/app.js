@@ -9,6 +9,7 @@ import searchRouter from "./routes/search.js";
 import profileRouter from "./routes/profile.js";
 import exploreRouter from "./routes/explore.js";
 import followingRouter from "./routes/following.js";
+import likeRoutes from "./routes/like.js";
 
 // Create an express server
 const app = express();
@@ -34,5 +35,6 @@ app.use("/api/search", searchRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/following", followingRouter);
 app.use("/api/explore", exploreRouter);
+app.use("/api", likeRoutes);
 
 export default app;
