@@ -10,7 +10,12 @@ function Post({ post }) {
 
   return (
     <article className={style.wrapper}>
-      <ProfileDash size="sm" border="bottom" followBtn={true} user={post.author} />
+      <ProfileDash
+        size="sm"
+        border="bottom"
+        followBtn={true}
+        user={post.author}
+      />
       <section className={style.contentContainer}>
         <header className={style.headerContainer}>
           <h1>{post.title}</h1>
