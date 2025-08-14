@@ -44,8 +44,9 @@ const useFetchWithAuth = (route, onReceived) => {
       }
 
       setIsLoading(false);
-    })().catch((e) => {
-      setError(e);
+    }).catch((e) => {
+      const errorMsg = e?.message || String(e);
+      setError(errorMsg);
       setIsLoading(false);
     });
   };
