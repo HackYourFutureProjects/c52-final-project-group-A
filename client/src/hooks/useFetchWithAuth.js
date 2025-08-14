@@ -31,7 +31,6 @@ const useFetchWithAuth = (route, onReceived) => {
       const url = `/api${route}`;
       const res = await fetch(url, { ...baseOptions, ...options });
 
-      // --- Исправленный блок обработки JSON:
       let json = {};
       try {
         json = await res.json();
