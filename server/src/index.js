@@ -1,9 +1,12 @@
+// index.js
 import express from "express";
 import app from "./app.js";
 import { logInfo, logError } from "./util/logging.js";
 import connectDB from "./db/connectDB.js";
 import testRouter from "./testRouter.js";
 import config from "./config.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const { PORT, NODE_ENV } = config;
 
@@ -19,20 +22,16 @@ const startServer = async () => {
 };
 
 /****** Host our client code for Heroku *****/
-/**
- * We only want to host our client code when in production mode as we then want to use the production build that is built in the dist folder.
- * When not in production, don't host the files, but the development version of the app can connect to the backend itself.
- */
 if (NODE_ENV === "production") {
-  app.use(
-    express.static(new URL("../../client/dist", import.meta.url).pathname),
-  );
-  // Redirect * requests to give the client data
-  app.get("/*file", (req, res) =>
-    res.sendFile(
-      new URL("../../client/dist/index.html", import.meta.url).pathname,
-    ),
-  );
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const clientPath = path.resolve(__dirname, "../../client/dist");
+
+  app.use(express.static(clientPath));
+
+  app.get(/^\/(?!api\/).*/, (_req, res) => {
+    res.sendFile(path.join(clientPath, "index.html"));
+  });
 }
 
 /****** For cypress we want to provide an endpoint to seed our data ******/
