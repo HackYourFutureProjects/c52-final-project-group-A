@@ -1,6 +1,7 @@
 :root {
-  --brand: var(--color-orange);
-  --text: var(--color-black);
+  --brand: #fe4a22;
+
+  --text: #000000;
 }
 
 /* Hero section */
@@ -17,7 +18,7 @@
 }
 
 /* Hero inner content */
-.hero__inner {
+.heroinner {
   text-align: center;
   max-width: 56.25rem; /* 900px */
   margin: 0 auto;
@@ -26,7 +27,7 @@
 }
 
 /* Headline styling */
-.hero__title {
+.herotitle {
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -35,14 +36,14 @@
   margin-bottom: 1.5rem;
 }
 
-.hero__line {
+.heroline {
   display: block;
   position: relative;
   white-space: nowrap;
   margin-bottom: 0.5rem;
 }
 
-.hero__dot {
+.herodot {
   display: inline-block;
   width: 0.25em;
   height: 0.25em;
@@ -52,12 +53,12 @@
   transform: translateY(-0.1em);
 }
 
-.hero__underline {
+.herounderline {
   position: relative;
   display: inline-block;
 }
 
-.hero__underline::after {
+.herounderline::after {
   content: "";
   position: absolute;
   left: 0;
@@ -69,7 +70,7 @@
 }
 
 /* Pill (highlighted word "ideas") */
-.hero__pill {
+.heropill {
   background: var(--brand);
   color: #fff;
   border-radius: var(--pill-border-radius);
@@ -80,8 +81,8 @@
   margin-left: 0.4em;
 }
 
-.hero__pill::before,
-.hero__pill::after {
+.heropill::before,
+.heropill::after {
   content: "";
   position: absolute;
   right: -1.25rem;
@@ -91,25 +92,25 @@
   border-radius: 0.125rem; /* 2px */
 }
 
-.hero__pill::before {
+.heropill::before {
   top: 18%;
   transform: rotate(25deg);
 }
 
-.hero__pill::after {
+.heropill::after {
   bottom: 18%;
   transform: rotate(-25deg);
 }
 
 /* Subtitle */
-.hero__subtitle {
+.herosubtitle {
   color: #444;
   font-size: 1.1rem;
   margin: 1.25rem 0 1.5rem;
 }
 
 /* CTA Buttons container */
-.hero__cta {
+.herocta {
   display: flex;
   gap: 0.75rem;
   justify-content: center;
@@ -132,23 +133,23 @@
   border-bottom: 2px solid var(--color-orange);
 }
 
-.btn--primary {
+.btnPrimary {
   background: var(--color-orange);
   color: #fff;
 }
 
-.btn--primary:hover {
+.btnPrimary:hover {
   background: #e84324;
   border-bottom: 2px solid #e84324;
 }
 
-.btn--ghost {
+.btnGhost {
   background: #fff;
   color: var(--text);
   border: 1px solid var(--color-border);
 }
 
-.btn--ghost:hover {
+.btnGhost:hover {
   background: #f3f3f3;
   border-bottom: 2px solid #999;
 }
@@ -246,12 +247,12 @@
 
 /* Responsive */
 @media (max-width: 35.063rem) {
-  .hero__line {
+  .heroline {
     white-space: normal;
   }
 
-  .hero__pill::before,
-  .hero__pill::after {
+  .heropill::before,
+  .heropill::after {
     display: none;
   }
 }
