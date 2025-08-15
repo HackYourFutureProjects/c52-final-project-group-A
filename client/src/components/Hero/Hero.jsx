@@ -14,6 +14,7 @@ export default function Hero() {
     "#Politics",
     "#Poetry",
     "#Ideas",
+    "#crypto",
   ];
 
   // Generate random positions and delays once
