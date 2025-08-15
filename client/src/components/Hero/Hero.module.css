@@ -253,4 +253,13 @@
   .heroPill::after {
     display: none;
   }
+@media (max-width: 35.063rem) {
+  .heroLine {
+    white-space: normal;
+  }
+
+  .heroPill::before,
+  .heroPill::after {
+    display: none;
+  }
 }
