@@ -1,5 +1,11 @@
+import Hero from "../components/Hero/Hero";
+
 function Landing() {
-  return <>Landing Page</>;
+  return (
+    <>
+      <Hero />
+    </>
+  );
 }
 
 export default Landing;
