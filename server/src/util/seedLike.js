@@ -4,21 +4,18 @@ import { logInfo } from "./logging.js";
 import User from "../models/User.js";
 import config from "../config.js";
 
-if (config.FAKER_SEED) {
-  faker.seed(config.FAKER_SEED);
-}
-async function seedlike(users, posts, AVG_NUM_LIKES = 5) {
-  const HAPPY = config.SEED_MODE === "happy";
+async function seedlike(users, posts, avgLikes = 5, happyPath = false) {
+  const { FEED_WINDOW_HOURS, MILLISECONDS_PER_HOUR } = config;
 
   // Freeze "now" for consistent timestamps during this run
   const runNow = new Date();
 
   // Feed window (e.g., last 28h if FEED_WINDOW_HOURS=28 in .env)
   const sinceWindow = new Date(
-    runNow.getTime() - config.FEED_WINDOW_HOURS * config.MILLISECONDS_PER_HOUR,
+    runNow.getTime() - FEED_WINDOW_HOURS * MILLISECONDS_PER_HOUR,
   );
 
-  const numLikes = users.length * AVG_NUM_LIKES;
+  const numLikes = users.length * avgLikes;
 
   // getting existing likes to avoid duplication
   const existingLikes = await Like.find({}, { user: 1, post: 1 }).lean();
@@ -41,9 +38,9 @@ async function seedlike(users, posts, AVG_NUM_LIKES = 5) {
       // Timestamp choice:
       // - HAPPY: guaranteed recent in your feed window
       // - REALISTIC: anywhere in the past (no forced recency)
-      const createdAt = HAPPY
+      const createdAt = happyPath
         ? faker.date.between({ from: sinceWindow, to: runNow })
-        : faker.date.past(); // <-- your requested "realistic" behavior
+        : faker.date.past();
 
       const like = new Like({
         user: randomUser._id,

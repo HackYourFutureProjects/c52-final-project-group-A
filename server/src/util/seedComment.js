@@ -3,8 +3,8 @@ import { faker } from "@faker-js/faker";
 import { logInfo } from "./logging.js";
 import User from "../models/User.js";
 
-async function seedComment(users, posts, AVG_NUM_COMMENTS = 3) {
-  const numComments = posts.length * AVG_NUM_COMMENTS;
+async function seedComment(users, posts, avgComments = 3) {
+  const numComments = posts.length * avgComments;
 
   const comments = [];
   const userCommentUpdates = new Map();
