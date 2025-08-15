@@ -86,6 +86,7 @@
   width: 0.875rem;
   height: 0.25rem;
   background: var(----color-orange);
+  background: var(--color-orange);
   border-radius: 0.125rem; /* 2px */
 }
 
