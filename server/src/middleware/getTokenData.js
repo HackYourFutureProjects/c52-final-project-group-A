@@ -24,6 +24,6 @@ export const getTokenData = (req, res, next) => {
     });
   }
 
-  req.body.tokenData = tokenData;
+  req.tokenData = tokenData;
   next();
 };
