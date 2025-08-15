@@ -18,7 +18,8 @@ async function readlineHelper() {
     });
     if (seed.toLowerCase() !== "y" && seed.toLowerCase() !== "yes") {
       logInfo("Seeding cancelled");
-      return rl.close();
+      rl.close();
+      return null;
     }
 
     const drop = await new Promise((resolve) => {
