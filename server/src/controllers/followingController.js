@@ -6,6 +6,13 @@ export const handleFollowing = async (req, res) => {
   const { userId } = req.tokenData;
 
   try {
+    const isAuthor = await User.findById(authorId);
+    if (!isAuthor) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Author not found" });
+    }
+
     const user = await User.findById(userId);
     if (!user) {
       return res
@@ -20,7 +27,7 @@ export const handleFollowing = async (req, res) => {
     if (following) {
       // Unfollow
       user.following = user.following.filter(
-        (id) => id.toString() !== authorId,
+        (id) => id.toString() !== authorId.toString(),
       );
       await user.save();
       return res
