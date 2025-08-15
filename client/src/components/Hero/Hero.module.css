@@ -135,6 +135,9 @@
 .btnPrimary:hover {
   background: #e84324;
   border-bottom: 2px solid #e84324;
+.btnPrimary:hover {
+  background: var(--color-orange-hover);
+  border-bottom: 2px solid var(--color-orange-hover);
 }
 
 .btnGhost {
