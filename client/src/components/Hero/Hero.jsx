@@ -36,28 +36,26 @@ export default function Hero() {
 
   return (
     <section className={style.hero}>
-      <div className={style.hero__inner}>
-        <h1 className={style.hero__title}>
-          <span className={`${style.hero__line} ${style.fadeLeft}`}>
+      <div className={style.heroinner}>
+        <h1 className={style.herotitle}>
+          <span className={`${style.heroline} ${style.fadeLeft}`}>
             The best
           </span>
-          <span className={`${style.hero__line} ${style.fadeLeft}`}>
-            <span className={style.hero__dot} />
+          <span className={`${style.heroline} ${style.fadeLeft}`}>
+            <span className={style.herodot} />
             place
           </span>
-          <span className={`${style.hero__line} ${style.fadeRight}`}>
-            for <span className={style.hero__underline}>your</span>{" "}
-            <span className={style.hero__pill}>ideas</span>
+          <span className={`${style.heroline} ${style.fadeRight}`}>
+            for <span className={style.herounderline}>your</span>{" "}
+            <span className={style.heropill}>ideas</span>
           </span>
         </h1>
 
-        <p
-          className={`${style.hero__subtitle} ${style.fadeUp} ${style.delay1}`}
-        >
+        <p className={`${style.herosubtitle} ${style.fadeUp} ${style.delay1}`}>
           Share bold thoughts. Discover rising creators.
         </p>
 
-        <div className={`${style.hero__cta} ${style.fadeUp} ${style.delay2}`}>
+        <div className={`${style.herocta} ${style.fadeUp} ${style.delay2}`}>
           <Link to="/explore" className={`${style.btn} ${style.btnPrimary}`}>
             Explore
           </Link>
@@ -67,7 +65,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ✅ Render floating tags from useMemo data */}
       <div className={style.tagCloud}>
         {floatingTags.map(({ tag, left, top, delay }, index) => (
           <span
