@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import styles from "./SearchBox.module.css";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchBox({ onClose }) {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("user"); // default to 'user'
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSearch = async () => {
     if (!query.trim()) return;
@@ -65,17 +67,42 @@ export default function SearchBox({ onClose }) {
         />
       </div>
 
-      <button className={styles.searchButton} onClick={handleSearch}>
+      <button className={styles.searchBoxButton} onClick={handleSearch}>
         🔍
       </button>
       <button className={styles.closeButton} onClick={onClose}>
         ✕
       </button>
 
+      {loading && <div className={styles.loading}>Loading...</div>}
+
       {results.length > 0 && (
         <ul className={styles.suggestionsList}>
           {results.map((item, index) => (
-            <li key={index} className={styles.suggestionItem}>
+            <li
+              key={index}
+              className={styles.suggestionItem}
+              onClick={() => {
+                if (type === "user") {
+                  navigate(`/user/${item._id}`);
+                } else {
+                  navigate(`/post/${item._id}`);
+                }
+                onClose(); // close the search box after navigating
+              }}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  if (type === "user") {
+                    navigate(`/user/${item._id}`);
+                  } else {
+                    navigate(`/post/${item._id}`);
+                  }
+                  onClose();
+                }
+              }}
+              role="button"
+            >
               {type === "user"
                 ? `${item.username} (${item.profile?.first_name || ""} ${item.profile?.last_name || ""})`
                 : `${item.title} - ${item.tags?.join(", ")}`}

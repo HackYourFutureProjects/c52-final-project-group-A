@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
+import styles from "./PostPage.module.css";
 
 export default function PostPage() {
   const { id } = useParams();
@@ -33,9 +34,9 @@ export default function PostPage() {
   if (!post) return null;
 
   return (
-    <div>
-      <h1>{post.title}</h1>
-      <div>
+    <div className={styles.container}>
+      <h1 className={styles.title}>{post.title}</h1>
+      <div className={styles.meta}>
         by {post.author?.username || "unknown"} ·{" "}
         {post.created_at && new Date(post.created_at).toLocaleString()}
         {post.status === "PUBLISHED" && post.published_at
@@ -43,13 +44,15 @@ export default function PostPage() {
           : null}
       </div>
       {post.tags?.length ? (
-        <div>
+        <div className={styles.tags}>
           {post.tags.map((t) => (
-            <span key={t}>{t}</span>
+            <span key={t} className={styles.tag}>
+              {t}
+            </span>
           ))}
         </div>
       ) : null}
-      <div>{post.content}</div>
+      <div className={styles.content}>{post.content}</div>
     </div>
   );
 }

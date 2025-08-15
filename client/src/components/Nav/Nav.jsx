@@ -6,6 +6,7 @@ import { useContext } from "react";
 import Logo from "../Logo.jsx";
 import UserDataContext from "../../context/userDataContext/UserDataContext.js";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
+import PropTypes from "prop-types";
 
 function Nav({ setShowSearchBox }) {
   const navigate = useNavigate();
@@ -123,5 +124,8 @@ function Nav({ setShowSearchBox }) {
     </nav>
   );
 }
+Nav.propTypes = {
+  setShowSearchBox: PropTypes.func.isRequired,
+};
 
 export default Nav;
