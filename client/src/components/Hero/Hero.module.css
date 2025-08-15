@@ -138,6 +138,9 @@
 .btnPrimary:hover {
   background: var(--color-orange-hover);
   border-bottom: 2px solid var(--color-orange-hover);
+.btnPrimary:hover {
+  background: var(--color-orange-dark);
+  border-bottom: 2px solid var(--color-orange-dark);
 }
 
 .btnGhost {
