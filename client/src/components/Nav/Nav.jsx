@@ -7,7 +7,7 @@ import Logo from "../Logo.jsx";
 import UserDataContext from "../../context/userDataContext/UserDataContext.js";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
 
-function Nav() {
+function Nav({ setShowSearchBox }) {
   const navigate = useNavigate();
   const location = useLocation();
   const mobile = useWindowWidth(768);
@@ -91,7 +91,12 @@ function Nav() {
           <Link to="/home">{mobile ? <HomeIcon /> : "Home"}</Link>
         </li>
         <li className={style.navButton}>
-          <Link to="#">{mobile ? <SearchIcon /> : "Search"}</Link>
+          <button
+            onClick={() => setShowSearchBox(true)}
+            className={style.searchButton}
+          >
+            {mobile ? <SearchIcon /> : "Search"}
+          </button>
         </li>
         {!mobile && (
           <li className={style.logoContainer}>

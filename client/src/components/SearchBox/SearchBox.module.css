@@ -1,0 +1,113 @@
+.searchBoxContainer {
+  position: fixed;
+  left: 46%;
+  transform: translateX(-50%);
+  width: 90vw;
+  max-width: 500px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* Desktop default */
+  top: 8.5rem;
+}
+
+/* On small screens (mobile), move it above the bottom navbar */
+@media (max-width: 768px) {
+  .searchBoxContainer {
+    top: unset;
+    left: 50%;
+    bottom: 2.5rem; /* Adjust based on mobile navbar height */
+  }
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  outline: none;
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+.searchButton {
+  background: transparent;
+  border: none;
+  font-size: 2.2rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+/**/
+.suggestionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 998;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.suggestionItem {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.suggestionItem:hover {
+  background: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .suggestionsList {
+    top: auto;
+    bottom: 100%;
+    border-radius: 10px 10px 0 0;
+    border-top: 1px solid #ccc;
+    border-bottom: none;
+  }
+}
+
+.searchGroup {
+  display: flex;
+  flex: 1;
+}
+
+.searchTypeSelect {
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  background-color: white;
+  outline: none;
+  height: 100%;
+  cursor: pointer;
+}
+
+.searchInput {
+  border-radius: 0 4px 4px 0;
+  border-left: none;
+}

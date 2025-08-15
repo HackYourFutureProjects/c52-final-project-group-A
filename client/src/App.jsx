@@ -9,13 +9,19 @@ import UserDataContextProvider from "./context/userDataContext/UserDataContextPr
 import EmailVerification from "./pages/EmailVerification.jsx";
 import SandboxPage from "./pages/Sandbox/Sandbox.jsx";
 import PostPage from "./pages/Post/Post";
+import SearchBox from "./components/SearchBox/SearchBox";
+import { useState } from "react";
 
 const App = () => {
+  const [showSearchBox, setShowSearchBox] = useState(false);
+
   // TODO: Adjust routes and their components
   return (
     <>
       <UserDataContextProvider>
-        <Nav />
+        <Nav setShowSearchBox={setShowSearchBox} />
+        {showSearchBox && <SearchBox onClose={() => setShowSearchBox(false)} />}
+
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/home" element={<Home />} />
