@@ -152,6 +152,8 @@
 .btnGhost:hover {
   background: #f3f3f3;
   border-bottom: 2px solid #999;
+  background: #f3f3f3;
+  border-bottom: 2px solid var(--color-gray-600);
 }
 
 /* Floating Tag Cloud */
