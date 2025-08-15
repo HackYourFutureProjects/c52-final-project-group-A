@@ -154,6 +154,9 @@
   border-bottom: 2px solid #999;
   background: #f3f3f3;
   border-bottom: 2px solid var(--color-gray-600);
+.btnGhost:hover {
+  background: var(--color-ghost-hover-bg);
+  border-bottom: 2px solid #999;
 }
 
 /* Floating Tag Cloud */
