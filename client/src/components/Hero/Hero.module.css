@@ -1,9 +1,3 @@
-:root {
-  --brand: #fe4a22;
-
-  --text: #000000;
-}
-
 /* Hero section */
 .hero {
   position: relative;
@@ -18,7 +12,7 @@
 }
 
 /* Hero inner content */
-.heroinner {
+.heroInner {
   text-align: center;
   max-width: 56.25rem; /* 900px */
   margin: 0 auto;
@@ -27,52 +21,52 @@
 }
 
 /* Headline styling */
-.herotitle {
+.heroTitle {
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  color: var(--text);
+  color: var(----color-black);
   font-size: clamp(2.25rem, 6vw, 5rem); /* 36px to 80px */
   margin-bottom: 1.5rem;
 }
 
-.heroline {
+.heroLine {
   display: block;
   position: relative;
   white-space: nowrap;
   margin-bottom: 0.5rem;
 }
 
-.herodot {
+.heroDot {
   display: inline-block;
   width: 0.25em;
   height: 0.25em;
-  background: var(--brand);
+  background: var(---color-orange);
   border-radius: 50%;
   margin-right: 0.3em;
   transform: translateY(-0.1em);
 }
 
-.herounderline {
+.heroUnderline {
   position: relative;
   display: inline-block;
 }
 
-.herounderline::after {
+.heroUnderline::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
   height: 0.1em;
-  background: var(--brand);
+  background: var(--color-orange);
   bottom: -0.08em;
   border-radius: 0.125rem; /* 2px */
 }
 
 /* Pill (highlighted word "ideas") */
-.heropill {
-  background: var(--brand);
-  color: #fff;
+.heroPill {
+  background: var(--color-orange);
+  color: var(--color-white);
   border-radius: var(--pill-border-radius);
   padding: 0.05em 0.6em;
   position: relative;
@@ -81,36 +75,36 @@
   margin-left: 0.4em;
 }
 
-.heropill::before,
-.heropill::after {
+.heroPill::before,
+.heroPill::after {
   content: "";
   position: absolute;
   right: -1.25rem;
   width: 0.875rem;
   height: 0.25rem;
-  background: var(--brand);
+  background: var(----color-orange);
   border-radius: 0.125rem; /* 2px */
 }
 
-.heropill::before {
+.heroPill::before {
   top: 18%;
   transform: rotate(25deg);
 }
 
-.heropill::after {
+.heroPill::after {
   bottom: 18%;
   transform: rotate(-25deg);
 }
 
 /* Subtitle */
-.herosubtitle {
-  color: #444;
+.heroSubTitle {
+  color: var(--color-black);
   font-size: 1.1rem;
   margin: 1.25rem 0 1.5rem;
 }
 
 /* CTA Buttons container */
-.herocta {
+.heroCta {
   display: flex;
   gap: 0.75rem;
   justify-content: center;
@@ -135,7 +129,7 @@
 
 .btnPrimary {
   background: var(--color-orange);
-  color: #fff;
+  color: var(--color-white);
 }
 
 .btnPrimary:hover {
@@ -144,8 +138,8 @@
 }
 
 .btnGhost {
-  background: #fff;
-  color: var(--text);
+  background: var(--color-white);
+  color: var(--color-black);
   border: 1px solid var(--color-border);
 }
 
@@ -251,8 +245,8 @@
     white-space: normal;
   }
 
-  .heropill::before,
-  .heropill::after {
+  .heroPill::before,
+  .heroPill::after {
     display: none;
   }
 }

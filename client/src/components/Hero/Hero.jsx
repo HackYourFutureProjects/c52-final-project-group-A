@@ -36,26 +36,26 @@ export default function Hero() {
 
   return (
     <section className={style.hero}>
-      <div className={style.heroinner}>
-        <h1 className={style.herotitle}>
-          <span className={`${style.heroline} ${style.fadeLeft}`}>
+      <div className={style.heroInner}>
+        <h1 className={style.heroTitle}>
+          <span className={`${style.heroLine} ${style.fadeLeft}`}>
             The best
           </span>
-          <span className={`${style.heroline} ${style.fadeLeft}`}>
-            <span className={style.herodot} />
+          <span className={`${style.heroLine} ${style.fadeLeft}`}>
+            <span className={style.heroDot} />
             place
           </span>
-          <span className={`${style.heroline} ${style.fadeRight}`}>
-            for <span className={style.herounderline}>your</span>{" "}
-            <span className={style.heropill}>ideas</span>
+          <span className={`${style.heroLine} ${style.fadeRight}`}>
+            for <span className={style.heroUnderline}>your</span>{" "}
+            <span className={style.heroPill}>ideas</span>
           </span>
         </h1>
 
-        <p className={`${style.herosubtitle} ${style.fadeUp} ${style.delay1}`}>
+        <p className={`${style.heroSubTitle} ${style.fadeUp} ${style.delay1}`}>
           Share bold thoughts. Discover rising creators.
         </p>
 
-        <div className={`${style.herocta} ${style.fadeUp} ${style.delay2}`}>
+        <div className={`${style.heroCta} ${style.fadeUp} ${style.delay2}`}>
           <Link to="/explore" className={`${style.btn} ${style.btnPrimary}`}>
             Explore
           </Link>
