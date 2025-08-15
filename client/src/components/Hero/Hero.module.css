@@ -26,6 +26,8 @@
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(----color-black);
+  letter-spacing: -0.02em;
+  color: var(--color-black);
   font-size: clamp(2.25rem, 6vw, 5rem); /* 36px to 80px */
   margin-bottom: 1.5rem;
 }
