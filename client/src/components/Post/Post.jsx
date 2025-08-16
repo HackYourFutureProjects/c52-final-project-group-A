@@ -4,7 +4,7 @@ import style from "./Post.module.css";
 import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
 
-function Post({ post }) {
+function Post({ post, liked, onLikeToggle }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
   console.log(publishedAgo);
 
@@ -22,7 +22,7 @@ function Post({ post }) {
         </header>
         <p className={style.postContent}>{post.content}</p>
       </section>
-      <PostFooter tags={post.tags} />
+      <PostFooter tags={post.tags} liked={liked} onLikeToggle={onLikeToggle} />
     </article>
   );
 }
@@ -47,3 +47,25 @@ Post.propTypes = {
 };
 
 export default Post;
+
+Post.propTypes = {
+  post: PropTypes.shape({
+    author: PropTypes.shape({
+      _id: PropTypes.string,
+      username: PropTypes.string,
+      email: PropTypes.string,
+    }),
+    content: PropTypes.string,
+    created_at: PropTypes.string,
+    published_at: PropTypes.string,
+    score: PropTypes.number,
+    status: PropTypes.oneOf(["DRAFT", "PUBLISHED", "ARCHIVED"]),
+    tags: PropTypes.arrayOf(PropTypes.string),
+    title: PropTypes.string,
+    __v: PropTypes.number,
+    _id: PropTypes.string,
+    likedByCurrentUser: PropTypes.bool,
+  }).isRequired,
+  liked: PropTypes.bool.isRequired,
+  onLikeToggle: PropTypes.func.isRequired,
+};
