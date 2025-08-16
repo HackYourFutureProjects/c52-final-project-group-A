@@ -73,12 +73,13 @@ function GoogleButton() {
 
   return (
     <Button
-      label={isLoading ? "Signing in..." : "Continue with Google"}
       onClick={googleLogin}
       icon={<GoogleLogo />}
       className={style.googleButton}
       disabled={isLoading}
-    />
+    >
+      {isLoading ? "Signing in..." : "Continue with Google"}
+    </Button>
   );
 }
 

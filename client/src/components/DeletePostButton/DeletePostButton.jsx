@@ -18,11 +18,9 @@ function DeletePostButton({ postId, onDelete }) {
 
   return (
     <>
-      <Button
-        label={isLoading ? "Deleting..." : "Delete"}
-        onClick={handleDelete}
-        disabled={isLoading || !postId}
-      />
+      <Button onClick={handleDelete} disabled={isLoading || !postId}>
+        {isLoading ? "Deleting..." : "Delete"}
+      </Button>
       {error && (
         <div style={{ color: "red" }}>
           {error.message ? error.message : String(error)}

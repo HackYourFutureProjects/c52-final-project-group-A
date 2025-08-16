@@ -88,7 +88,9 @@ function Nav() {
               : style.navButton
           }
         >
-          <Link to="/home">{mobile ? <HomeIcon /> : "Home"}</Link>
+          <Link to={userData ? "/home" : "/login"}>
+            {mobile ? <HomeIcon /> : "Home"}
+          </Link>
         </li>
         <li className={style.navButton}>
           <Link to="#">{mobile ? <SearchIcon /> : "Search"}</Link>
@@ -105,15 +107,15 @@ function Nav() {
               : style.navButton
           }
         >
-          <Link to="/profile">{mobile ? <ProfileIcon /> : "Profile"}</Link>
+          <Link to={userData ? "/profile" : "/login"}>
+            {mobile ? <ProfileIcon /> : "Profile"}
+          </Link>
         </li>
       </ul>
       {!mobile && !userData && (
-        <Button
-          label="Sign-in"
-          onClick={handleSignIn}
-          className={style.signInButton}
-        />
+        <Button onClick={handleSignIn} className={style.signInButton}>
+          Sign-in
+        </Button>
       )}
     </nav>
   );

@@ -157,10 +157,11 @@ function AuthForm({ type }) {
           {renderFormFields()}
           <Button
             type="submit"
-            label={isSignIn ? "Log in" : "Continue"}
             className={style.submitBtn}
             disabled={isLoading}
-          />
+          >
+            {isSignIn ? "Log in" : "Continue"}
+          </Button>
         </form>
         {isSignIn && (
           <div className={style.noAccContainer}>

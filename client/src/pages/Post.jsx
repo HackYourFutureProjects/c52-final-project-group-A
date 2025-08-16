@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
-import Post from "../../components/Post/Post.jsx";
+import useFetchWithAuth from "../hooks/useFetchWithAuth.js";
+import Post from "../components/Post/Post.jsx";
 
 export default function PostPage() {
   const { id } = useParams();

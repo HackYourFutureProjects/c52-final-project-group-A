@@ -89,11 +89,12 @@ function EmailVerificationForm() {
           </div>
 
           <Button
-            label={isLoading ? "Verifying..." : "Verify Code"}
             onClick={handleSubmit}
             className={styles.submitBtn}
             disabled={isLoading}
-          />
+          >
+            {isLoading ? "Verifying..." : "Verify Code"}
+          </Button>
         </div>
       </div>
     </div>

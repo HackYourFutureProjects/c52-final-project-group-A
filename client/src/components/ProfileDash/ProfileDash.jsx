@@ -12,7 +12,6 @@ function ProfileDash({ size, user, border = "full", followBtn = true }) {
     mobile && size === "lg" ? style[`dash_mobile`] : style[`dash_${size}`];
   const nameAndBtnContainer = style[`nameAndBtnContainer_${size}`];
   const followBtnSize = style[`followBtn_${size}`];
-  console.log(user);
 
   const username = user?.username ?? "username";
   const score = user?.score ?? "00";
@@ -36,10 +35,9 @@ function ProfileDash({ size, user, border = "full", followBtn = true }) {
               </Link>
             </header>
             {followBtn && (
-              <Button
-                label="Follow"
-                className={style.followBtn + " " + followBtnSize}
-              />
+              <Button className={style.followBtn + " " + followBtnSize}>
+                Follow
+              </Button>
             )}
           </div>
           {size === "lg" && (
