@@ -101,6 +101,17 @@ export default function SearchBox({ onClose }) {
                   onClose();
                 }
               }}
+          {results.map((item, index) => (
+            <li
+              key={index}
+              className={styles.suggestionItem}
+              onClick={() => handleNavigate(item)}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleNavigate(item);
+                }
+              }}
               role="button"
             >
               {type === "user"
