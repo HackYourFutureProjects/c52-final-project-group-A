@@ -16,8 +16,6 @@ export const getPostsPerUser = async (req, res) => {
       "author",
       "username profile score",
     );
-    if (!posts)
-      return res.status(404).json({ success: false, msg: "Posts not found" });
     res.json(posts);
   } catch (error) {
     res.status(500).json({ success: false, msg: error.message });
