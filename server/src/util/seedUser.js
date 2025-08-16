@@ -2,16 +2,15 @@ import { faker } from "@faker-js/faker";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import { logInfo } from "./logging.js";
-import usernameGenerator from "./usernameGenerator.js";
 
-async function seedUser(NUM_USERS, CREATE_ADMIN, saltRounds = 10) {
+async function seedUser(numUsers, createAdmin, saltRounds = 10) {
   const users = [];
 
-  for (let i = 0; i < NUM_USERS; i++) {
-    const admin = CREATE_ADMIN && i === 0; // create an admin user if requested and it's the first user
+  for (let i = 0; i < numUsers; i++) {
+    const admin = createAdmin && i === 0; // create an admin user if requested and it's the first user
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
-    const username = admin ? "admin" : usernameGenerator();
+    const username = admin ? "admin" : faker.internet.username();
     const email = admin
       ? "admin@gmail.com"
       : faker.internet.email({ firstName, lastName });
@@ -37,8 +36,8 @@ async function seedUser(NUM_USERS, CREATE_ADMIN, saltRounds = 10) {
 
     const savedUser = await user.save();
     users.push(savedUser);
-    if (i % 10 === 0 || i === NUM_USERS - 1)
-      logInfo(`${i + 1}/${NUM_USERS} users created`);
+    if (i % 10 === 0 || i === numUsers - 1)
+      logInfo(`${i + 1}/${numUsers} users created`);
   }
 
   return users;

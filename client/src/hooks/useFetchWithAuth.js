@@ -1,62 +1,63 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useRef } from "react";
 
-export default function useFetchWithAuth(url, onSuccess) {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+const useFetchWithAuth = (route, onReceived) => {
+  if (route.includes("api/")) {
+    throw Error("route must NOT include /api in useFetchWithAuth");
+  }
+
+  const controllerRef = useRef(null);
   const [error, setError] = useState(null);
-  const abortControllerRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const performFetch = useCallback(
-    async (options = {}) => {
-      if (!url) return;
+  const cancelFetch = () => {
+    controllerRef.current?.abort();
+  };
 
-      if (abortControllerRef.current) abortControllerRef.current.abort();
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
+  const performFetch = (options) => {
+    setError(null);
+    setIsLoading(true);
 
-      setIsLoading(true);
-      setError(null);
+    controllerRef.current = new AbortController();
+    const { signal } = controllerRef.current;
 
+    const baseOptions = {
+      method: "GET",
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      signal,
+    };
+
+    (async () => {
+      const url = `/api${route}`;
+      const res = await fetch(url, { ...baseOptions, ...options });
+
+      let json = {};
       try {
-        const res = await fetch(`/api${url}`, {
-          method: "GET",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          signal: controller.signal,
-          ...options,
-        });
-
-        let json;
-        try {
-          json = await res.json();
-        } catch (parseError) {
-          console.error("Failed to parse JSON response:", parseError);
-          throw new Error(
-            `Failed to parse JSON response: ${parseError.message}`,
-          );
-        }
-
-        if (!res.ok) throw new Error(json?.message || `HTTP ${res.status}`);
-
-        setData(json);
-        onSuccess?.(json);
-      } catch (err) {
-        if (err?.name === "AbortError") return;
-        setError(err);
-      } finally {
-        abortControllerRef.current = null;
-        setIsLoading(false);
+        json = await res.json();
+      } catch {
+        json = {};
       }
-    },
-    [url, onSuccess],
-  );
 
-  const cancelFetch = useCallback(() => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-      abortControllerRef.current = null;
-    }
-  }, []);
+      if (res.ok) {
+        onReceived(json);
+      } else {
+        const msg =
+          (Array.isArray(json?.errors) && json.errors.join(", ")) ||
+          json?.message ||
+          json?.msg ||
+          `HTTP ${res.status}`;
+        setError(msg);
+      }
 
-  return { data, isLoading, error, performFetch, cancelFetch };
-}
+      setIsLoading(false);
+    })().catch((e) => {
+      const errorMsg = e?.message || String(e);
+      setError(errorMsg);
+      setIsLoading(false);
+    });
+  };
+
+  return { isLoading, error, performFetch, cancelFetch };
+};
+
+export default useFetchWithAuth;

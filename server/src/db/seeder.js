@@ -12,38 +12,26 @@ import seedLike from "../util/seedLike.js";
 import seedComment from "../util/seedComment.js";
 import seedFollow from "../util/seedFollow.js";
 import config from "../config.js";
-import * as readline from "node:readline";
+import readlineHelper from "../util/readlineHelper.js";
 
-const {
-  SALT_ROUNDS,
-  DROP_DB,
-  CREATE_ADMIN,
-  NUM_USERS,
-  MAX_NUM_POSTS_PER_USER,
-  TAGS,
-  AVG_NUM_LIKES,
-  AVG_NUM_COMMENTS,
-  AVG_NUM_FOLLOWS,
-} = config;
+const { SALT_ROUNDS, TAGS } = config;
 
 async function seed() {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
   try {
-    const answer = await new Promise((resolve) => {
-      rl.question(
-        "Are you sure you want to seed the database? [Please check your .env to see the seeding options] (y/n) ",
-        resolve,
-      );
-    });
-
-    if (answer.toLowerCase() !== "y" && answer.toLowerCase() !== "yes") {
-      logInfo("Seeding cancelled");
-      return rl.close();
+    const userInput = await readlineHelper();
+    if (!userInput) {
+      return;
     }
+
+    const {
+      dropCreateAdmin,
+      happyPath,
+      numUsers,
+      maxPostsPerUser,
+      avgLikes,
+      avgComments,
+      avgFollows,
+    } = userInput;
 
     logInfo("Starting database seeding...");
 
@@ -52,7 +40,7 @@ async function seed() {
     logInfo("Connected to MongoDB");
 
     // dropping data (optional), comment out to proceed without dropping DB
-    if (DROP_DB) {
+    if (dropCreateAdmin) {
       logInfo("Dropping existing data...");
       await User.deleteMany();
       await Post.deleteMany();
@@ -63,29 +51,28 @@ async function seed() {
 
     // generating users
     logInfo("Generating users...");
-    const users = await seedUser(NUM_USERS, CREATE_ADMIN, SALT_ROUNDS);
+    const users = await seedUser(numUsers, dropCreateAdmin, SALT_ROUNDS);
 
     // generating posts
     logInfo("Generating posts...");
-    const posts = await seedPost(users, MAX_NUM_POSTS_PER_USER, TAGS);
+    const posts = await seedPost(users, maxPostsPerUser, TAGS, happyPath);
     logInfo(`Created ${posts.length} posts`);
 
     // generating likes
     logInfo("Generating likes...");
-    await seedLike(users, posts, AVG_NUM_LIKES);
+    await seedLike(users, posts, avgLikes, happyPath);
 
     logInfo("Generating comments...");
-    await seedComment(users, posts, AVG_NUM_COMMENTS);
+    await seedComment(users, posts, avgComments);
 
     // generating follows
     logInfo("Generating follows...");
-    await seedFollow(users, AVG_NUM_FOLLOWS);
+    await seedFollow(users, avgFollows);
 
     logInfo("Follows generated");
   } catch (error) {
     logError("Error seeding database: " + error);
   } finally {
-    rl.close();
     await mongoose.connection.close();
   }
 }

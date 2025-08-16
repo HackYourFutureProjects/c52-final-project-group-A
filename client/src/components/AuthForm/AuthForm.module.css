@@ -37,7 +37,6 @@
   padding: 0.8rem 0 0.8rem 0;
   border-radius: var(--inner-border-radius);
   font-size: 1.5rem;
-  cursor: pointer;
   margin-top: 1rem;
 }
 .noAccContainer {

@@ -22,15 +22,17 @@ export const getFeed = async (req, res) => {
       return res.json({ mode: "cold-start", items: trending });
     }
     const since = new Date(Date.now() - FEED_WINDOW_HOURS * 3600 * 1000);
+
     // Get list of users the logged-in user follows
     const following = await Follow.find({ follower: userId }).select(
       "following",
     );
     const followingIds = following.map((f) => f.following);
+
     const likedPosts = await Like.find({ user: userId })
       .select("post")
       .limit(config.MAX_LIKED_POSTS_LIMIT);
-    const likedPostIds = likedPosts.map((like) => like.post);
+    const likedPostIds = likedPosts.map((like) => like.post.toString()); // now we convert to string for comparison
 
     // Get posts by followed users from last 7 days
     const recentPosts = await Post.aggregate([
@@ -90,6 +92,7 @@ export const getFeed = async (req, res) => {
     const homeFeed = recentPosts.map((post) => ({
       ...post,
       score: calculatePostScore(post.likeCount, post.tags, tagFrequency),
+      likedByMe: likedPostIds.includes(post._id.toString()), // New field added
     }));
 
     homeFeed.sort((a, b) => b.score - a.score);
