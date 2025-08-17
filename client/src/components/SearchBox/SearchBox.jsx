@@ -9,6 +9,7 @@ export default function SearchBox({ onClose }) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const handleNavigate = useCallback(
     (item) => {
@@ -22,13 +23,11 @@ export default function SearchBox({ onClose }) {
   const handleSearch = useCallback(async () => {
     if (!query.trim()) return;
     setLoading(true);
-    let text = "";
     try {
       const res = await fetch(
         `/api/search?q=${encodeURIComponent(query)}&type=${type}`,
       );
-      text = await res.text(); // get raw body text
-      const data = JSON.parse(text); // manually parse
+      const data = await res.json();
       if (res.ok) {
         setResults(type === "user" ? data.users : data.posts);
       } else {
@@ -36,7 +35,6 @@ export default function SearchBox({ onClose }) {
         setResults([]);
       }
     } catch (jsonErr) {
-      console.error("Failed to parse JSON response:", text);
       console.error("JSON parse error:", jsonErr);
       setResults([]);
     } finally {
@@ -48,11 +46,14 @@ export default function SearchBox({ onClose }) {
     const delayDebounce = setTimeout(() => {
       if (query.trim()) handleSearch();
       else setResults([]);
-      setLoading(false);
     }, 500);
 
     return () => clearTimeout(delayDebounce);
   }, [query, type, handleSearch]);
+  //Reset selection when query or type changes
+  useEffect(() => {
+    setSelectedIndex(-1);
+  }, [query, type]);
 
   return (
     <div className={styles.searchBoxContainer}>
@@ -73,7 +74,19 @@ export default function SearchBox({ onClose }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handleSearch();
+            if (e.key === "Enter") {
+              if (selectedIndex >= 0 && results[selectedIndex]) {
+                handleNavigate(results[selectedIndex]);
+              } else {
+                handleSearch();
+              }
+            } else if (e.key === "ArrowDown") {
+              setSelectedIndex((prev) =>
+                Math.min(prev + 1, results.length - 1),
+              );
+            } else if (e.key === "ArrowUp") {
+              setSelectedIndex((prev) => Math.max(prev - 1, 0));
+            }
           }}
         />
       </div>
@@ -89,10 +102,10 @@ export default function SearchBox({ onClose }) {
 
       {results.length > 0 && (
         <ul className={styles.suggestionsList}>
-          {results.map((item) => (
+          {results.map((item, index) => (
             <li
-              key={item._id}
-              className={styles.suggestionItem}
+              key={type === "user" ? item.username : item.slug || item._id}
+              className={`${styles.suggestionItem} ${index === selectedIndex ? styles.active : ""}`}
               onClick={() => handleNavigate(item)}
               tabIndex={0}
               onKeyDown={(e) => {
@@ -103,7 +116,12 @@ export default function SearchBox({ onClose }) {
               role="button"
             >
               {type === "user"
-                ? `${item.username} (${item.profile?.first_name || ""} ${item.profile?.last_name || ""})`
+                ? (() => {
+                    const first = item.profile?.first_name || "";
+                    const last = item.profile?.last_name || "";
+                    const fullName = [first, last].filter(Boolean).join(" ");
+                    return `${item.username}${fullName ? ` (${fullName})` : ""}`;
+                  })()
                 : `${item.title} - ${(Array.isArray(item.tags) ? item.tags : []).join(", ")}`}
             </li>
           ))}

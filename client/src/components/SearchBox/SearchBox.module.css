@@ -108,3 +108,7 @@
     border-bottom: none;
   }
 }
+.active {
+  background-color: var(--highlight-color, #e2e8f0); /* fallback gray */
+  color: black;
+}

@@ -33,7 +33,7 @@ export const search = async (req, res) => {
           { "profile.last_name": regex },
         ],
       })
-        .select("username profile")
+        .select("_id username profile")
         .limit(5)
         .lean();
     }
@@ -43,7 +43,7 @@ export const search = async (req, res) => {
       posts = await Post.find({
         $or: [{ title: regex }, { tags: regex }],
       })
-        .select("title author tags")
+        .select("_id title author tags")
         .populate("author", "username")
         .limit(5)
         .lean();
