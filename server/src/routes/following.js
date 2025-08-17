@@ -1,8 +1,13 @@
 import express from "express";
-import { authMiddleware } from "../middleware/authMiddleware.js";
+import { getTokenData } from "../middleware/getTokenData.js";
+import {
+  handleFollowing,
+  checkFollowingStatus,
+} from "../controllers/followingController.js";
 
 const router = express.Router();
 
-router.post("/", authMiddleware);
+router.post("/", getTokenData, handleFollowing);
+router.post("/FollowingCheck", getTokenData, checkFollowingStatus);
 
 export default router;
