@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
-import styles from "./PostPage.module.css";
 import Post from "../../components/Post/Post.jsx";
 
 export default function PostPage() {
@@ -29,6 +28,6 @@ export default function PostPage() {
   if (isLoading && !post) return <div>Loading…</div>;
   if (error) return <div>Error: {String(error.message || error)}</div>;
   if (!post) return null;
-  
+
   return <Post post={post} />;
 }

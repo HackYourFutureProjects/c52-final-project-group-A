@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styles from "./SearchBox.module.css";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
@@ -10,16 +10,24 @@ export default function SearchBox({ onClose }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearch = async () => {
+  const handleNavigate = useCallback(
+    (item) => {
+      const route = type === "user" ? `/user/${item._id}` : `/post/${item._id}`;
+      navigate(route);
+      onClose();
+    },
+    [navigate, onClose, type],
+  );
+
+  const handleSearch = useCallback(async () => {
     if (!query.trim()) return;
     setLoading(true);
-
-    const res = await fetch(
-      `/api/search?q=${encodeURIComponent(query)}&type=${type}`,
-    );
-    const text = await res.text(); // get raw body text
-
+    let text = "";
     try {
+      const res = await fetch(
+        `/api/search?q=${encodeURIComponent(query)}&type=${type}`,
+      );
+      text = await res.text(); // get raw body text
       const data = JSON.parse(text); // manually parse
       if (res.ok) {
         setResults(type === "user" ? data.users : data.posts);
@@ -31,17 +39,20 @@ export default function SearchBox({ onClose }) {
       console.error("Failed to parse JSON response:", text);
       console.error("JSON parse error:", jsonErr);
       setResults([]);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [query, type]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (query.trim()) handleSearch();
       else setResults([]);
+      setLoading(false);
     }, 300);
 
     return () => clearTimeout(delayDebounce);
-  }, [query, type]);
+  }, [query, type, handleSearch]);
 
   return (
     <div className={styles.searchBoxContainer}>
@@ -78,29 +89,6 @@ export default function SearchBox({ onClose }) {
 
       {results.length > 0 && (
         <ul className={styles.suggestionsList}>
-          {results.map((item, index) => (
-            <li
-              key={index}
-              className={styles.suggestionItem}
-              onClick={() => {
-                if (type === "user") {
-                  navigate(`/user/${item._id}`);
-                } else {
-                  navigate(`/post/${item._id}`);
-                }
-                onClose(); // close the search box after navigating
-              }}
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  if (type === "user") {
-                    navigate(`/user/${item._id}`);
-                  } else {
-                    navigate(`/post/${item._id}`);
-                  }
-                  onClose();
-                }
-              }}
           {results.map((item, index) => (
             <li
               key={index}
