@@ -49,7 +49,7 @@ export default function SearchBox({ onClose }) {
       if (query.trim()) handleSearch();
       else setResults([]);
       setLoading(false);
-    }, 300);
+    }, 500);
 
     return () => clearTimeout(delayDebounce);
   }, [query, type, handleSearch]);
@@ -89,9 +89,9 @@ export default function SearchBox({ onClose }) {
 
       {results.length > 0 && (
         <ul className={styles.suggestionsList}>
-          {results.map((item, index) => (
+          {results.map((item) => (
             <li
-              key={index}
+              key={item._id}
               className={styles.suggestionItem}
               onClick={() => handleNavigate(item)}
               tabIndex={0}
@@ -104,7 +104,7 @@ export default function SearchBox({ onClose }) {
             >
               {type === "user"
                 ? `${item.username} (${item.profile?.first_name || ""} ${item.profile?.last_name || ""})`
-                : `${item.title} - ${item.tags?.join(", ")}`}
+                : `${item.title} - ${(Array.isArray(item.tags) ? item.tags : []).join(", ")}`}
             </li>
           ))}
         </ul>
