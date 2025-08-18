@@ -1,4 +1,3 @@
-// index.js
 import express from "express";
 import app from "./app.js";
 import { logInfo, logError } from "./util/logging.js";
@@ -7,6 +6,7 @@ import testRouter from "./testRouter.js";
 import config from "./config.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import "./cron/weeklyDigestCron.js";
 
 const { PORT, NODE_ENV } = config;
 
