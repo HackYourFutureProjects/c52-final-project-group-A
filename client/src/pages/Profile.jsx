@@ -8,21 +8,23 @@ function Profile() {
   const { userData } = useContext(UserDataContext);
   const [posts, setPosts] = useState([]);
 
-  const { performFetch, error } = useFetch("", (response) => {
-    setPosts(response.result);
-  });
+  // TODO: create a new (reusable) component for the profile/user pages and move the fetch logic there
+  const { performFetch, error } = useFetch(
+    `/user/${userData._id}`,
+    (response) => {
+      setPosts(response.result);
+    },
+  );
 
   useEffect(() => {
-    if (!userData?._id) return;
     const options = {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      url: `/post/user/${userData._id}`,
     };
     performFetch(options);
-  }, [userData?._id]);
+  }, []);
 
   if (error) {
     console.error(error);
