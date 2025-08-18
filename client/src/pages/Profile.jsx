@@ -10,13 +10,14 @@ function Profile() {
 
   // TODO: create a new (reusable) component for the profile/user pages and move the fetch logic there
   const { performFetch, error } = useFetch(
-    `/user/${userData._id}`,
+    `/user/${userData?._id}`,
     (response) => {
       setPosts(response.result);
     },
   );
 
   useEffect(() => {
+    if (!userData || !userData._id) return;
     const options = {
       method: "GET",
       headers: {
