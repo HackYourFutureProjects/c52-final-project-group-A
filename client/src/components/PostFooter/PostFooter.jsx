@@ -1,7 +1,7 @@
 import Button from "../Button.jsx";
 import style from "./PostFooter.module.css";
 import PropTypes from "prop-types";
-import { LikeIcon, CommentIcon, ShareIcon, MoreIcon } from "../icons/index.js";
+import { CommentIcon, ShareIcon, MoreIcon } from "../icons/index.js";
 import LikeButton from "../LikeButton/LikeButton.jsx";
 
 function PostFooter({ postId, tags }) {

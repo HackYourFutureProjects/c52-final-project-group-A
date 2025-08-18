@@ -4,7 +4,6 @@ import UserDataContext from "../context/userDataContext/UserDataContext.js";
 import Post from "../components/Post/Post.jsx";
 import useFetch from "../hooks/useFetch.js";
 
-
 function Profile() {
   const { userData } = useContext(UserDataContext);
   const [posts, setPosts] = useState([]);
