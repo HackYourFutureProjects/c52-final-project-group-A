@@ -138,14 +138,11 @@
 }
 
 .btnGhost {
-  background: var(--color-white);
-  color: var(--color-black);
-  border: 1px solid var(--color-border);
-  border-bottom: 2px solid transparent;
+  background: var(--color-orange);
+  color: var(--color-white);
 }
 .btnGhost:hover {
-  background: #ccc;
-  border-bottom: 2px solid #999;
+  background: #e84324;
 }
 
 /* Floating Tag Cloud */
