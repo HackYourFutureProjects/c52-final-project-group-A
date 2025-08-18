@@ -32,7 +32,7 @@ app.use("/api/feed", feedRouter);
 app.use("/api/register", registerRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/search", searchRouter);
-app.use("/api/profile", profileRouter);
+app.use("/api/user", profileRouter);
 app.use("/api/following", followingRouter);
 app.use("/api/explore", exploreRouter);
 app.use("/api", likeRoutes);
