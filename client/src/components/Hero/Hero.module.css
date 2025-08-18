@@ -141,6 +141,7 @@
   background: var(--color-white);
   color: var(--color-black);
   border: 1px solid var(--color-border);
+  border-bottom: 2px solid transparent;
 }
 .btnGhost:hover {
   background: #ccc;
