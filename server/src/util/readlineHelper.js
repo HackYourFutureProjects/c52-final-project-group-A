@@ -21,7 +21,7 @@ async function readlineHelper() {
     }
 
     const followHappyPath = await rl.question(
-      "Should the database be seeded using a happy path? (y/n) ",
+      "Should the database be seeded with a happy path? (y/n) ",
     );
     if (
       followHappyPath.toLowerCase() === "y" ||
@@ -79,7 +79,6 @@ async function readlineHelper() {
     };
   } catch (error) {
     logError("Error seeding database: " + error);
-    return null;
   } finally {
     rl.close();
   }
