@@ -47,7 +47,6 @@ export const handleFollowing = async (req, res) => {
   }
 };
 
-// Новый контроллер для проверки статуса подписки
 export const checkFollowingStatus = async (req, res) => {
   const { authorId } = req.body;
   const { userId } = req.tokenData;
@@ -66,10 +65,10 @@ export const checkFollowingStatus = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      status: isFollowing ? "following" : "Follow",
+      status: isFollowing,
     });
   } catch (err) {
     logError("Error checking following status:", err);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ success: false, msg: "Server error" });
   }
 };
