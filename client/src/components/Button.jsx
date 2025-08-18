@@ -10,7 +10,7 @@ function Button({ children, onClick, icon, className, disabled = false }) {
 }
 
 Button.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   onClick: PropTypes.func,
   icon: PropTypes.element,
   className: PropTypes.string,
