@@ -1,29 +1,8 @@
 import Button from "../Button.jsx";
 import style from "./PostFooter.module.css";
 import PropTypes from "prop-types";
+import LikeButton from "../LikeButton/LikeButton.jsx";
 
-const Like = ({ fill = false }) => {
-  return (
-    <svg
-      className={style.icon}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g id="Interface / Heart_01">
-        <path
-          id="Vector"
-          d="M12 7.69431C10 2.99988 3 3.49988 3 9.49991C3 15.4999 12 20.5001 12 20.5001C12 20.5001 21 15.4999 21 9.49991C21 3.49988 14 2.99988 12 7.69431Z"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill={fill ? "currentColor" : "none"}
-        />
-      </g>
-    </svg>
-  );
-};
 const Comment = () => {
   return (
     <svg
@@ -103,12 +82,12 @@ const More = () => {
   );
 };
 
-function PostFooter({ tags }) {
+function PostFooter({ postId, tags }) {
   return (
     <footer className={style.footer}>
       <section className={style.wrapper}>
         <section className={style.actionsContainer}>
-          <Button icon={<Like fill={false} />} />
+          <LikeButton postId={postId} />
           <Button icon={<Comment />} />
           <Button icon={<Share />} />
         </section>
@@ -132,10 +111,10 @@ function PostFooter({ tags }) {
 
 PostFooter.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
-
-Like.propTypes = {
-  fill: PropTypes.bool,
+  postId: PropTypes.string.isRequired,
 };
 
 export default PostFooter;
+PostFooter.propTypes = {
+  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
