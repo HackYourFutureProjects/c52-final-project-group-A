@@ -1,0 +1,22 @@
+.likeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  transition: filter 0.2s;
+}
+
+.likeButton:hover svg {
+  filter: brightness(1.2);
+}
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
+}
+
+.likeButton[aria-pressed="true"] {
+  color: var(--color-orange);
+}
