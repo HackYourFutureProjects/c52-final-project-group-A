@@ -1,17 +1,29 @@
-import { useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import style from "./LikeButton.module.css";
+import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
 import PropTypes from "prop-types";
 
 export default function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
 
-  const handleToggle = async () => {
-    const res = await fetch(`/api/posts/${postId}/like`, {
-      method: "POST",
-      credentials: "include",
-    });
-    const data = await res.json();
+  const handleStatus = useCallback((data) => {
     setLiked(Boolean(data.liked));
+  }, []);
+  const { performFetch: fetchLikeStatus, cancelFetch } = useFetchWithAuth(
+    `/posts/${postId}/like`,
+    handleStatus,
+  );
+  useEffect(() => {
+    fetchLikeStatus();
+    return () => cancelFetch && cancelFetch();
+  }, [fetchLikeStatus, cancelFetch, postId]);
+
+  const { performFetch: sendLike } = useFetchWithAuth(
+    `/posts/${postId}/like`,
+    (data) => setLiked(Boolean(data.liked)),
+  );
+  const handleToggle = () => {
+    sendLike({ method: "POST", credentials: "include" });
   };
 
   return (
@@ -35,7 +47,7 @@ export default function LikeButton({ postId }) {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            fill={liked ? "currentColor" : "none"}
+            fill={liked ? "#FE4A22" : "none"}
           />
         </g>
       </svg>
