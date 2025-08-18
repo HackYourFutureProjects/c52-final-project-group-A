@@ -59,7 +59,7 @@ export default function Hero() {
           <Link to="/explore" className={`${style.btn} ${style.btnPrimary}`}>
             Explore
           </Link>
-          <Link to="/signup" className={`${style.btn} ${style.btnGhost}`}>
+          <Link to="/register" className={`${style.btn} ${style.btnGhost}`}>
             Sign up
           </Link>
         </div>
@@ -83,3 +83,4 @@ export default function Hero() {
     </section>
   );
 }
+
