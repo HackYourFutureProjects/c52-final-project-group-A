@@ -4,7 +4,7 @@ import style from "./Post.module.css";
 import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
 
-function Post({ post, liked, onLikeToggle }) {
+function Post({ post }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
   console.log(publishedAgo);
 
@@ -22,7 +22,7 @@ function Post({ post, liked, onLikeToggle }) {
         </header>
         <p className={style.postContent}>{post.content}</p>
       </section>
-      <PostFooter tags={post.tags} liked={liked} onLikeToggle={onLikeToggle} />
+      <PostFooter postId={post._id} tags={post.tags} />
     </article>
   );
 }

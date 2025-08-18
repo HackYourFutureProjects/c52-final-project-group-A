@@ -82,12 +82,12 @@ const More = () => {
   );
 };
 
-function PostFooter({ tags, liked, onLikeToggle }) {
+function PostFooter({ postId, tags }) {
   return (
     <footer className={style.footer}>
       <section className={style.wrapper}>
         <section className={style.actionsContainer}>
-          <LikeButton liked={liked} onClick={onLikeToggle} />
+          <LikeButton postId={postId} />
           <Button icon={<Comment />} />
           <Button icon={<Share />} />
         </section>
@@ -111,11 +111,10 @@ function PostFooter({ tags, liked, onLikeToggle }) {
 
 PostFooter.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  postId: PropTypes.string.isRequired,
 };
 
 export default PostFooter;
 PostFooter.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-  liked: PropTypes.bool.isRequired,
-  onLikeToggle: PropTypes.func.isRequired,
 };

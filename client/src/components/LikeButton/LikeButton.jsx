@@ -1,13 +1,25 @@
+import { useState } from "react";
 import style from "./LikeButton.module.css";
 import PropTypes from "prop-types";
 
-export default function LikeButton({ liked, onClick }) {
+export default function LikeButton({ postId }) {
+  const [liked, setLiked] = useState(false);
+
+  const handleToggle = async () => {
+    const res = await fetch(`/api/posts/${postId}/like`, {
+      method: "POST",
+      credentials: "include",
+    });
+    const data = await res.json();
+    setLiked(Boolean(data.liked));
+  };
+
   return (
     <button
       type="button"
       aria-pressed={liked}
       className={style.likeButton}
-      onClick={onClick}
+      onClick={handleToggle}
       title={liked ? "Unlike" : "Like"}
     >
       <svg
@@ -32,6 +44,5 @@ export default function LikeButton({ liked, onClick }) {
 }
 
 LikeButton.propTypes = {
-  liked: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
+  postId: PropTypes.string.isRequired,
 };

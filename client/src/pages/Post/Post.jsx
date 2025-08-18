@@ -25,26 +25,9 @@ export default function PostPage() {
     };
   }, [id]);
 
-  // Like switcher function
-  const handleLikeToggle = async () => {
-    if (!post) return;
-    const res = await fetch(`/api/posts/${post._id}/like`, {
-      method: "POST",
-      credentials: "include",
-    });
-    const data = await res.json();
-    setPost((prev) => ({ ...prev, likedByCurrentUser: data.liked }));
-  };
-
   if (isLoading && !post) return <div>Loading…</div>;
   if (error) return <div>Error: {String(error.message || error)}</div>;
   if (!post) return null;
 
-  return (
-    <Post
-      post={post}
-      liked={post.likedByCurrentUser}
-      onLikeToggle={handleLikeToggle}
-    />
-  );
+  return <Post post={post} />;
 }
