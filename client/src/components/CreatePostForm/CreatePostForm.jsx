@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import useFetchWithAuth from "../../hooks/useFetchWithAuth";
+import Button from "../Button.jsx";
 
 export default function CreatePostForm({ onCreated }) {
   const [title, setTitle] = useState("");
@@ -83,13 +84,13 @@ export default function CreatePostForm({ onCreated }) {
 
       {error && <p style={{ color: "red" }}>{String(error)}</p>}
 
-      <button
+      <Button
         type="submit"
         disabled={isLoading}
         className="px-4 py-2 bg-black text-white rounded"
       >
         {isLoading ? "Saving..." : "Create"}
-      </button>
+      </Button>
     </form>
   );
 }

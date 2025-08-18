@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DeletePostButton from "../../components/DeletePostButton/DeletePostButton.jsx";
+import DeletePostButton from "../components/DeletePostButton/DeletePostButton.jsx";
 
 export default function SandboxPage() {
   // Delete post state
