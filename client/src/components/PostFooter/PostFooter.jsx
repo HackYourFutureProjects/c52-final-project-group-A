@@ -9,9 +9,9 @@ function PostFooter({ postId, tags }) {
     <footer className={style.footer}>
       <section className={style.wrapper}>
         <section className={style.actionsContainer}>
+          <LikeButton postId={postId} />
           <Button icon={<CommentIcon style={style.icon} />} />
           <Button icon={<ShareIcon style={style.icon} />} />
-          <LikeButton postId={postId} />
         </section>
         <section className={style.tagsContainer}>
           <ul>

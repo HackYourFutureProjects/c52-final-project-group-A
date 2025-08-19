@@ -12,9 +12,8 @@
   filter: brightness(1.2);
 }
 .icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  display: block;
+  width: 1rem;
+  height: 1rem;
 }
 
 .likeButton[aria-pressed="true"] {
