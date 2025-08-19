@@ -12,9 +12,9 @@ function GoogleButton() {
   const { setUserData } = useContext(UserDataContext);
 
   const { performFetch, isLoading, error } = useFetch(
-    "/login/Google_Auth",
+    "/login/google-auth",
     (res) => {
-      setUserData(res.user._doc);
+      setUserData(res.user);
       navigate("/home"); // Redirect to landing page on success
     },
   );

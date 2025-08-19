@@ -4,9 +4,12 @@ import PropTypes from "prop-types";
 import Avatar from "../Avatar/Avatar.jsx";
 import { Link } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
+import { useState, useEffect } from "react";
+import useFetch from "../../hooks/useFetch.js";
 
-function ProfileDash({ size, user, border = "full", followBtn = true }) {
+function ProfileDash({ size, user, border = "full", followBtn }) {
   const mobile = useWindowWidth(768);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const dashSize =
     mobile && size === "lg" ? style[`dash_mobile`] : style[`dash_${size}`];
@@ -14,9 +17,43 @@ function ProfileDash({ size, user, border = "full", followBtn = true }) {
   const followBtnSize = style[`followBtn_${size}`];
 
   const username = user?.username ?? "username";
-  const score = user?.score ?? "00";
+  let score = user?.score ?? "00";
   const profile = user?.profile ?? { first_name: "Full", last_name: "Name" };
   const fullName = profile.first_name + " " + profile.last_name;
+
+  score = score.toString().padStart(2, "0");
+
+  // Hook for checking follow status
+  const { performFetch: checkFollowStatus } = useFetch(
+    "/following/check",
+    (response) => {
+      setIsFollowing(response.isFollowing);
+    },
+  );
+
+  // Hook for follow/unfollow actions
+  const { performFetch: toggleFollow } = useFetch("/following", () => {
+    setIsFollowing(!isFollowing);
+  });
+
+  // Check follow status when component loads
+  useEffect(() => {
+    if (followBtn && user?._id) {
+      checkFollowStatus({
+        method: "POST",
+        body: JSON.stringify({ authorId: user._id }),
+      });
+    }
+  }, [user?._id, followBtn]);
+
+  const handleFollowClick = () => {
+    if (!user?._id) return;
+
+    toggleFollow({
+      method: "POST",
+      body: JSON.stringify({ authorId: user._id }),
+    });
+  };
 
   return (
     <article
@@ -35,8 +72,11 @@ function ProfileDash({ size, user, border = "full", followBtn = true }) {
               </Link>
             </header>
             {followBtn && (
-              <Button className={style.followBtn + " " + followBtnSize}>
-                Follow
+              <Button
+                className={style.followBtn + " " + followBtnSize}
+                onClick={handleFollowClick}
+              >
+                {isFollowing ? "Following" : "Follow"}
               </Button>
             )}
           </div>

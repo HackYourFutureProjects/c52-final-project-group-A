@@ -3,17 +3,23 @@ import PostFooter from "../PostFooter/PostFooter.jsx";
 import style from "./Post.module.css";
 import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
+import { useContext } from "react";
+import UserDataContext from "../../context/userDataContext/UserDataContext.js";
 
 function Post({ post }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
   console.log(publishedAgo);
+
+  // Follow button visibility
+  const userData = useContext(UserDataContext);
+  const showFollowBtn = userData?._id !== post.author._id;
 
   return (
     <article className={style.wrapper}>
       <ProfileDash
         size="sm"
         border="bottom"
-        followBtn={true}
+        followBtn={showFollowBtn}
         user={post.author}
       />
       <section className={style.contentContainer}>
