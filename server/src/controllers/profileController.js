@@ -13,7 +13,7 @@ export const getProfile = async (req, res) => {
   try {
     const user = await User.findOne(
       { username },
-      { password: 0, email: 0, admin: 0 },
+      { _id: 1, username: 1, profile: 1, posts: 1, score: 1, created_at: 1 },
     ).populate("posts");
 
     if (!user) {
