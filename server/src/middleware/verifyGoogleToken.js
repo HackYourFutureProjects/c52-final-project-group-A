@@ -36,9 +36,9 @@ export const verifyGoogleToken = async (req, res, next) => {
         .json({ msg: "Token verification failed: invalid payload" });
     }
 
-    const { email, given_name, family_name, id } = payload;
+    const { email, given_name, family_name, sub } = payload;
 
-    if (!email || !id) {
+    if (!email || !sub) {
       return res
         .status(422)
         .json({ msg: "Token payload missing required user info (email, id)" });
@@ -50,7 +50,7 @@ export const verifyGoogleToken = async (req, res, next) => {
         first_name: given_name || "Unknown",
         last_name: family_name || "User",
       },
-      google_id: id,
+      google_id: sub,
       username: generateUsername(),
     };
 
