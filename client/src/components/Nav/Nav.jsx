@@ -40,9 +40,6 @@ function Nav({ setShowSearchBox }) {
           >
             {mobile ? <SearchIcon /> : "Search"}
           </button>
-          <Link to="#">
-            {mobile ? <SearchIcon style={style.searchIcon} /> : "Search"}
-          </Link>
         </li>
         {!mobile && (
           <li className={style.logoContainer}>
