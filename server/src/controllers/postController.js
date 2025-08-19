@@ -82,14 +82,31 @@ export const updatePost = async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
 
-    // Check that only the author can edit
     if (post.author.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ message: "Not authorized to update this post" });
     }
 
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
+    // Allowed fields
+    const allowedFields = ["title", "content", "tags", "status"];
+    const updates = {};
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    }
+
+    // if the status is PUBLISHED - update the date
+    const statusTo = updates.status ?? post.status;
+    if (statusTo === "PUBLISHED") {
+      updates.published_at = new Date();
+    } else {
+      // If it leaves the publication - reset published_at (if you want)
+      updates.published_at = null;
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(req.params.id, updates, {
       new: true,
       runValidators: true,
     });
