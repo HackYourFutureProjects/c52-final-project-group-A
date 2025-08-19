@@ -61,6 +61,7 @@
 .followBtn_sm {
   font-size: 0.8em;
   align-self: center;
+  margin-right: 0.5em;
 }
 .followBtn_sm:hover {
   text-decoration: underline;

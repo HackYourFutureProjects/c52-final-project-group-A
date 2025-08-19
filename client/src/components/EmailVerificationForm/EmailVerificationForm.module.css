@@ -55,15 +55,12 @@
   border-radius: var(--inner-border-radius);
   outline: none;
   transition: border-color 0.2s ease;
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), sans-serif;
 }
 
+.codeInput:hover,
 .codeInput:focus {
-  border-color: var(--color-orange);
-}
-
-.codeInput:hover {
-  border-color: var(--color-orange);
+  border-color: var(--color-dark-grey);
 }
 
 .submitBtn {
@@ -75,10 +72,6 @@
   cursor: pointer;
   margin-top: 1rem;
   width: 100%;
-}
-
-.submitBtn:hover {
-  opacity: 0.9;
 }
 
 .resendContainer {

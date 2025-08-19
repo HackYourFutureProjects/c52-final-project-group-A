@@ -4,14 +4,14 @@ import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
-import Home from "./pages/Home.jsx";
+import Home from "./pages/Home/Home.jsx";
 import NewPostPage from "./pages/NewPost/NewPost.jsx";
 import UserDataContextProvider from "./context/userDataContext/UserDataContextProvider.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
-import SandboxPage from "./pages/Sandbox/Sandbox.jsx";
-import PostPage from "./pages/Post/Post";
 import SearchBox from "./components/SearchBox/SearchBox";
 import { useState } from "react";
+import SandboxPage from "./pages/Sandbox.jsx";
+import PostPage from "./pages/Post/Post.jsx";
 
 const App = () => {
   const [showSearchBox, setShowSearchBox] = useState(false);
