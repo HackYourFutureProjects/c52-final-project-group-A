@@ -1,23 +1,27 @@
 import User from "../models/User.js";
 import { logError } from "../util/logging.js";
-import { Types } from "mongoose";
 
 export const getProfile = async (req, res) => {
-  const { id } = req.params;
-
-  const ObjectId = Types.ObjectId;
-  if (!ObjectId.isValid(id)) {
+  const { username } = req.params;
+  if (!username) {
     return res.status(400).json({
       success: false,
-      msg: "Invalid user id",
+      msg: "Username is required",
     });
   }
 
   try {
     const user = await User.findOne(
-      { _id: id },
+      { username },
       { password: 0, email: 0, admin: 0 },
     ).populate("posts");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        msg: "User not found",
+      });
+    }
 
     res.status(200).json({ success: true, result: user });
   } catch (err) {
