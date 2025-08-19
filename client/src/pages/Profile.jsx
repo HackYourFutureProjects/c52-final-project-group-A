@@ -14,7 +14,7 @@ function Profile() {
   });
 
   useEffect(() => {
-    if (!userData._id) return;
+    if (!userData || !userData._id) return;
     const options = {
       method: "GET",
       headers: {
@@ -32,8 +32,10 @@ function Profile() {
     <>
       <ProfileDash size="lg" user={userData} followBtn={false} />
       <section>
-        {userData.posts.length > 0 ? (
-          userData.posts.map((post) => <Post key={post._id} post={post} />)
+        {userData &&
+        Array.isArray(userData.posts) &&
+        userData.posts.length > 0 ? (
+          userData?.posts?.map((post) => <Post key={post._id} post={post} />)
         ) : (
           <p>No posts found.</p>
         )}
