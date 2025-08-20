@@ -8,19 +8,15 @@ export const handleFollowing = async (req, res) => {
 
   try {
     // Check if the author exists
-    const isAuthor = await User.findById(authorId);
-    if (!isAuthor) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Author not found" });
+    const author = await User.findById(authorId);
+    if (!author) {
+      return res.status(404).json({ success: false, msg: "Author not found" });
     }
 
     // Check if the current user exists
     const user = await User.findById(userId);
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, msg: "User not found" });
     }
 
     // Check if user is already following the author
@@ -35,7 +31,7 @@ export const handleFollowing = async (req, res) => {
       );
 
       // Remove user from author's followers list
-      isAuthor.followers = isAuthor.followers.filter(
+      author.followers = author.followers.filter(
         (id) => id.toString() !== userId.toString(),
       );
 
@@ -47,7 +43,7 @@ export const handleFollowing = async (req, res) => {
 
       // Save changes to both user documents
       await user.save();
-      await isAuthor.save();
+      await author.save();
 
       return res
         .status(200)
@@ -57,7 +53,7 @@ export const handleFollowing = async (req, res) => {
       user.following.push(authorId);
 
       // Add user to author's followers list
-      isAuthor.followers.push(userId);
+      author.followers.push(userId);
 
       // Create new follow relationship in Follow collection
       await Follow.create({
@@ -68,7 +64,7 @@ export const handleFollowing = async (req, res) => {
 
       // Save changes to both user documents
       await user.save();
-      await isAuthor.save();
+      await author.save();
 
       return res
         .status(200)
@@ -76,7 +72,7 @@ export const handleFollowing = async (req, res) => {
     }
   } catch (err) {
     logError("Error handling follow/unfollow:", err);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ success: false, msg: "Server error" });
   }
 };
 
@@ -88,9 +84,7 @@ export const checkFollowingStatus = async (req, res) => {
     // Find the current user
     const user = await User.findById(userId);
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, msg: "User not found" });
     }
 
     // Check if user is following the specified author

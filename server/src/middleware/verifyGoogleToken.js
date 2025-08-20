@@ -36,9 +36,9 @@ export const verifyGoogleToken = async (req, res, next) => {
         .json({ msg: "Token verification failed: invalid payload" });
     }
 
-    const { email, given_name, family_name, sub } = payload;
+    const { email, given_name, family_name, id } = payload;
 
-    if (!email || !sub) {
+    if (!email || !id) {
       return res
         .status(422)
         .json({ msg: "Token payload missing required user info (email, id)" });
@@ -50,7 +50,7 @@ export const verifyGoogleToken = async (req, res, next) => {
         first_name: given_name || "Unknown",
         last_name: family_name || "User",
       },
-      google_id: sub,
+      google_id: id,
       username: generateUsername(),
     };
 
@@ -59,8 +59,7 @@ export const verifyGoogleToken = async (req, res, next) => {
     if (isValidUser.length > 0) {
       logError("User validation failed:", isValidUser);
       return res.status(400).json({
-        msg: "Invalid user data from Google token",
-        errors: isValidUser,
+        msg: `Invalid user data from Google token: ${isValidUser.join(", ")}`,
       });
     }
 
