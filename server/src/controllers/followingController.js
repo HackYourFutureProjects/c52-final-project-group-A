@@ -72,7 +72,10 @@ export const handleFollowing = async (req, res) => {
     }
   } catch (err) {
     logError("Error handling follow/unfollow:", err);
-    return res.status(500).json({ success: false, msg: "Server error" });
+    return res.status(500).json({
+      success: false,
+      msg: "Failed to process follow/unfollow request",
+    });
   }
 };
 
