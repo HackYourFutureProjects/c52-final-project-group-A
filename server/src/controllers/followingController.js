@@ -1,21 +1,30 @@
 import User from "../models/User.js";
 import Follow from "../models/Follow.js";
 import { logError } from "../util/logging.js";
+import mongoose from "mongoose";
 
 export const handleFollowing = async (req, res) => {
   const { authorId } = req.body;
   const { userId } = req.tokenData;
 
+  // Start a session for transaction
+  const session = await mongoose.startSession();
+
   try {
+    // Start transaction
+    await session.startTransaction();
+
     // Check if the author exists
-    const author = await User.findById(authorId);
+    const author = await User.findById(authorId).session(session);
     if (!author) {
+      await session.abortTransaction();
       return res.status(404).json({ success: false, msg: "Author not found" });
     }
 
     // Check if the current user exists
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).session(session);
     if (!user) {
+      await session.abortTransaction();
       return res.status(404).json({ success: false, msg: "User not found" });
     }
 
@@ -39,11 +48,14 @@ export const handleFollowing = async (req, res) => {
       await Follow.deleteOne({
         follower: userId,
         following: authorId,
-      });
+      }).session(session);
 
       // Save changes to both user documents
-      await user.save();
-      await author.save();
+      await user.save({ session });
+      await author.save({ session });
+
+      // Commit transaction
+      await session.commitTransaction();
 
       return res
         .status(200)
@@ -56,26 +68,39 @@ export const handleFollowing = async (req, res) => {
       author.followers.push(userId);
 
       // Create new follow relationship in Follow collection
-      await Follow.create({
-        follower: userId,
-        following: authorId,
-        created_at: new Date(),
-      });
+      await Follow.create(
+        [
+          {
+            follower: userId,
+            following: authorId,
+            created_at: new Date(),
+          },
+        ],
+        { session },
+      );
 
       // Save changes to both user documents
-      await user.save();
-      await author.save();
+      await user.save({ session });
+      await author.save({ session });
+
+      // Commit transaction
+      await session.commitTransaction();
 
       return res
         .status(200)
         .json({ success: true, message: "Followed successfully" });
     }
   } catch (err) {
+    // Abort transaction on error
+    await session.abortTransaction();
     logError("Error handling follow/unfollow:", err);
     return res.status(500).json({
       success: false,
       msg: "Failed to process follow/unfollow request",
     });
+  } finally {
+    // End session
+    await session.endSession();
   }
 };
 
