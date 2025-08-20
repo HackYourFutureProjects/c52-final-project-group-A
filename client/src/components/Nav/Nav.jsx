@@ -52,7 +52,7 @@ function Nav() {
         )}
         <li
           className={
-            location.pathname === `user/${state.username}`
+            location.pathname === `/user/${state.username}`
               ? style.navButtonActive
               : style.navButton
           }

@@ -15,6 +15,10 @@ function GoogleButton() {
     "/login/Google_Auth",
     (res) => {
       const { _id: userId, username } = res.user;
+      if (!userId || !username) {
+        console.error("Invalid user data:", res.user);
+        return;
+      }
       setState({ userId, username });
       navigate("/home"); // Redirect to landing page on success
     },
