@@ -6,7 +6,7 @@ import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import Home from "./pages/Home/Home.jsx";
 import NewPostPage from "./pages/NewPost/NewPost.jsx";
-import UserDataContextProvider from "./context/userDataContext/UserDataContextProvider.jsx";
+import StateContextProvider from "./context/state/StateContextProvider.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
 import SandboxPage from "./pages/Sandbox.jsx";
 import PostPage from "./pages/Post/Post.jsx";
@@ -14,7 +14,7 @@ import PostPage from "./pages/Post/Post.jsx";
 const App = () => {
   return (
     <>
-      <UserDataContextProvider>
+      <StateContextProvider>
         <Nav />
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -27,7 +27,7 @@ const App = () => {
           <Route path="/sandbox" element={<SandboxPage />} />
           <Route path="/post/:id" element={<PostPage />} />
         </Routes>
-      </UserDataContextProvider>
+      </StateContextProvider>
     </>
   );
 };

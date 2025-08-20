@@ -4,7 +4,7 @@ import Button from "../Button.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import Logo from "../Logo.jsx";
-import UserDataContext from "../../context/userDataContext/UserDataContext.js";
+import StateContext from "../../context/state/StateContext.js";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
 import { HomeIcon, SearchIcon, ProfileIcon } from "../icons/index.js";
 
@@ -12,15 +12,15 @@ function Nav() {
   const navigate = useNavigate();
   const location = useLocation();
   const mobile = useWindowWidth(768);
-  const { userData } = useContext(UserDataContext);
-  const [profileLink, setProfileLink] = useState("");
+  const { state } = useContext(StateContext);
+  const [profileLink, setProfileLink] = useState(null);
 
   useEffect(() => {
-    if (!userData) {
-      return;
+    if (!state.username) {
+      return setProfileLink("/login");
     }
-    setProfileLink(`/user/${userData.username}`);
-  }, [userData]);
+    setProfileLink(`/user/${state.username}`);
+  }, [state]);
 
   const handleSignIn = () => {
     navigate("/login");
@@ -36,7 +36,7 @@ function Nav() {
               : style.navButton
           }
         >
-          <Link to={userData ? "/home" : "/login"}>
+          <Link to={state.userId ? "/home" : "/login"}>
             {mobile ? <HomeIcon style={style.homeIcon} /> : "Home"}
           </Link>
         </li>
@@ -52,17 +52,17 @@ function Nav() {
         )}
         <li
           className={
-            location.pathname === profileLink
+            location.pathname === `user/${state.username}`
               ? style.navButtonActive
               : style.navButton
           }
         >
-          <Link to={userData ? profileLink : "/login"}>
+          <Link to={profileLink}>
             {mobile ? <ProfileIcon style={style.profileIcon} /> : "Profile"}
           </Link>
         </li>
       </ul>
-      {!mobile && !userData && (
+      {!mobile && !state.userId && (
         <Button onClick={handleSignIn} className={style.signInButton}>
           Sign-in
         </Button>
