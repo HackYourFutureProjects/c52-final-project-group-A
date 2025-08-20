@@ -76,8 +76,6 @@ export const verifyGoogleToken = async (req, res, next) => {
         .json({ msg: "Unable to connect to Google services" });
     }
 
-    // Invalid token - уже обработано выше через response.ok
-    // Здесь остаются только неожиданные ошибки
     return res.status(500).json({ msg: "Token verification failed" });
   }
 };
