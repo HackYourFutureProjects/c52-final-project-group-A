@@ -7,25 +7,29 @@ export const handleFollowing = async (req, res) => {
   const { authorId } = req.body;
   const { userId } = req.tokenData;
 
-  // Start a session for transaction
+  // Prevent users from following themselves
+  if (userId === authorId) {
+    return res.status(400).json({
+      success: false,
+      msg: "You cannot follow yourself",
+    });
+  }
+
   const session = await mongoose.startSession();
 
   try {
-    // Start transaction
     await session.startTransaction();
 
     // Check if the author exists
     const author = await User.findById(authorId).session(session);
     if (!author) {
-      await session.abortTransaction();
-      return res.status(404).json({ success: false, msg: "Author not found" });
+      throw new Error("Author not found");
     }
 
     // Check if the current user exists
     const user = await User.findById(userId).session(session);
     if (!user) {
-      await session.abortTransaction();
-      return res.status(404).json({ success: false, msg: "User not found" });
+      throw new Error("User not found");
     }
 
     // Check if user is already following the author
@@ -68,16 +72,12 @@ export const handleFollowing = async (req, res) => {
       author.followers.push(userId);
 
       // Create new follow relationship in Follow collection
-      await Follow.create(
-        [
-          {
-            follower: userId,
-            following: authorId,
-            created_at: new Date(),
-          },
-        ],
-        { session },
-      );
+      const newFollow = new Follow({
+        follower: userId,
+        following: authorId,
+        created_at: new Date(),
+      });
+      await newFollow.save({ session });
 
       // Save changes to both user documents
       await user.save({ session });
@@ -91,15 +91,21 @@ export const handleFollowing = async (req, res) => {
         .json({ success: true, message: "Followed successfully" });
     }
   } catch (err) {
-    // Abort transaction on error
     await session.abortTransaction();
+
+    if (err.message === "Author not found") {
+      return res.status(404).json({ success: false, msg: "Author not found" });
+    }
+    if (err.message === "User not found") {
+      return res.status(404).json({ success: false, msg: "User not found" });
+    }
+
     logError("Error handling follow/unfollow:", err);
     return res.status(500).json({
       success: false,
       msg: "Failed to process follow/unfollow request",
     });
   } finally {
-    // End session
     await session.endSession();
   }
 };
