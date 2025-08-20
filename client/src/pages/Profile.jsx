@@ -1,20 +1,17 @@
 import ProfileDash from "../components/ProfileDash/ProfileDash.jsx";
-import { useContext, useEffect, useState } from "react";
-import UserDataContext from "../context/userDataContext/UserDataContext.js";
+import { useEffect, useState } from "react";
 import Post from "../components/Post/Post.jsx";
 import useFetch from "../hooks/useFetch.js";
+import { useParams } from "react-router-dom";
 
 function Profile() {
-  const { userData } = useContext(UserDataContext);
-  const [posts, setPosts] = useState([]);
+  const { username } = useParams();
+  const [userData, setUserData] = useState(null);
 
-  // TODO: create a new (reusable) component for the profile/user pages and move the fetch logic there
-  const { performFetch, error } = useFetch(
-    `/user/${userData?._id}`,
-    (response) => {
-      setPosts(response.result);
-    },
-  );
+  const { performFetch, error } = useFetch(`/user/${username}`, (response) => {
+    console.log(response);
+    setUserData(response.result);
+  });
 
   useEffect(() => {
     if (!userData || !userData._id) return;
@@ -35,8 +32,10 @@ function Profile() {
     <>
       <ProfileDash size="lg" user={userData} followBtn={false} />
       <section>
-        {posts.length > 0 ? (
-          posts.map((post) => <Post key={post._id} post={post} />)
+        {userData &&
+        Array.isArray(userData.posts) &&
+        userData.posts.length > 0 ? (
+          userData?.posts?.map((post) => <Post key={post._id} post={post} />)
         ) : (
           <p>No posts found.</p>
         )}

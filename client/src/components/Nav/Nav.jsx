@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import style from "./Nav.module.css";
 import Button from "../Button.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Logo from "../Logo.jsx";
 import UserDataContext from "../../context/userDataContext/UserDataContext.js";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
@@ -13,6 +13,14 @@ function Nav() {
   const location = useLocation();
   const mobile = useWindowWidth(768);
   const { userData } = useContext(UserDataContext);
+  const [profileLink, setProfileLink] = useState("");
+
+  useEffect(() => {
+    if (!userData) {
+      return;
+    }
+    setProfileLink(`/user/${userData.username}`);
+  }, [userData]);
 
   const handleSignIn = () => {
     navigate("/login");
@@ -44,12 +52,12 @@ function Nav() {
         )}
         <li
           className={
-            location.pathname === "/profile"
+            location.pathname === profileLink
               ? style.navButtonActive
               : style.navButton
           }
         >
-          <Link to={userData ? "/profile" : "/login"}>
+          <Link to={userData ? profileLink : "/login"}>
             {mobile ? <ProfileIcon style={style.profileIcon} /> : "Profile"}
           </Link>
         </li>
