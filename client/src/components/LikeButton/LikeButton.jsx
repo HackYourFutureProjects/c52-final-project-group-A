@@ -18,7 +18,7 @@ export default function LikeButton({ postId }) {
   useEffect(() => {
     fetchLikeStatus();
     return () => cancelFetch && cancelFetch();
-  }, [fetchLikeStatus, cancelFetch, postId]);
+  }, [postId]);
 
   const { performFetch: sendLike } = useFetchWithAuth(
     `/posts/${postId}/like`,
