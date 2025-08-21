@@ -1,0 +1,21 @@
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #ff5722;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 1.6rem 2.3rem 1.6rem 2rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  z-index: 1000;
+  transition: background 0.18s;
+}
+
+.fab:hover {
+  background: #e94d1b;
+}
