@@ -1,0 +1,8 @@
+.wrapper {
+  border: 1px solid var(--color-border);
+  border-radius: var(--outer-border-radius);
+  margin-top: 0.5rem;
+}
+.commentSection {
+  padding: 0.5rem;
+}

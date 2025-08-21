@@ -4,18 +4,20 @@ import style from "./Post.module.css";
 import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
 
-function Post({ post }) {
+function Post({ post, className, dashboard = true }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
   console.log(publishedAgo);
 
   return (
-    <article className={style.wrapper}>
-      <ProfileDash
-        size="sm"
-        border="bottom"
-        followBtn={true}
-        user={post.author}
-      />
+    <article className={style.wrapper + " " + className}>
+      {dashboard && (
+        <ProfileDash
+          size="sm"
+          border="bottom"
+          followBtn={true}
+          user={post.author}
+        />
+      )}
       <section className={style.contentContainer}>
         <header className={style.headerContainer}>
           <h1>{post.title}</h1>
@@ -44,6 +46,8 @@ Post.propTypes = {
     __v: PropTypes.number,
     _id: PropTypes.string,
   }).isRequired,
+  className: PropTypes.string,
+  dashboard: PropTypes.bool,
 };
 
 export default Post;

@@ -5,7 +5,13 @@ import Avatar from "../Avatar/Avatar.jsx";
 import { Link } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
 
-function ProfileDash({ size, user, border = "full", followBtn = true }) {
+function ProfileDash({
+  size,
+  user,
+  className,
+  border = "full",
+  followBtn = true,
+}) {
   const mobile = useWindowWidth(768);
 
   const dashSize =
@@ -20,7 +26,15 @@ function ProfileDash({ size, user, border = "full", followBtn = true }) {
 
   return (
     <article
-      className={style.dash + " " + dashSize + " " + style[`border_${border}`]}
+      className={
+        style.dash +
+        " " +
+        dashSize +
+        " " +
+        style[`border_${border}`] +
+        " " +
+        className
+      }
     >
       <div className={style.mainContainer}>
         <Avatar avatar={profile.avatar ?? null} score={score} />
@@ -65,6 +79,7 @@ ProfileDash.propTypes = {
     },
     score: PropTypes.number,
   }),
+  className: PropTypes.string,
   border: PropTypes.oneOf(["full", "bottom"]),
   followBtn: PropTypes.bool,
 };
