@@ -15,12 +15,12 @@ export const search = async (req, res) => {
     if (!q) {
       return res
         .status(400)
-        .json({ success: false, msg: "Search query is required" });
+        .json({ success: false, message: "Search query is required" });
     }
     if (q.length > SEARCH_QUERY_MAX_LENGTH) {
       return res.status(400).json({
         success: false,
-        msg: "Search query exceeds maximum length of 100 characters",
+        message: "Search query exceeds maximum length of 100 characters",
       });
     }
 
@@ -56,6 +56,6 @@ export const search = async (req, res) => {
     return res.status(200).json({ success: true, users, posts });
   } catch (err) {
     logError("Error in search controller:", err);
-    return res.status(500).json({ success: false, msg: "Server error" });
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
