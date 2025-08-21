@@ -80,23 +80,59 @@ export const createPost = async (req, res) => {
 export const updatePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!post) {
+      return res.status(404).json({ success: false, msg: "Post not found" });
+    }
 
-    // Check that only the author can edit
     if (post.author.toString() !== req.user._id.toString()) {
       return res
         .status(403)
-        .json({ message: "Not authorized to update this post" });
+        .json({ success: false, msg: "Not authorized to update this post" });
     }
 
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
+    // Allowed fields
+    const allowedFields = ["title", "content", "tags", "status"];
+    const updates = {};
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    }
+
+    const statusTo = updates.status ?? post.status;
+
+    // Update published_at only if the status changes
+    if (statusTo === "PUBLISHED") {
+      updates.published_at = new Date();
+    } else if (post.status === "PUBLISHED" && statusTo !== "PUBLISHED") {
+      // Only reset published_at if transitioning from PUBLISHED to a non-published status
+      updates.published_at = null;
+    }
+
+    // Prepare candidate for validation
+    const candidate = { ...post.toObject(), ...updates };
+    const errors = validatePost(candidate);
+    if (errors.length) {
+      return res.status(400).json({
+        success: false,
+        msg: errors.join("; "),
+      });
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(req.params.id, updates, {
       new: true,
       runValidators: true,
     });
 
-    res.json(updatedPost);
+    if (!updatedPost) {
+      return res
+        .status(404)
+        .json({ success: false, msg: "Post not found after update" });
+    }
+
+    res.json({ success: true, post: updatedPost });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ success: false, msg: error.message });
   }
 };
 

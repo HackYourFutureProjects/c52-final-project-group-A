@@ -8,6 +8,6 @@ import {
 const router = express.Router();
 
 router.post("/", getTokenData, handleFollowing);
-router.post("/following-check", getTokenData, checkFollowingStatus);
+router.post("/check", getTokenData, checkFollowingStatus);
 
 export default router;

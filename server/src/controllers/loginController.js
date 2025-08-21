@@ -14,11 +14,14 @@ export const loginUser = async (req, res) => {
 
     if (!user) {
       logError("Login attempt with non-existing email:", email);
-      return res.status(401).json({ msg: "Invalid email or password" });
+      return res
+        .status(401)
+        .json({ success: false, msg: "Invalid email or password" });
     }
 
     if (user.google_id) {
       return res.status(401).json({
+        success: false,
         msg: "This account is linked to Google. Please sign in using the Google login button.",
       });
     }
@@ -26,7 +29,9 @@ export const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       logError("Login attempt with incorrect password for email:", email);
-      return res.status(401).json({ msg: "Invalid email or password" });
+      return res
+        .status(401)
+        .json({ success: false, msg: "Invalid email or password" });
     }
 
     const token = jwt.sign(
@@ -42,19 +47,14 @@ export const loginUser = async (req, res) => {
       sameSite: "strict",
     });
 
-    const userResponse = Object.fromEntries(
-      Object.entries(user).filter(
-        ([key]) => key !== "password" && key !== "__v",
-      ),
-    );
-
     return res.status(200).json({
       success: true,
-      message: "Login successful",
-      user: userResponse,
+      msg: "Login successful",
+      userId: user._id,
+      username: user.username,
     });
   } catch (err) {
-    logError("Login error:", err);
-    return res.status(500).json({ msg: "Server error" });
+    logError(err);
+    return res.status(500).json({ success: false, msg: "Server error" });
   }
 };
