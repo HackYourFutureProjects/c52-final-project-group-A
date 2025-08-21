@@ -6,9 +6,10 @@ export const verifyGoogleToken = async (req, res, next) => {
   const { access_token } = req.body;
 
   if (!access_token || typeof access_token !== "string") {
-    return res
-      .status(400)
-      .json({ msg: "No access token provided or token is invalid type" });
+    return res.status(400).json({
+      success: false,
+      msg: "No access token provided or token is invalid type",
+    });
   }
 
   try {
@@ -25,23 +26,28 @@ export const verifyGoogleToken = async (req, res, next) => {
     if (!response.ok) {
       const errorText = await response.text();
       logError("Google API error:", errorText);
-      return res.status(401).json({ msg: "Invalid access token" });
+      return res.status(401).json({
+        success: false,
+        msg: "Invalid access token",
+      });
     }
 
     const payload = await response.json();
 
     if (!payload || !payload.email) {
-      return res
-        .status(401)
-        .json({ msg: "Token verification failed: invalid payload" });
+      return res.status(401).json({
+        success: false,
+        msg: "Token verification failed: invalid payload",
+      });
     }
 
     const { email, given_name, family_name, id } = payload;
 
     if (!email || !id) {
-      return res
-        .status(422)
-        .json({ msg: "Token payload missing required user info (email, id)" });
+      return res.status(422).json({
+        success: false,
+        msg: "Token payload missing required user info (email, id)",
+      });
     }
 
     const userData = {
@@ -59,6 +65,7 @@ export const verifyGoogleToken = async (req, res, next) => {
     if (isValidUser.length > 0) {
       logError("User validation failed:", isValidUser);
       return res.status(400).json({
+        success: false,
         msg: `Invalid user data from Google token: ${isValidUser.join(", ")}`,
       });
     }
@@ -71,11 +78,15 @@ export const verifyGoogleToken = async (req, res, next) => {
 
     // Network/connection errors
     if (err.name === "TypeError" && err.message.includes("fetch")) {
-      return res
-        .status(503)
-        .json({ msg: "Unable to connect to Google services" });
+      return res.status(503).json({
+        success: false,
+        msg: "Unable to connect to Google services",
+      });
     }
 
-    return res.status(500).json({ msg: "Token verification failed" });
+    return res.status(500).json({
+      success: false,
+      msg: "Token verification failed",
+    });
   }
 };
