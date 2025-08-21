@@ -12,24 +12,22 @@ export default function LikeButton({ postId }) {
   const {
     performFetch: fetchLikeStatus,
     cancelFetch,
-    error: fetchStatusError, // <-- добавь error
+    error: fetchStatusError,
   } = useFetchWithAuth(`/posts/${postId}/like`, handleStatus);
   useEffect(() => {
     fetchLikeStatus();
     return () => cancelFetch && cancelFetch();
   }, [fetchLikeStatus, cancelFetch, postId]);
 
-  const {
-    performFetch: sendLike,
-    error: sendLikeError, // <-- добавь error
-  } = useFetchWithAuth(`/posts/${postId}/like`, (data) =>
-    setLiked(Boolean(data.liked)),
+  const { performFetch: sendLike, error: sendLikeError } = useFetchWithAuth(
+    `/posts/${postId}/like`,
+    (data) => setLiked(Boolean(data.liked)),
   );
   const handleToggle = () => {
     sendLike({ method: "POST", credentials: "include" });
   };
 
-  // Логирование ошибок для отладки
+  // Error logging for debugging
   if (fetchStatusError) console.error("Fetch status error:", fetchStatusError);
   if (sendLikeError) console.error("Send like error:", sendLikeError);
 
