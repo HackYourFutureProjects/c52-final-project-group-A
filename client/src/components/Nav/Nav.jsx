@@ -9,7 +9,7 @@ import useWindowWidth from "../../hooks/useWindowWidth.js";
 import PropTypes from "prop-types";
 import { HomeIcon, SearchIcon, ProfileIcon } from "../icons/index.js";
 
-function Nav({ setShowSearchBox }) {
+function Nav({ setShowSearchBox, showSearchBox }) {
   const navigate = useNavigate();
   const location = useLocation();
   const mobile = useWindowWidth(768);
@@ -33,7 +33,7 @@ function Nav({ setShowSearchBox }) {
             {mobile ? <HomeIcon style={style.homeIcon} /> : "Home"}
           </Link>
         </li>
-        <li className={style.navButton}>
+        <li className={showSearchBox ? style.navButtonActive : style.navButton}>
           <button
             onClick={() => setShowSearchBox(true)}
             className={style.searchButton}
@@ -67,6 +67,7 @@ function Nav({ setShowSearchBox }) {
   );
 }
 Nav.propTypes = {
+  showSearchBox: PropTypes.func.isRequired,
   setShowSearchBox: PropTypes.func.isRequired,
 };
 

@@ -16,8 +16,6 @@ import PostPage from "./pages/Post/Post.jsx";
 const App = () => {
   const [showSearchBox, setShowSearchBox] = useState(false);
 
-  // TODO: Adjust routes and their components
-
   return (
     <>
       <UserDataContextProvider>

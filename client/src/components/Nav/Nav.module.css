@@ -51,9 +51,6 @@
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: 500;
-  background: none;
-  border: none;
-  cursor: pointer;
 }
 
 .navButton:hover {
@@ -91,7 +88,6 @@
 }
 
 /* @media */
-/* TODO: write more media starting from mobile and scaling upwards */
 @media (max-width: 768px) {
   .navContainer {
     top: auto;
