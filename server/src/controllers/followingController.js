@@ -88,7 +88,7 @@ export const handleFollowing = async (req, res) => {
 
       return res
         .status(200)
-        .json({ success: true, message: "Followed successfully" });
+        .json({ success: true, msg: "Followed successfully" });
     }
   } catch (err) {
     await session.abortTransaction();
