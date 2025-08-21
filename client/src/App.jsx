@@ -10,6 +10,7 @@ import StateContextProvider from "./context/state/StateContextProvider.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
 import SandboxPage from "./pages/Sandbox.jsx";
 import PostPage from "./pages/Post/Post.jsx";
+import EditPostPage from "./pages/EditPost/EditPost.jsx";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/new-post" element={<NewPostPage />} />
           <Route path="/sandbox" element={<SandboxPage />} />
           <Route path="/post/:id" element={<PostPage />} />
+          <Route path="/post/:id/edit" element={<EditPostPage />} />
         </Routes>
       </StateContextProvider>
     </>
