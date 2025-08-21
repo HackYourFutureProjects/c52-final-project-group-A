@@ -29,7 +29,7 @@ export const getProfile = async (req, res) => {
       });
     }
 
-    res.status(200).json({ success: true, result: user });
+    res.status(200).json({ success: true, user });
   } catch (err) {
     logError(err);
     res.status(500).json({

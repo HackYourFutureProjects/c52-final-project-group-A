@@ -14,7 +14,7 @@ function Profile() {
   const isUser = state.username === username;
 
   const { performFetch, error } = useFetch(`/user/${username}`, (response) => {
-    setUserData(response.result);
+    setUserData(response.user);
   });
 
   useEffect(() => {
