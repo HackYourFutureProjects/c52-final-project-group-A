@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Button from "../Button.jsx";
 import InputField from "../InputField/InputField.jsx";
@@ -6,11 +6,22 @@ import style from "./EditPostForm.module.css";
 
 export default function EditPostForm({ post, error, onSave, onCancel }) {
   const [form, setForm] = useState({
-    title: post.title,
-    content: post.content,
-    tags: post.tags.join(", "),
-    status: post.status,
+    title: post?.title || "",
+    content: post?.content || "",
+    tags: Array.isArray(post?.tags) ? post.tags.join(", ") : "",
+    status: post?.status || "DRAFT",
   });
+
+  useEffect(() => {
+    if (post) {
+      setForm({
+        title: post.title || "",
+        content: post.content || "",
+        tags: Array.isArray(post.tags) ? post.tags.join(", ") : "",
+        status: post.status || "DRAFT",
+      });
+    }
+  }, [post]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,7 +93,9 @@ export default function EditPostForm({ post, error, onSave, onCancel }) {
 
       <div className={style.buttonGroup}>
         <Button type="submit">Save</Button>
-        <Button type="button" onClick={onCancel}></Button>
+        <Button type="button" onClick={onCancel}>
+          Cancel
+        </Button>
       </div>
     </form>
   );

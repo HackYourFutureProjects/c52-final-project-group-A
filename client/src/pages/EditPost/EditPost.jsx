@@ -6,12 +6,12 @@ import EditPostForm from "../../components/EditPostForm/EditPostForm.jsx";
 
 export default function EditPostPage() {
   const { id } = useParams();
-  const { state } = useContext(StateContext);
+  const { state: user } = useContext(StateContext);
   const [post, setPost] = useState(null);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Get post
+  // GET post
   const handleGetSuccess = useCallback((json) => {
     setPost(json);
   }, []);
@@ -22,32 +22,45 @@ export default function EditPostPage() {
     performFetch,
   } = useFetchWithAuth(`/post/${id}`, handleGetSuccess);
 
+  // PATCH to update Post
+  const { performFetch: performPatch } = useFetchWithAuth(
+    `/post/${id}`,
+    (json) => {
+      if (json.success) {
+        navigate(`/post/${id}`);
+      } else {
+        setError(json.msg || "Unknown error");
+      }
+    },
+  );
+
   useEffect(() => {
     performFetch();
   }, [id]);
 
-  // PATCH (call from EditPostForm)
+  // PATCH from EditPostForm
   const handleSave = (fields) => {
     setError("");
-    performFetch({
+
+    // eslint-disable-next-line no-unused-vars
+    const { _id, __v, ...fieldsToSend } = fields;
+
+    performPatch({
       method: "PATCH",
-      body: fields,
-      onSuccess: (json) => {
-        if (json.success) {
-          navigate(`/post/${id}`);
-        } else {
-          setError(json.msg || "Unknown error");
-        }
+      body: JSON.stringify(fieldsToSend),
+      headers: {
+        "Content-Type": "application/json",
       },
     });
   };
 
   // Author check
-  const authorId = post?.author?._id || post?.author;
-  if (post && state.userId && String(authorId) !== String(state.userId)) {
+  if (!user || !user.userId) {
+    return <div>Loading user…</div>;
+  }
+  if (post && post.author && user && post.author._id !== user.userId) {
     return <div>Not authorized</div>;
   }
-
   if (isLoading && !post) return <div>Loading…</div>;
   if (fetchError)
     return <div>Error: {String(fetchError.message || fetchError)}</div>;
@@ -60,7 +73,7 @@ export default function EditPostPage() {
         post={post}
         error={error}
         onSave={handleSave}
-        onCancel={() => navigate(`/post/${id}`)}
+        onCancel={() => navigate(`/home`)}
       />
     </main>
   );

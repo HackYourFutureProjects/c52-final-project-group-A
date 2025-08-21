@@ -78,6 +78,7 @@ export const createPost = async (req, res) => {
 
 // Update Post endpoint
 export const updatePost = async (req, res) => {
+
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -110,7 +111,17 @@ export const updatePost = async (req, res) => {
     }
 
     // Prepare candidate for validation
-    const candidate = { ...post.toObject(), ...updates };
+    const candidate = {
+      title: updates.title ?? post.title,
+      content: updates.content ?? post.content,
+      tags: updates.tags ?? post.tags,
+      status: updates.status ?? post.status,
+      author: post.author,
+      created_at: post.created_at,
+      published_at: updates.published_at ?? post.published_at,
+      score: post.score,
+    };
+
     const errors = validatePost(candidate);
     if (errors.length) {
       return res.status(400).json({
