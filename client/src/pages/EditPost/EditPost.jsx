@@ -1,8 +1,10 @@
-import { useEffect, useState, useCallback, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import StateContext from "../../context/state/StateContext.js";
 import useFetchWithAuth from "../../hooks/useFetchWithAuth";
 import EditPostForm from "../../components/EditPostForm/EditPostForm.jsx";
+import ProfileDash from "../../components/ProfileDash/ProfileDash.jsx";
+import style from "./EditPost.module.css";
 
 export default function EditPostPage() {
   const { id } = useParams();
@@ -11,70 +13,70 @@ export default function EditPostPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // GET post
-  const handleGetSuccess = useCallback((json) => {
-    setPost(json);
-  }, []);
-
+  // GET hook for fetching post
   const {
     isLoading,
     error: fetchError,
-    performFetch,
-  } = useFetchWithAuth(`/post/${id}`, handleGetSuccess);
+    performFetch: fetchPost,
+    cancelFetch,
+  } = useFetchWithAuth(`/post/${id}`, (res) => setPost(res.post ?? res));
 
-  // PATCH to update Post
-  const { performFetch: performPatch } = useFetchWithAuth(
+  // PATCH hook for updating post
+  const { performFetch: updatePost } = useFetchWithAuth(
     `/post/${id}`,
-    (json) => {
-      if (json.success) {
-        navigate(`/post/${id}`);
-      } else {
-        setError(json.msg || "Unknown error");
-      }
+    (res) => {
+      console.log("PATCH response:", res);
+      if (res.success) navigate(`/post/${id}`); // redirect to post page after save
     },
   );
 
   useEffect(() => {
-    performFetch();
+    setPost(null);
+    fetchPost();
+    return () => cancelFetch && cancelFetch();
   }, [id]);
 
-  // PATCH from EditPostForm
   const handleSave = (fields) => {
     setError("");
 
     // eslint-disable-next-line no-unused-vars
     const { _id, __v, ...fieldsToSend } = fields;
 
-    performPatch({
+    updatePost({
       method: "PATCH",
       body: JSON.stringify(fieldsToSend),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
   };
 
   // Author check
-  if (!user || !user.userId) {
-    return <div>Loading user…</div>;
-  }
-  if (post && post.author && user && post.author._id !== user.userId) {
+  if (!user || !user.userId) return <div>Loading user…</div>;
+  if (post && post.author && post.author._id !== user.userId)
     return <div>Not authorized</div>;
-  }
+
   if (isLoading && !post) return <div>Loading…</div>;
   if (fetchError)
     return <div>Error: {String(fetchError.message || fetchError)}</div>;
   if (!post) return null;
 
+  const showFollowBtn = user.userId !== post?.author?._id;
+
   return (
-    <main>
-      <h2>Edit Post</h2>
-      <EditPostForm
-        post={post}
-        error={error}
-        onSave={handleSave}
-        onCancel={() => navigate(`/home`)}
+    <main className={style.main}>
+      <ProfileDash
+        size="md"
+        user={post.author}
+        className={style.dashboard}
+        followBtn={!showFollowBtn}
       />
+      <div className={style.postContainer}>
+        <EditPostForm
+          post={post}
+          error={error}
+          onSave={handleSave}
+          onCancel={() => navigate(`/post/${id}`)}
+        />
+      </div>
     </main>
   );
 }

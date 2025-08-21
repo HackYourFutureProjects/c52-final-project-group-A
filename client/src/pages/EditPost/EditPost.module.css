@@ -1,0 +1,17 @@
+.main {
+  padding-top: 10rem;
+}
+.dashboard {
+  margin-bottom: 2rem;
+}
+.postContainer {
+  padding: 0 1rem;
+}
+@media (max-width: 768px) {
+  .main {
+    padding-top: 3vw;
+  }
+  .postContainer {
+    padding: 0;
+  }
+}

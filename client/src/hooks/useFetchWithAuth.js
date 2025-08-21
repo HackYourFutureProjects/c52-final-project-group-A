@@ -38,6 +38,8 @@ const useFetchWithAuth = (route, onReceived) => {
         json = {};
       }
 
+      console.log("JSON RESPONSE:", json);
+
       if (res.ok) {
         onReceived(json);
       } else {

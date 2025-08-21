@@ -78,7 +78,6 @@ export const createPost = async (req, res) => {
 
 // Update Post endpoint
 export const updatePost = async (req, res) => {
-
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {

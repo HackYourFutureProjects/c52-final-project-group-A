@@ -12,6 +12,7 @@ export default function EditPostForm({ post, error, onSave, onCancel }) {
     status: post?.status || "DRAFT",
   });
 
+  // Update form state when post changes
   useEffect(() => {
     if (post) {
       setForm({
@@ -42,52 +43,49 @@ export default function EditPostForm({ post, error, onSave, onCancel }) {
   };
 
   return (
-    <form className={style.form} onSubmit={handleSubmit}>
+    <form className={style.postCard} onSubmit={handleSubmit}>
+      {/* Title field */}
       <InputField
         name="title"
         type="text"
         placeholder="Title"
         value={form.title}
         onChange={handleChange}
-        required={true}
+        required
+        className={style.titleInput}
       />
 
-      <label htmlFor="content" className={style.label}>
-        <textarea
-          id="content"
-          name="content"
-          className={style.textarea}
-          placeholder="Content"
-          value={form.content}
-          maxLength={10000}
-          onChange={handleChange}
-          required
-          rows={10}
-        />
-        <span className={style.placeholder}>Content</span>
-      </label>
+      {/* Content field */}
+      <textarea
+        name="content"
+        className={style.contentInput}
+        placeholder="Content"
+        value={form.content}
+        onChange={handleChange}
+        rows={8}
+        required
+      />
 
+      {/* Tags field */}
       <InputField
         name="tags"
         type="text"
         placeholder="Tags (comma separated)"
         value={form.tags}
         onChange={handleChange}
+        className={style.tagsInput}
       />
 
-      <label htmlFor="status" className={style.label}>
-        <select
-          id="status"
-          name="status"
-          className={style.select}
-          value={form.status}
-          onChange={handleChange}
-        >
-          <option value="DRAFT">Draft</option>
-          <option value="PUBLISHED">Published</option>
-        </select>
-        <span className={style.placeholder}>Status</span>
-      </label>
+      {/* Status field */}
+      <select
+        name="status"
+        className={style.statusSelect}
+        value={form.status}
+        onChange={handleChange}
+      >
+        <option value="DRAFT">Draft</option>
+        <option value="PUBLISHED">Published</option>
+      </select>
 
       {error && <div className={style.error}>{error}</div>}
 
