@@ -4,17 +4,22 @@ import Button from "../Button.jsx";
 import useFetch from "../../hooks/useFetch.js";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import UserDataContext from "../../context/userDataContext/UserDataContext.js";
+import StateContext from "../../context/state/StateContext.js";
 import { GoogleIcon } from "../icons/index.js";
 
 function GoogleButton() {
   const navigate = useNavigate();
-  const { setUserData } = useContext(UserDataContext);
+  const { setState } = useContext(StateContext);
 
   const { performFetch, isLoading, error } = useFetch(
     "/login/Google_Auth",
     (res) => {
-      setUserData(res.user._doc);
+      const { _id: userId, username } = res.user;
+      if (!userId || !username) {
+        console.error("Invalid user data:", res.user);
+        return;
+      }
+      setState({ userId, username });
       navigate("/home"); // Redirect to landing page on success
     },
   );

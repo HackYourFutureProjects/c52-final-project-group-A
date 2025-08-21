@@ -9,12 +9,10 @@ function Profile() {
   const [userData, setUserData] = useState(null);
 
   const { performFetch, error } = useFetch(`/user/${username}`, (response) => {
-    console.log(response);
     setUserData(response.result);
   });
 
   useEffect(() => {
-    if (!userData || !userData._id) return;
     const options = {
       method: "GET",
       headers: {
@@ -22,7 +20,7 @@ function Profile() {
       },
     };
     performFetch(options);
-  }, [userData]);
+  }, []);
 
   if (error) {
     console.error(error);
