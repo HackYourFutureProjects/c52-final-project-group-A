@@ -4,15 +4,15 @@ import style from "./Post.module.css";
 import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
 import { useContext } from "react";
-import UserDataContext from "../../context/userDataContext/UserDataContext.js";
+import StateContext from "../../context/state/StateContext.js";
 
 function Post({ post }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
   console.log(publishedAgo);
 
   // Follow button visibility
-  const userData = useContext(UserDataContext);
-  const showFollowBtn = userData?._id !== post.author._id;
+  const userData = useContext(StateContext);
+  const showFollowBtn = userData?.userId !== post.author._id;
 
   return (
     <article className={style.wrapper}>
