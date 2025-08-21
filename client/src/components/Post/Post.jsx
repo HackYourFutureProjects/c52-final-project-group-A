@@ -14,7 +14,7 @@ function Post({ post, className, dashboard = true }) {
   console.log(publishedAgo);
 
   return (
-    <article className={style.wrapper + " " + className}>
+    <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
       {dashboard && (
         <ProfileDash
           size="sm"

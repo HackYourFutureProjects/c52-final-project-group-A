@@ -26,15 +26,9 @@ function ProfileDash({
 
   return (
     <article
-      className={
-        style.dash +
-        " " +
-        dashSize +
-        " " +
-        style[`border_${border}`] +
-        " " +
-        className
-      }
+      className={[style.dash, dashSize, style[`border_${border}`], className]
+        .filter(Boolean)
+        .join(" ")}
     >
       <div className={style.mainContainer}>
         <Avatar avatar={profile.avatar ?? null} score={score} />
