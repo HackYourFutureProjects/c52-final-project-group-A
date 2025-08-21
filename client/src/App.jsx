@@ -8,14 +8,22 @@ import Home from "./pages/Home/Home.jsx";
 import NewPostPage from "./pages/NewPost/NewPost.jsx";
 import StateContextProvider from "./context/state/StateContextProvider.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
+import SearchBox from "./components/SearchBox/SearchBox";
+import { useState } from "react";
 import SandboxPage from "./pages/Sandbox.jsx";
 import PostPage from "./pages/Post/Post.jsx";
 
 const App = () => {
+  const [showSearchBox, setShowSearchBox] = useState(false);
+
   return (
     <>
       <StateContextProvider>
-        <Nav />
+        <Nav
+          setShowSearchBox={setShowSearchBox}
+          showSearchBox={showSearchBox}
+        />
+        {showSearchBox && <SearchBox onClose={() => setShowSearchBox(false)} />}
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/home" element={<Home />} />
