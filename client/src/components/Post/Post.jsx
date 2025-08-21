@@ -10,8 +10,13 @@ function Post({ post, className, dashboard = true }) {
   const { state } = useContext(stateContext);
   const isUser = state.userId === post.author._id;
 
+
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
   console.log(publishedAgo);
+
+  // Follow button visibility
+  const userData = useContext(StateContext);
+  const showFollowBtn = userData?.userId !== post.author._id;
 
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>

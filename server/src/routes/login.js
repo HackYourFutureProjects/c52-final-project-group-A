@@ -8,7 +8,7 @@ import { verifyGoogleToken } from "../middleware/verifyGoogleToken.js";
 const router = express.Router();
 
 router.post("/", validateLoginBody, loginUser);
-router.post("/google-Auth", verifyGoogleToken, googleAuth);
+router.post("/google-auth", verifyGoogleToken, googleAuth);
 router.post("/logout", logoutUser);
 
 export default router;
