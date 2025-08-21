@@ -7,6 +7,7 @@ import Logo from "../Logo.jsx";
 import StateContext from "../../context/state/StateContext.js";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
 import { HomeIcon, SearchIcon, ProfileIcon } from "../icons/index.js";
+import PropTypes from "prop-types";
 
 function Nav() {
   const navigate = useNavigate();
@@ -75,5 +76,8 @@ function Nav() {
     </nav>
   );
 }
-
+Nav.propTypes = {
+  setShowSearchBox: PropTypes.func.isRequired,
+  showSearchBox: PropTypes.bool.isRequired,
+};
 export default Nav;
