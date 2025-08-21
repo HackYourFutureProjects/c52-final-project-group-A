@@ -14,7 +14,6 @@ function ProfileDash({
   border = "full",
   followBtn = true,
 }) {
-
   const mobile = useWindowWidth(768);
   const [isFollowing, setIsFollowing] = useState(false);
 

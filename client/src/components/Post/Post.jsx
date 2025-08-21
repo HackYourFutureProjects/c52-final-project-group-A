@@ -4,13 +4,9 @@ import style from "./Post.module.css";
 import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
 import { useContext } from "react";
-import stateContext from "../../context/state/StateContext.js";
+import StateContext from "../../context/state/StateContext.js";
 
 function Post({ post, className, dashboard = true }) {
-  const { state } = useContext(stateContext);
-  const isUser = state.userId === post.author._id;
-
-
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
   console.log(publishedAgo);
 
@@ -24,7 +20,7 @@ function Post({ post, className, dashboard = true }) {
         <ProfileDash
           size="sm"
           border="bottom"
-          followBtn={!isUser}
+          followBtn={!showFollowBtn}
           user={post.author}
         />
       )}
