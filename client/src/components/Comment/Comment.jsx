@@ -9,7 +9,12 @@ function Comment({ comment }) {
 
   return (
     <article className={style.wrapper}>
-      <ProfileDash size="sm" user={comment.user} border="bottom" />
+      <ProfileDash
+        size="sm"
+        user={comment.user}
+        border="bottom"
+        followBtn={false}
+      />
       <div className={style.commentSection}>
         <p>{comment.content}</p>
       </div>

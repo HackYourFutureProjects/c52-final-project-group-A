@@ -1,0 +1,14 @@
+.main {
+  padding-top: 10rem;
+}
+.postsContainer {
+  padding: 0 1rem;
+}
+@media (max-width: 768px) {
+  .main {
+    padding-top: 3vw;
+  }
+  .postsContainer {
+    padding: 0;
+  }
+}

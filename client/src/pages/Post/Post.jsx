@@ -49,12 +49,16 @@ export default function PostPage() {
   return (
     <main className={style.main}>
       <ProfileDash size="md" user={post.author} className={style.dashboard} />
-      <Post post={post} dashboard={false} />
-      {comments &&
-        comments.length > 0 &&
-        comments.map((comment) => (
-          <Comment key={comment._id} comment={comment} />
-        ))}
+      <div className={style.postContainer}>
+        <Post post={post} dashboard={false} />
+        {comments && comments.length > 0 && (
+          <div className={style.commentsContainer}>
+            {comments.map((comment) => (
+              <Comment key={comment._id} comment={comment} />
+            ))}
+          </div>
+        )}
+      </div>
     </main>
   );
 }
