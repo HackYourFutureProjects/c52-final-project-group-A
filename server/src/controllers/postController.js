@@ -44,9 +44,6 @@ export const getCommentsByPostId = async (req, res) => {
       post: postId,
       status: CommentStatus.VISIBLE,
     }).populate("user", "username profile score");
-    if (comments.length === 0) {
-      return res.status(404).json({ success: false, msg: "No comments found" });
-    }
     res.json({ success: true, comments });
   } catch (error) {
     logError(error);
