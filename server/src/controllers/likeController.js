@@ -34,10 +34,12 @@ export const toggleLike = async (req, res) => {
       await session.commitTransaction();
       return res.json({ success: true, result: { liked: false } });
     } else {
-      // 3. Create like and add to user's array
-      const [newLike] = await Like.create(
-        [{ user: userId, post: postObjectId }],
-        { session },
+      // 4. If the like does not exist, create it and add its id to user's likes array
+      const newLike = await Like.create(
+        { user: userId, post: postId },
+        {
+          session,
+        },
       );
       await User.findByIdAndUpdate(
         userId,
