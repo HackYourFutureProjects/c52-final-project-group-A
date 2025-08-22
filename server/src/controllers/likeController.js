@@ -29,7 +29,7 @@ export const toggleLike = async (req, res) => {
       return res.json({ liked: false });
     } else {
       // 4. If the like does not exist, create it and add its id to user's likes array
-      const [newLike] = await Like.create([{ user: userId, post: postId }], {
+      const newLike = await Like.create({ user: userId, post: postId }, {
         session,
       });
       await User.findByIdAndUpdate(
