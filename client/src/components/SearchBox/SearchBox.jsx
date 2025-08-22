@@ -82,11 +82,13 @@ export default function SearchBox({ onClose }) {
                 performFetch();
               }
             } else if (e.key === "ArrowDown") {
+              e.preventDefault();
               setSelectedIndex((prev) =>
                 Math.min(prev + 1, results.length - 1),
               );
             } else if (e.key === "ArrowUp") {
-              setSelectedIndex((prev) => Math.max(prev - 1, 0));
+              e.preventDefault();
+              setSelectedIndex((prev) => Math.max(prev - 1, -1));
             }
           }}
         />
@@ -115,7 +117,7 @@ export default function SearchBox({ onClose }) {
         <ul className={styles.suggestionsList}>
           {results.map((item, index) => (
             <li
-              key={type === "user" ? item.username : item.slug || item._id}
+              key={item._id}
               className={`${styles.suggestionItem} ${
                 index === selectedIndex ? styles.active : ""
               }`}
