@@ -4,21 +4,27 @@ import User from "../models/User.js";
 
 // Controller for toggling like (like/unlike)
 export const toggleLike = async (req, res) => {
-  // 1. Create a session for the transaction
-  const session = await mongoose.startSession();
-  session.startTransaction();
-  try {
-    const userId = req.user._id;
-    const postId = req.params.id;
+  // 0. Validate postId format before anything else
+  const { id: postId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(postId)) {
+    return res.status(400).json({ success: false, msg: "Invalid postId" });
+  }
 
-    // 2. Check if a like already exists
+  const userId = req.user._id;
+  const postObjectId = new mongoose.Types.ObjectId(postId);
+
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+
+    // 1. Check if a like already exists
     const existingLike = await Like.findOne({
       user: userId,
-      post: postId,
+      post: postObjectId,
     }).session(session);
 
     if (existingLike) {
-      // 3. If the like exists, remove it and also remove its id from user's likes array
+      // 2. Remove the like and from user's array
       await Like.deleteOne({ _id: existingLike._id }).session(session);
       await User.findByIdAndUpdate(
         userId,
@@ -26,44 +32,51 @@ export const toggleLike = async (req, res) => {
         { session },
       );
       await session.commitTransaction();
-      return res.json({ liked: false });
+      return res.json({ success: true, result: { liked: false } });
     } else {
-      // 4. If the like does not exist, create it and add its id to user's likes array
-      const [newLike] = await Like.create([{ user: userId, post: postId }], {
-        session,
-      });
+      // 3. Create like and add to user's array
+      const [newLike] = await Like.create(
+        [{ user: userId, post: postObjectId }],
+        { session },
+      );
       await User.findByIdAndUpdate(
         userId,
         { $push: { likes: newLike._id } },
         { session },
       );
       await session.commitTransaction();
-      return res.json({ liked: true });
+      return res.json({ success: true, result: { liked: true } });
     }
   } catch (error) {
-    // 5. If there is an error, abort the transaction
     await session.abortTransaction();
+    // Log full error for server-side debugging
     if (error.code === 11000) {
-      return res.status(409).json({ error: "Like already exists" });
+      return res
+        .status(409)
+        .json({ success: false, msg: "Like already exists" });
     }
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ success: false, msg: "Server error" });
   } finally {
-    // 6. End the session
     session.endSession();
   }
 };
 
-// Get like status for the current user and post
+// Controller to get like status for the current user and post
 export const getLikeStatus = async (req, res) => {
+  const { id: postId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(postId)) {
+    return res.status(400).json({ success: false, msg: "Invalid postId" });
+  }
+  const postObjectId = new mongoose.Types.ObjectId(postId);
+  const userId = req.user._id;
+
   try {
-    const userId = req.user._id;
-    const postId = req.params.id;
-
-    // Check if the like exists
-    const existingLike = await Like.findOne({ user: userId, post: postId });
-
-    res.json({ liked: !!existingLike });
+    const existingLike = await Like.findOne({
+      user: userId,
+      post: postObjectId,
+    });
+    res.json({ success: true, result: { liked: !!existingLike } });
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ success: false, msg: "Server error" });
   }
 };

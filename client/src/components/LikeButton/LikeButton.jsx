@@ -7,7 +7,7 @@ export default function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
 
   const handleStatus = useCallback((data) => {
-    setLiked(Boolean(data.liked));
+    setLiked(Boolean(data.result && data.result.liked));
   }, []);
   const {
     performFetch: fetchLikeStatus,
@@ -17,11 +17,11 @@ export default function LikeButton({ postId }) {
   useEffect(() => {
     fetchLikeStatus();
     return () => cancelFetch && cancelFetch();
-  }, [fetchLikeStatus, cancelFetch, postId]);
+  }, [postId]);
 
   const { performFetch: sendLike, error: sendLikeError } = useFetchWithAuth(
     `/posts/${postId}/like`,
-    (data) => setLiked(Boolean(data.liked)),
+    (data) => setLiked(Boolean(data.result && data.result.liked)),
   );
   const handleToggle = () => {
     sendLike({ method: "POST", credentials: "include" });
