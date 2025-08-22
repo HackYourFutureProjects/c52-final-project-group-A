@@ -14,7 +14,7 @@ import Fab from "./components/Fab/Fab.jsx";
 
 const App = () => {
   const location = useLocation();
-  const hideFabOn = ["/", "/login", "/register", "/new-post"]; // Nn FAB button here
+  const hideFabOn = ["/", "/login", "/register", "/new-post"]; // No FAB button here
 
   return (
     <StateContextProvider>
