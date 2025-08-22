@@ -75,6 +75,7 @@ export const userRegister = async (req, res) => {
     });
 
     return res.status(200).json({
+      success: true,
       message: "Verification code sent to email",
     });
   } catch (err) {
