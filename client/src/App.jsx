@@ -30,7 +30,7 @@ const App = () => {
         <Route path="/sandbox" element={<SandboxPage />} />
         <Route path="/post/:id" element={<PostPage />} />
       </Routes>
-      {!hideFabOn.includes(location.pathname) && <Fab>Sign-in</Fab>}
+      {!hideFabOn.includes(location.pathname) && <Fab>Create post</Fab>}
     </StateContextProvider>
   );
 };

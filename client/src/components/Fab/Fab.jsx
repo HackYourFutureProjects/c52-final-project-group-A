@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./Fab.module.css";
 import PropTypes from "prop-types";
+import Button from "../Button.jsx";
 
 export default function Fab({ children }) {
   const navigate = useNavigate();
@@ -10,9 +11,9 @@ export default function Fab({ children }) {
   };
 
   return (
-    <button className={styles.fab} onClick={handleClick}>
+    <Button className={styles.fab} onClick={handleClick}>
       {children}
-    </button>
+    </Button>
   );
 }
 
