@@ -55,7 +55,7 @@ export default function PostPage() {
         size="md"
         user={post.author}
         className={style.dashboard}
-        followBtn={!showFollowBtn}
+        followBtn={showFollowBtn}
       />
       <div className={style.postContainer}>
         <Post post={post} dashboard={false} />
