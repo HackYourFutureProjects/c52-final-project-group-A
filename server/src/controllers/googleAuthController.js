@@ -54,6 +54,9 @@ export const googleAuth = async (req, res) => {
     });
   } catch (err) {
     logError("Google auth controller error:", err);
-    return res.status(500).json({ msg: "Server error" });
+    return res.status(500).json({
+      success: false,
+      msg: "Server error",
+    });
   }
 };
