@@ -14,7 +14,13 @@ export const getProfile = async (req, res) => {
     const user = await User.findOne(
       { username },
       { _id: 1, username: 1, profile: 1, posts: 1, score: 1, created_at: 1 },
-    ).populate("posts");
+    ).populate({
+      path: "posts",
+      populate: {
+        path: "author",
+        select: "_id username profile score",
+      },
+    });
 
     if (!user) {
       return res.status(404).json({
@@ -23,7 +29,7 @@ export const getProfile = async (req, res) => {
       });
     }
 
-    res.status(200).json({ success: true, result: user });
+    res.status(200).json({ success: true, user });
   } catch (err) {
     logError(err);
     res.status(500).json({
