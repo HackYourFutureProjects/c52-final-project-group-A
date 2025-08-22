@@ -62,6 +62,10 @@
   background: var(--color-yellow);
 }
 
+.navButtonActive a {
+  color: var(--color-yellow);
+}
+
 /* Mobile icons styling */
 .homeIcon,
 .searchIcon,

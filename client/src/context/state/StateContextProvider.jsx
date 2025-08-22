@@ -10,20 +10,25 @@ const StateContextProvider = ({ children }) => {
   };
 
   const [state, setState] = useState(stateInit);
+  const [showSearchBox, setShowSearchBox] = useState(false);
+
   const { performFetch, cancelFetch } = useFetch("/context", (res) => {
     const { userId, username } = res;
-    setState({ userId, username });
+    setState((prevState) => ({ ...prevState, userId, username }));
   });
 
   useEffect(() => {
-    performFetch({ credentials: "include" });
+    performFetch();
+
     return () => {
       cancelFetch();
     };
   }, []);
 
   return (
-    <StateContext.Provider value={{ state, setState }}>
+    <StateContext.Provider
+      value={{ state, setState, showSearchBox, setShowSearchBox }}
+    >
       {children}
     </StateContext.Provider>
   );

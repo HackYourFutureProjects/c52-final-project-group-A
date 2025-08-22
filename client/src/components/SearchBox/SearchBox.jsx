@@ -3,6 +3,7 @@ import styles from "./SearchBox.module.css";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
+import Button from "../Button";
 
 export default function SearchBox({ onClose }) {
   const [query, setQuery] = useState("");
@@ -94,7 +95,7 @@ export default function SearchBox({ onClose }) {
         />
       </div>
 
-      <button
+      <Button
         className={styles.searchBoxButton}
         onClick={() => {
           if (query.trim()) {
@@ -103,10 +104,10 @@ export default function SearchBox({ onClose }) {
         }}
       >
         🔍
-      </button>
-      <button className={styles.closeButton} onClick={onClose}>
+      </Button>
+      <Button className={styles.closeButton} onClick={onClose}>
         ✕
-      </button>
+      </Button>
 
       {isLoading && <div className={styles.loading}>Loading...</div>}
       {isRealError && (
