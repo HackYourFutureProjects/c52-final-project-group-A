@@ -48,7 +48,8 @@ export default function SearchBox({ onClose }) {
 
   const handleNavigate = useCallback(
     (item) => {
-      const route = type === "user" ? `/user/${item._id}` : `/post/${item._id}`;
+      const route =
+        type === "user" ? `/user/${item.username}` : `/post/${item._id}`;
       navigate(route);
       onClose();
     },
