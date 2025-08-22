@@ -25,7 +25,6 @@ export default function EditPostPage() {
   const { performFetch: updatePost } = useFetchWithAuth(
     `/post/${id}`,
     (res) => {
-      console.log("PATCH response:", res);
       if (res.success) navigate(`/post/${id}`); // redirect to post page after save
     },
   );

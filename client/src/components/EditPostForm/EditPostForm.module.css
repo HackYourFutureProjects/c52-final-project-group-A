@@ -47,7 +47,7 @@
   padding: 0.5rem;
   font-size: 1rem;
   font-family: inherit;
-  border: 1px solid #ccc;
+  border: var(--border-inner);
   border-radius: 4px;
   box-sizing: border-box;
 }
