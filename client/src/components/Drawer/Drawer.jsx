@@ -3,7 +3,7 @@ import style from "./Drawer.module.css";
 
 function Drawer({ name, value, options, placeholder, onChange }) {
   return (
-    <label htmlFor={name} className={style.label}>
+    <label htmlFor={name}>
       <select
         id={name}
         name={name}
@@ -25,7 +25,7 @@ function Drawer({ name, value, options, placeholder, onChange }) {
 
 Drawer.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   placeholder: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

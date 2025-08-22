@@ -31,7 +31,7 @@ export default function CreatePostForm({ onCreated }) {
       body: JSON.stringify({
         title: title.trim(),
         content: content.trim(),
-        status,
+        status: status ?? "DRAFT",
         tags: tagsInput
           .split(",")
           .map((t) => t.trim())
