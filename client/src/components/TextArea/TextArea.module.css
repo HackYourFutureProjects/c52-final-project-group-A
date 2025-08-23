@@ -1,0 +1,22 @@
+.textArea {
+  display: flex;
+  position: relative;
+}
+.input {
+  flex: 1;
+  padding: 1.3rem 0.8rem 0.5rem 0.8rem;
+  border-radius: var(--inner-border-radius);
+  border: 1px solid var(--color-border);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  resize: none;
+}
+.placeholder {
+  position: absolute;
+  top: 7%;
+  left: 5%;
+  transform: translateY(-50%);
+  color: var(--color-dark-grey);
+  font-size: 0.8rem;
+  pointer-events: none;
+}

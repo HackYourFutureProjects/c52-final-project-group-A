@@ -10,10 +10,6 @@
   font-size: 1rem;
   transition: border-color 0.2s ease;
 }
-.input:focus,
-.input:hover {
-  border-color: var(--color-dark-grey);
-}
 .placeholder {
   position: absolute;
   top: 25%;
