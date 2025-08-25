@@ -8,25 +8,35 @@ import { LikeIcon } from "../icons/index.js";
 export default function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
 
+  // GET the like status
   const handleStatus = useCallback((data) => {
     setLiked(Boolean(data.liked));
   }, []);
-  const { performFetch: fetchLikeStatus, cancelFetch } = useFetchWithAuth(
-    `/posts/${postId}/like`,
-    handleStatus,
-  );
+
+  const {
+    performFetch: fetchLikeStatus,
+    cancelFetch,
+    error: fetchStatusError,
+  } = useFetchWithAuth(`/posts/${postId}/like`, handleStatus);
+
   useEffect(() => {
     fetchLikeStatus();
     return () => cancelFetch && cancelFetch();
   }, [postId]);
 
-  const { performFetch: sendLike } = useFetchWithAuth(
+  // POST the like toggle
+  const { performFetch: sendLike, error: sendLikeError } = useFetchWithAuth(
     `/posts/${postId}/like`,
     (data) => setLiked(Boolean(data.liked)),
   );
+
   const handleToggle = () => {
     sendLike({ method: "POST", credentials: "include" });
   };
+
+  // Error logging for debugging
+  if (fetchStatusError) console.error("Fetch status error:", fetchStatusError);
+  if (sendLikeError) console.error("Send like error:", sendLikeError);
 
   return (
     <Button

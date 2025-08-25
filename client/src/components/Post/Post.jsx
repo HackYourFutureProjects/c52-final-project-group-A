@@ -8,7 +8,6 @@ import StateContext from "../../context/state/StateContext.js";
 
 function Post({ post, className, dashboard = true }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
-  console.log(publishedAgo);
 
   // Follow button visibility
   const userData = useContext(StateContext);
@@ -27,6 +26,7 @@ function Post({ post, className, dashboard = true }) {
       <section className={style.contentContainer}>
         <header className={style.headerContainer}>
           <h1>{post.title}</h1>
+          <span className={style.publishedAgo}>{publishedAgo}</span>
         </header>
         <p className={style.postContent}>{post.content}</p>
       </section>
@@ -37,9 +37,10 @@ function Post({ post, className, dashboard = true }) {
 
 Post.propTypes = {
   post: PropTypes.shape({
-    author: {
+    author: PropTypes.shape({
       _id: PropTypes.string,
       username: PropTypes.string,
+      email: PropTypes.string,
       profile: PropTypes.shape({
         first_name: PropTypes.string,
         last_name: PropTypes.string,
@@ -47,7 +48,7 @@ Post.propTypes = {
         bio: PropTypes.string,
       }),
       score: PropTypes.number,
-    },
+    }),
     content: PropTypes.string,
     created_at: PropTypes.string,
     published_at: PropTypes.string,
