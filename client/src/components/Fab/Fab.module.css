@@ -4,12 +4,11 @@
   right: 2rem;
   background: var(--color-orange);
   color: var(--color-white);
-  border: none;
   border-radius: var(--circle-border-radius);
-  padding: 1.6rem 2.3rem 1.6rem 2rem;
-  font-size: 1.5rem;
-  font-weight: 500;
-  font-family: inherit;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  padding: 1rem 1rem 0.813rem 1rem;
   z-index: 1000;
+}
+.icon {
+  width: 2rem;
+  height: 2rem;
 }
