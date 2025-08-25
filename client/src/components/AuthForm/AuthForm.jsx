@@ -6,11 +6,11 @@ import InputField from "../InputField/InputField.jsx";
 import GoogleButton from "../GoogleButton/GoogleButton.jsx";
 import Button from "../Button.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import UserDataContext from "../../context/userDataContext/UserDataContext.js";
+import StateContext from "../../context/state/StateContext.js";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const initialFormValues = isSignIn
     ? { email: "", password: "" }
     : {
@@ -21,14 +21,14 @@ function AuthForm({ type }) {
         passwordConfirmation: "",
       };
 
-  const navigate = useNavigate();
-  const { setUserData } = useContext(UserDataContext);
+  const { setState } = useContext(StateContext);
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const endpoint = isSignIn ? "/login" : "/register";
   const { error, isLoading, performFetch } = useFetch(`${endpoint}`, (res) => {
     if (isSignIn) {
-      setUserData(res.user._doc);
+      const { userId, username } = res;
+      setState({ userId, username });
       navigate("/home");
     } else {
       navigate("/verify-email");
@@ -49,10 +49,6 @@ function AuthForm({ type }) {
     };
 
     performFetch(options);
-    if (!isSignIn) {
-      return Navigate("/verify-email");
-    }
-    return Navigate("/home");
   };
   if (error) {
     console.log(error);
@@ -157,10 +153,11 @@ function AuthForm({ type }) {
           {renderFormFields()}
           <Button
             type="submit"
-            label={isSignIn ? "Log in" : "Continue"}
             className={style.submitBtn}
             disabled={isLoading}
-          />
+          >
+            {isSignIn ? "Log in" : "Continue"}
+          </Button>
         </form>
         {isSignIn && (
           <div className={style.noAccContainer}>
