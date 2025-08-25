@@ -1,0 +1,53 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.input,
+.textarea,
+.select {
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--outer-border-radius);
+  font-size: 1rem;
+  width: 100%;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.placeholder {
+  position: absolute;
+  top: 0.2rem;
+  left: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-placeholder);
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+}
+
+.contentInput {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: var(--border-inner);
+  border-radius: 4px;
+  box-sizing: border-box;
+}

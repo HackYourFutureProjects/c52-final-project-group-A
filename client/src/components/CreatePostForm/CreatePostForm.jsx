@@ -2,12 +2,16 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import useFetchWithAuth from "../../hooks/useFetchWithAuth";
 import Button from "../Button.jsx";
+import InputField from "../InputField/InputField.jsx";
+import style from "./CreatePostForm.module.css";
+import TextArea from "../TextArea/TextArea.jsx";
+import Drawer from "../Drawer/Drawer.jsx";
 
 export default function CreatePostForm({ onCreated }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tagsInput, setTagsInput] = useState("");
-  const [status, setStatus] = useState("DRAFT");
+  const [status, setStatus] = useState("");
 
   const { isLoading, error, performFetch } = useFetchWithAuth(
     "/post",
@@ -27,7 +31,7 @@ export default function CreatePostForm({ onCreated }) {
       body: JSON.stringify({
         title: title.trim(),
         content: content.trim(),
-        status,
+        status: status ?? "DRAFT",
         tags: tagsInput
           .split(",")
           .map((t) => t.trim())
@@ -37,61 +41,49 @@ export default function CreatePostForm({ onCreated }) {
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3 max-w-xl">
-      <label>
-        Title*
-        <input
-          className="w-full border p-2"
+    <main className={style.main}>
+      <form onSubmit={onSubmit} className={style.form}>
+        <InputField
+          name="title"
+          placeholder="Title*"
+          type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
         />
-      </label>
 
-      <label>
-        Content*
-        <textarea
-          className="w-full border p-2"
-          rows={8}
+        <TextArea
+          name="content"
+          placeholder="Content*"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
         />
-      </label>
 
-      <div className="grid grid-cols-2 gap-3">
-        <label>
-          Post status
-          <select
-            className="w-full border p-2"
+        <div className={style.optionsContainer}>
+          <Drawer
+            name="status"
             value={status}
+            options={["DRAFT", "PUBLISHED"]}
+            placeholder="Select status"
             onChange={(e) => setStatus(e.target.value)}
-          >
-            <option value="DRAFT">DRAFT</option>
-            <option value="PUBLISHED">PUBLISHED</option>
-          </select>
-        </label>
-
-        <label>
-          Gegs (Separated by commas)
-          <input
-            className="w-full border p-2"
+          />
+          <InputField
+            name="tags"
+            type="text"
+            placeholder="Tags (comma-separated)"
             value={tagsInput}
             onChange={(e) => setTagsInput(e.target.value)}
           />
-        </label>
-      </div>
+        </div>
 
-      {error && <p style={{ color: "red" }}>{String(error)}</p>}
+        {error && <p style={{ color: "red" }}>{String(error)}</p>}
 
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="px-4 py-2 bg-black text-white rounded"
-      >
-        {isLoading ? "Saving..." : "Create"}
-      </Button>
-    </form>
+        <Button type="submit" disabled={isLoading} className={style.submitBtn}>
+          {isLoading ? "Saving..." : "Create"}
+        </Button>
+      </form>
+    </main>
   );
 }
 

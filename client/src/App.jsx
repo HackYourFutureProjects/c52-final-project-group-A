@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Nav from "./components/Nav/Nav.jsx";
 import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
@@ -10,11 +10,15 @@ import EmailVerification from "./pages/EmailVerification.jsx";
 import SearchBox from "./components/SearchBox/SearchBox";
 import SandboxPage from "./pages/Sandbox.jsx";
 import PostPage from "./pages/Post/Post.jsx";
+import Fab from "./components/Fab/Fab.jsx";
+import EditPostPage from "./pages/EditPost/EditPost.jsx";
 import { useContext } from "react";
 import StateContext from "./context/state/StateContext.js";
 
 const App = () => {
+  const location = useLocation();
   const { showSearchBox, setShowSearchBox } = useContext(StateContext);
+  const hideFabOn = ["/", "/login", "/register", "/new-post"]; // No FAB button here
 
   return (
     <>
@@ -30,8 +34,10 @@ const App = () => {
         <Route path="/new-post" element={<NewPostPage />} />
         <Route path="/sandbox" element={<SandboxPage />} />
         <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/post/:id/edit" element={<EditPostPage />} />
       </Routes>
-    </>
+      {!hideFabOn.includes(location.pathname) && <Fab>Create post</Fab>}
+       </>
   );
 };
 
