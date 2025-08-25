@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import Button from "../Button.jsx";
 import InputField from "../InputField/InputField.jsx";
 import style from "./EditPostForm.module.css";
+import TextArea from "../TextArea/TextArea.jsx";
+import Drawer from "../Drawer/Drawer.jsx";
 
 export default function EditPostForm({ post, error, onSave, onCancel }) {
   const [form, setForm] = useState({
@@ -11,6 +13,8 @@ export default function EditPostForm({ post, error, onSave, onCancel }) {
     tags: Array.isArray(post?.tags) ? post.tags.join(", ") : "",
     status: post?.status || "DRAFT",
   });
+
+  const options = ["DRAFT", "PUBLISHED"];
 
   // Update form state when post changes
   useEffect(() => {
@@ -43,8 +47,7 @@ export default function EditPostForm({ post, error, onSave, onCancel }) {
   };
 
   return (
-    <form className={style.postCard} onSubmit={handleSubmit}>
-      {/* Title field */}
+    <form className={style.form} onSubmit={handleSubmit}>
       <InputField
         name="title"
         type="text"
@@ -54,19 +57,13 @@ export default function EditPostForm({ post, error, onSave, onCancel }) {
         required
         className={style.titleInput}
       />
-
-      {/* Content field */}
-      <textarea
+      <TextArea
         name="content"
-        className={style.contentInput}
         placeholder="Content"
         value={form.content}
         onChange={handleChange}
-        rows={8}
         required
       />
-
-      {/* Tags field */}
       <InputField
         name="tags"
         type="text"
@@ -75,23 +72,21 @@ export default function EditPostForm({ post, error, onSave, onCancel }) {
         onChange={handleChange}
         className={style.tagsInput}
       />
-
-      {/* Status field */}
-      <select
+      <Drawer
         name="status"
-        className={style.statusSelect}
         value={form.status}
+        options={options}
         onChange={handleChange}
-      >
-        <option value="DRAFT">Draft</option>
-        <option value="PUBLISHED">Published</option>
-      </select>
+        placeholder="Select status"
+      />
 
-      {error && <div className={style.error}>{error}</div>}
+      {error && <div>{error}</div>}
 
       <div className={style.buttonGroup}>
-        <Button type="submit">Save</Button>
-        <Button type="button" onClick={onCancel}>
+        <Button type="submit" className={style.submitBtn}>
+          Save
+        </Button>
+        <Button type="button" className={style.cancelBtn} onClick={onCancel}>
           Cancel
         </Button>
       </div>
