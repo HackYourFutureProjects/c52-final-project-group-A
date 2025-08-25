@@ -25,7 +25,7 @@ function Profile() {
       },
     };
     performFetch(options);
-  }, []);
+  }, [username]);
 
   if (error) {
     console.error(error);

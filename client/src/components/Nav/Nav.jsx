@@ -7,12 +7,13 @@ import Logo from "../Logo.jsx";
 import StateContext from "../../context/state/StateContext.js";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
 import { HomeIcon, SearchIcon, ProfileIcon } from "../icons/index.js";
+import PropTypes from "prop-types";
 
 function Nav() {
   const navigate = useNavigate();
   const location = useLocation();
   const mobile = useWindowWidth(768);
-  const { state } = useContext(StateContext);
+  const { state, showSearchBox, setShowSearchBox } = useContext(StateContext);
   const [profileLink, setProfileLink] = useState(null);
 
   useEffect(() => {
@@ -40,11 +41,16 @@ function Nav() {
             {mobile ? <HomeIcon style={style.homeIcon} /> : "Home"}
           </Link>
         </li>
-        <li className={style.navButton}>
-          <Link to="#">
+        <li
+          className={`${style.navButton} ${
+            showSearchBox ? style.navButtonActive : ""
+          }`}
+        >
+          <Button onClick={() => setShowSearchBox(true)}>
             {mobile ? <SearchIcon style={style.searchIcon} /> : "Search"}
-          </Link>
+          </Button>
         </li>
+
         {!mobile && (
           <li className={style.logoContainer}>
             <Logo className={style.logo} />
@@ -70,5 +76,8 @@ function Nav() {
     </nav>
   );
 }
-
+Nav.propTypes = {
+  setShowSearchBox: PropTypes.func.isRequired,
+  showSearchBox: PropTypes.bool.isRequired,
+};
 export default Nav;
