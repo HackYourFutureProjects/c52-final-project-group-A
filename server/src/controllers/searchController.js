@@ -6,7 +6,7 @@ function escapeRegex(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-const SEARCH_QUERY_MAX_LENGTH = 100;
+const SearchQueryMaxLength = 100;
 
 export const search = async (req, res) => {
   try {
@@ -17,7 +17,7 @@ export const search = async (req, res) => {
         .status(400)
         .json({ success: false, msg: "Search query is required" });
     }
-    if (q.length > SEARCH_QUERY_MAX_LENGTH) {
+    if (q.length > SearchQueryMaxLength) {
       return res.status(400).json({
         success: false,
         msg: "Search query exceeds maximum length of 100 characters",
