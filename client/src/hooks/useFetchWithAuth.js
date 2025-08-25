@@ -51,6 +51,7 @@ const useFetchWithAuth = (route, onReceived) => {
 
       setIsLoading(false);
     })().catch((e) => {
+      if (e.name === "AbortError") return; // This is expected behavior for managed requests in React applications and is not an application or network error.
       const errorMsg = e?.message || String(e);
       setError(errorMsg);
       setIsLoading(false);

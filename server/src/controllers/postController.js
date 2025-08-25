@@ -1,12 +1,15 @@
 import Post, { PostStatus, validatePost } from "../models/Post.js";
+import Comment, { CommentStatus } from "../models/Comment.js";
 import mongoose from "mongoose";
+import { logError } from "../util/logging.js";
 
 export const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find().populate("author", "username email");
     res.json(posts);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logError(error);
+    res.status(500).json({ success: false, msg: "Server error" });
   }
 };
 
@@ -17,10 +20,34 @@ export const getPostById = async (req, res) => {
       "author",
       "username profile score",
     );
-    if (!post) return res.status(404).json({ message: "Post not found" });
-    res.json(post);
+    if (!post)
+      return res.status(404).json({ success: false, msg: "Post not found" });
+    res.json({ success: true, post });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logError(error);
+    res.status(500).json({ success: false, msg: "Server error" });
+  }
+};
+
+// Get Comments By Post ID endpoint
+export const getCommentsByPostId = async (req, res) => {
+  const postId = req.params.id;
+  if (!postId) {
+    return res.status(400).json({ success: false, msg: "Post ID is required" });
+  }
+  if (!mongoose.Types.ObjectId.isValid(postId)) {
+    return res.status(400).json({ success: false, msg: "Invalid post ID" });
+  }
+
+  try {
+    const comments = await Comment.find({
+      post: postId,
+      status: CommentStatus.VISIBLE,
+    }).populate("user", "username profile score");
+    res.json({ success: true, comments });
+  } catch (error) {
+    logError(error);
+    res.status(500).json({ success: false, msg: "Server error" });
   }
 };
 
@@ -65,14 +92,15 @@ export const createPost = async (req, res) => {
 
     const errors = validatePost(candidate);
     if (errors.length) {
-      return res.status(400).json({ errors });
+      return res.status(400).json({ success: false, msg: errors.join("; ") });
     }
 
     const newPost = await Post.create(candidate);
     const populated = await newPost.populate("author", "username email");
-    res.status(201).json(populated);
+    res.status(201).json({ success: true, populated });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    logError(error);
+    res.status(500).json({ success: false, msg: "Server error" });
   }
 };
 
@@ -110,7 +138,17 @@ export const updatePost = async (req, res) => {
     }
 
     // Prepare candidate for validation
-    const candidate = { ...post.toObject(), ...updates };
+    const candidate = {
+      title: updates.title ?? post.title,
+      content: updates.content ?? post.content,
+      tags: updates.tags ?? post.tags,
+      status: updates.status ?? post.status,
+      author: post.author,
+      created_at: post.created_at,
+      published_at: updates.published_at ?? post.published_at,
+      score: post.score,
+    };
+
     const errors = validatePost(candidate);
     if (errors.length) {
       return res.status(400).json({
@@ -132,7 +170,8 @@ export const updatePost = async (req, res) => {
 
     res.json({ success: true, post: updatedPost });
   } catch (error) {
-    res.status(400).json({ success: false, msg: error.message });
+    logError(error);
+    res.status(500).json({ success: false, msg: "Server error" });
   }
 };
 
@@ -140,25 +179,29 @@ export const updatePost = async (req, res) => {
 export const deletePost = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ message: "Invalid post ID" });
+      return res.status(400).json({ success: false, msg: "Invalid post ID" });
     }
 
     const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!post)
+      return res.status(404).json({ success: false, msg: "Post not found" });
 
     if (!req.user || !req.user._id) {
-      return res.status(401).json({ message: "User not authenticated" });
+      return res
+        .status(401)
+        .json({ success: false, msg: "User not authenticated" });
     }
 
     if (post.author.toString() !== req.user._id.toString()) {
       return res
         .status(403)
-        .json({ message: "Not authorized to delete this post" });
+        .json({ success: false, msg: "Not authorized to delete this post" });
     }
 
     await post.deleteOne();
-    res.json({ message: "Post deleted" });
+    res.json({ success: true, msg: "Post deleted" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logError(error);
+    res.status(500).json({ success: false, msg: "Server error" });
   }
 };

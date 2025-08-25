@@ -51,12 +51,22 @@ a:hover {
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font-family: inherit;
   font-weight: inherit;
   border: none;
   background: none;
   outline: none;
+}
+input:hover,
+input:focus,
+textarea:hover,
+textarea:focus,
+select:hover,
+select:focus {
+  border-color: var(--color-dark-grey);
 }
 button {
   cursor: pointer;
@@ -80,6 +90,6 @@ body {
     font-size: 80%;
   }
   body {
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem;
   }
 }
