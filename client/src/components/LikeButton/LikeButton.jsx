@@ -6,23 +6,28 @@ import PropTypes from "prop-types";
 export default function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
 
+  // GET the like status
   const handleStatus = useCallback((data) => {
-    setLiked(Boolean(data.result && data.result.liked));
+    setLiked(Boolean(data.liked));
   }, []);
+
   const {
     performFetch: fetchLikeStatus,
     cancelFetch,
     error: fetchStatusError,
   } = useFetchWithAuth(`/posts/${postId}/like`, handleStatus);
+
   useEffect(() => {
     fetchLikeStatus();
     return () => cancelFetch && cancelFetch();
   }, [postId]);
 
+  // POST the like toggle
   const { performFetch: sendLike, error: sendLikeError } = useFetchWithAuth(
     `/posts/${postId}/like`,
-    (data) => setLiked(Boolean(data.result && data.result.liked)),
+    (data) => setLiked(Boolean(data.liked)),
   );
+
   const handleToggle = () => {
     sendLike({ method: "POST", credentials: "include" });
   };

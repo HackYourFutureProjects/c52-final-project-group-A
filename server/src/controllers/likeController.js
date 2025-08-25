@@ -32,26 +32,25 @@ export const toggleLike = async (req, res) => {
         { session },
       );
       await session.commitTransaction();
-      return res.json({ success: true, result: { liked: false } });
+      // RETURN FLAT STRUCTURE:
+      return res.json({ success: true, liked: false });
     } else {
-      // 4. If the like does not exist, create it and add its id to user's likes array
-      const newLike = await Like.create(
-        { user: userId, post: postId },
-        {
-          session,
-        },
-      );
+      // 3. If the like does not exist, create it and add its id to user's likes array
+      const [newLike] = await Like.create([{ user: userId, post: postId }], {
+        session,
+      });
       await User.findByIdAndUpdate(
         userId,
         { $push: { likes: newLike._id } },
         { session },
       );
       await session.commitTransaction();
-      return res.json({ success: true, result: { liked: true } });
+      // RETURN FLAT STRUCTURE:
+      return res.json({ success: true, liked: true });
     }
   } catch (error) {
     await session.abortTransaction();
-    // Log full error for server-side debugging
+    console.error("Toggle Like Error:", error);
     if (error.code === 11000) {
       return res
         .status(409)
@@ -77,8 +76,9 @@ export const getLikeStatus = async (req, res) => {
       user: userId,
       post: postObjectId,
     });
-    res.json({ success: true, result: { liked: !!existingLike } });
+    res.json({ success: true, liked: !!existingLike });
   } catch (error) {
+    console.error("Get Like Status Error:", error);
     res.status(500).json({ success: false, msg: "Server error" });
   }
 };
