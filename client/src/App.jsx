@@ -17,13 +17,15 @@ import StateContext from "./context/state/StateContext.js";
 
 const App = () => {
   const location = useLocation();
-  const { showSearchBox, setShowSearchBox } = useContext(StateContext);
+  const { showSearchBox, setShowSearchBox, state } = useContext(StateContext);
   const hideFabOn = ["/", "/login", "/register", "/new-post"]; // No FAB button here
 
   return (
     <>
-      <Nav />
-      {showSearchBox && <SearchBox onClose={() => setShowSearchBox(false)} />}
+      <Nav setShowSearchBox={setShowSearchBox} showSearchBox={showSearchBox} />
+      {showSearchBox && state.userId && (
+        <SearchBox onClose={() => setShowSearchBox(false)} />
+      )}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />

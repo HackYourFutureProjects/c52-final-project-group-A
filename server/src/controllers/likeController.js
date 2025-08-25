@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Like from "../models/Like.js";
 import User from "../models/User.js";
+import { logError } from "../util/logging.js";
 
 // Controller for toggling like (like/unlike)
 export const toggleLike = async (req, res) => {
@@ -50,7 +51,7 @@ export const toggleLike = async (req, res) => {
     }
   } catch (error) {
     await session.abortTransaction();
-    console.error("Toggle Like Error:", error);
+    logError("Toggle Like Error:", error);
     if (error.code === 11000) {
       return res
         .status(409)
@@ -78,7 +79,7 @@ export const getLikeStatus = async (req, res) => {
     });
     res.json({ success: true, liked: !!existingLike });
   } catch (error) {
-    console.error("Get Like Status Error:", error);
+    logError("Get Like Status Error:", error);
     res.status(500).json({ success: false, msg: "Server error" });
   }
 };
