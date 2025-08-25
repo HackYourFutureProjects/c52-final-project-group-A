@@ -38,5 +38,6 @@ app.use("/api/following", followingRouter);
 app.use("/api/explore", exploreRouter);
 app.use("/api/context", contextRouter);
 app.use("/api", likeRoutes);
+app.use("/user", profileRouter);
 
 export default app;
