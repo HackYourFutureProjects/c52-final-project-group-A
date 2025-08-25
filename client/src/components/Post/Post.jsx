@@ -41,11 +41,6 @@ Post.propTypes = {
       _id: PropTypes.string,
       username: PropTypes.string,
       email: PropTypes.string,
-    }),
-
-    author: {
-      _id: PropTypes.string,
-      username: PropTypes.string,
       profile: PropTypes.shape({
         first_name: PropTypes.string,
         last_name: PropTypes.string,
@@ -53,7 +48,7 @@ Post.propTypes = {
         bio: PropTypes.string,
       }),
       score: PropTypes.number,
-    },
+    }),
     content: PropTypes.string,
     created_at: PropTypes.string,
     published_at: PropTypes.string,
