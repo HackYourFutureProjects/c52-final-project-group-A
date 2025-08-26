@@ -85,7 +85,6 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({
       success: false,
       msg: "Unable to update profile, try again later",
-      error: err.message,
     });
   }
 };
