@@ -14,6 +14,7 @@ import Fab from "./components/Fab/Fab.jsx";
 import EditPostPage from "./pages/EditPost/EditPost.jsx";
 import { useContext } from "react";
 import StateContext from "./context/state/StateContext.js";
+import EditProfile from "./pages/EditProfile/EditProfile.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/sandbox" element={<SandboxPage />} />
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/post/:id/edit" element={<EditPostPage />} />
+        <Route path="/user/:username/edit" element={<EditProfile />} />
       </Routes>
       {!hideFabOn.includes(location.pathname) && <Fab />}
     </>
