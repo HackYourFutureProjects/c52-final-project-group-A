@@ -38,7 +38,7 @@ const App = () => {
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/post/:id/edit" element={<EditPostPage />} />
       </Routes>
-      {!hideFabOn.includes(location.pathname) && <Fab>Create post</Fab>}
+      {!hideFabOn.includes(location.pathname) && <Fab />}
     </>
   );
 };
