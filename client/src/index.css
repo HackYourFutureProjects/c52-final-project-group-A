@@ -43,11 +43,8 @@ menu {
 }
 
 a {
-  color: var(--color-orange);
   text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
+  color: inherit;
 }
 
 button,

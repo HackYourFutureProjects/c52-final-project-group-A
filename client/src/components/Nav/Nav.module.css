@@ -62,10 +62,6 @@
   background: var(--color-yellow);
 }
 
-.navButtonActive a {
-  color: var(--color-yellow);
-}
-
 /* Mobile icons styling */
 .homeIcon,
 .searchIcon,
@@ -100,7 +96,8 @@
   .navButton:hover {
     border: none;
   }
-  .nav a {
+  .nav a,
+  .nav button {
     padding: 0.6rem 0.8rem 0.4rem 0.8rem;
   }
 }
