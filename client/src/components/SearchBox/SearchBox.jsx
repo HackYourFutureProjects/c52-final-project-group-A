@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import styles from "./SearchBox.module.css";
+import style from "./SearchBox.module.css";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import Button from "../Button";
+import { SearchIcon } from "../icons/index.js";
 
 export default function SearchBox({ onClose }) {
   const [query, setQuery] = useState("");
@@ -59,20 +60,18 @@ export default function SearchBox({ onClose }) {
   const isRealError = error && error.name !== "AbortError";
 
   return (
-    <div className={styles.searchBoxContainer}>
-      <div className={styles.searchGroup}>
-        <select
-          className={styles.searchTypeSelect}
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+    <div className={style.searchBoxContainer}>
+      <div className={style.searchGroup}>
+        <Button
+          className={style.typeSwitch}
+          onClick={() => setType((prev) => (prev === "user" ? "post" : "user"))}
         >
-          <option value="post">Posts</option>
-          <option value="user">Users</option>
-        </select>
-
+          {type}
+        </Button>
         <input
+          name="searchInput"
           type="text"
-          className={styles.searchInput}
+          className={style.searchInput}
           placeholder={`Search ${type}s...`}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -97,31 +96,28 @@ export default function SearchBox({ onClose }) {
       </div>
 
       <Button
-        className={styles.searchBoxButton}
+        className={style.searchBoxBtn}
         onClick={() => {
           if (query.trim()) {
             performFetch();
           }
         }}
       >
-        🔍
-      </Button>
-      <Button className={styles.closeButton} onClick={onClose}>
-        ✕
+        <SearchIcon style={style.searchIcon} />
       </Button>
 
-      {isLoading && <div className={styles.loading}>Loading...</div>}
+      {isLoading && <div className={style.loading}>Loading...</div>}
       {isRealError && (
-        <div className={styles.error}>Error: {error.toString()}</div>
+        <div className={style.error}>Error: {error.toString()}</div>
       )}
 
       {results.length > 0 && (
-        <ul className={styles.suggestionsList}>
+        <ul className={style.suggestionsList}>
           {results.map((item, index) => (
             <li
               key={item._id}
-              className={`${styles.suggestionItem} ${
-                index === selectedIndex ? styles.active : ""
+              className={`${style.suggestionItem} ${
+                index === selectedIndex ? style.active : ""
               }`}
               onClick={() => handleNavigate(item)}
               tabIndex={0}

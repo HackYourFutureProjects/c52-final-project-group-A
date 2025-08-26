@@ -1,7 +1,7 @@
 .fab {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 5rem;
+  right: 5rem;
   background: var(--color-orange);
   color: var(--color-white);
   border-radius: var(--circle-border-radius);
@@ -11,4 +11,11 @@
 .icon {
   width: 2rem;
   height: 2rem;
+}
+
+@media (max-width: 768px) {
+  .fab {
+    bottom: 2.5rem;
+    right: 2rem;
+  }
 }

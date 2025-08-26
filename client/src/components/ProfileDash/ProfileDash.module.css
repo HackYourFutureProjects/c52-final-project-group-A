@@ -52,6 +52,10 @@
 }
 .username {
   font-size: 0.6em;
+  color: var(--color-orange);
+}
+.username:hover {
+  text-decoration: underline;
 }
 .followBtn {
   color: var(--color-orange);
