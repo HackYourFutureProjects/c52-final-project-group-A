@@ -49,7 +49,7 @@ function Nav() {
           <Button
             onClick={() => {
               if (state.userId) {
-                setShowSearchBox(true);
+                setShowSearchBox((prev) => !prev);
               }
             }}
           >
