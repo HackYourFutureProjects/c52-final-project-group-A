@@ -106,10 +106,8 @@ export default function SearchBox({ onClose }) {
         <SearchIcon style={style.searchIcon} />
       </Button>
 
-      {isLoading && <div className={style.loading}>Loading...</div>}
-      {isRealError && (
-        <div className={style.error}>Error: {error.toString()}</div>
-      )}
+      {isLoading && <div>Loading...</div>}
+      {isRealError && <div>Error: {error.toString()}</div>}
 
       {results.length > 0 && (
         <ul className={style.suggestionsList}>
