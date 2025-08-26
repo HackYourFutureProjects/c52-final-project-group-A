@@ -12,6 +12,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: border 0.2s ease-in-out;
+}
+.searchBoxContainer:hover {
+  border: 1px solid var(--color-dark-grey);
 }
 
 .searchGroup {
@@ -24,6 +28,10 @@
   border: 1px solid var(--color-border);
   border-radius: var(--pill-border-radius);
   padding: 0.35rem 0.6rem;
+  transition: border 0.2s ease-in-out;
+}
+.typeSwitch:hover {
+  border: 1px solid var(--color-dark-grey);
 }
 
 .searchInput {
@@ -33,7 +41,7 @@
   color: var(--color-black);
 }
 .searchInput::placeholder {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease-in-out;
 }
 .searchInput:focus::placeholder {
   opacity: 0.5;
@@ -66,7 +74,7 @@
 .suggestionItem {
   padding: 0.75rem 1rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease-in-out;
   color: var(--color-black);
 }
 
