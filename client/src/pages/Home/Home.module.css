@@ -1,0 +1,122 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 10rem;
+}
+
+.container {
+  max-width: 50rem;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.header {
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--color-black);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.postsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: var(--color-dark-grey);
+  opacity: 0.8;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-orange);
+  background-color: rgba(254, 74, 34, 0.1);
+  border: 1px solid rgba(254, 74, 34, 0.3);
+  border-radius: var(--outer-border-radius);
+  margin: 1rem 0;
+  font-weight: 500;
+}
+
+.loadMoreBtn {
+  display: block;
+  margin: 2rem auto;
+  padding: 0.8rem 2rem;
+  background-color: var(--color-dark-grey);
+  color: var(--color-white);
+  border-radius: var(--inner-border-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+  font-family: var(--font-sans), sans-serif;
+}
+
+.loadMoreBtn:hover:not(:disabled) {
+  opacity: 0.95;
+}
+
+.loadMoreBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-dark-grey);
+  font-size: 1.2rem;
+  background-color: rgba(26, 26, 26, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: var(--outer-border-radius);
+  margin-top: 2rem;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding-top: 1rem;
+  }
+
+  .container {
+    padding: 0 0.5rem;
+  }
+
+  .header {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .postsContainer {
+    gap: 1rem;
+  }
+
+  .loading {
+    padding: 2rem;
+    font-size: 1rem;
+  }
+
+  .error {
+    padding: 1.5rem;
+    margin: 0.5rem 0;
+  }
+
+  .loadMoreBtn {
+    margin: 1.5rem auto;
+    padding: 0.7rem 1.5rem;
+  }
+
+  .emptyState {
+    padding: 3rem 1.5rem;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+  }
+}

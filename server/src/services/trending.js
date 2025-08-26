@@ -18,8 +18,25 @@ export async function getTrendingPosts({
       },
     },
     {
+      $lookup: {
+        from: "users",
+        localField: "author",
+        foreignField: "_id",
+        as: "authorData",
+      },
+    },
+    {
+      $unwind: "$authorData",
+    },
+    {
       $addFields: {
         likeCount: { $size: "$likes" },
+        author: {
+          _id: "$authorData._id",
+          username: "$authorData.username",
+          score: "$authorData.score",
+          profile: "$authorData.profile",
+        },
       },
     },
     {
@@ -40,7 +57,10 @@ export async function getTrendingPosts({
   const decayRate = Math.log(2) / halfLifeHours;
 
   const scored = rawPosts.map((post) => {
-    const hoursAgo = Date.now() - new Date(post.published_at).getTime(); //MILLISECONDS_PER_HOUR;
+    const MILLISECONDS_PER_HOUR = 1000 * 60 * 60;
+    const hoursAgo =
+      (Date.now() - new Date(post.published_at).getTime()) /
+      MILLISECONDS_PER_HOUR;
     const decay = Math.exp(-decayRate * hoursAgo);
     return { ...post, score: post.likeCount * decay };
   });
@@ -52,7 +72,7 @@ export async function getTrendingPosts({
   const seen = new Map();
   const items = [];
   for (const post of scored) {
-    const authorId = String(post.author);
+    const authorId = String(post.author._id); // Изменено: теперь author - это объект
     const count = seen.get(authorId) || 0;
     if (count < capPerAuthor) {
       items.push(post);
