@@ -73,7 +73,11 @@ export default function EditProfileForm({ profile, error, onSave, onCancel }) {
 }
 
 EditProfileForm.propTypes = {
-  profile: PropTypes.object.isRequired,
+  profile: PropTypes.shape({
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    bio: PropTypes.string,
+  }).isRequired,
   error: PropTypes.string,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
