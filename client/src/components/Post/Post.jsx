@@ -2,21 +2,20 @@ import ProfileDash from "../ProfileDash/ProfileDash.jsx";
 import PostFooter from "../PostFooter/PostFooter.jsx";
 import style from "./Post.module.css";
 import PropTypes from "prop-types";
-import timeAgoCalc from "../../util/timeAgoCalc.js";
+// import timeAgoCalc from "../../util/timeAgoCalc.js";
 import { useContext } from "react";
 import StateContext from "../../context/state/StateContext.js";
 import { Link, useLocation } from "react-router-dom";
 
 function Post({ post, className, dashboard = true }) {
-  const publishedAgo = timeAgoCalc(new Date(post.published_at));
-  console.log(publishedAgo);
-
+  // const publishedAgo = timeAgoCalc(new Date(post.published_at)); // is assigned a value but never used
   const location = useLocation();
-  const linkDisabled = location.pathname === `/post/${post._id}`;
 
-  // Follow button visibility
   const userData = useContext(StateContext);
   const showFollowBtn = userData?.userId !== post.author._id;
+  const linkDisabled = location.pathname === `/post/${post._id}`;
+
+  console.log("Post -> authorId:", post.author._id);
 
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
@@ -28,6 +27,7 @@ function Post({ post, className, dashboard = true }) {
           user={post.author}
         />
       )}
+
       <Link
         className={linkDisabled ? style.linkDisabled : style.link}
         to={`/post/${post._id}`}
@@ -39,7 +39,11 @@ function Post({ post, className, dashboard = true }) {
           <p className={style.postContent}>{post.content}</p>
         </section>
       </Link>
-      <PostFooter postId={post._id} tags={post.tags} />
+      <PostFooter
+        postId={post._id}
+        tags={post.tags}
+        authorId={post.author._id}
+      />
     </article>
   );
 }

@@ -41,12 +41,13 @@ export default function PostPage() {
       cancelFetchComments();
     };
   }, [id]);
+
   const showFollowBtn = state.userId !== post?.author?._id;
 
   if ((isLoading || isLoadingComments) && (!post || !comments))
     return <div>Loading…</div>;
   if (error || errorComments)
-    return <div>Error: {String(error.message || error)}</div>;
+    return <div>Error: {String(error?.message || error)}</div>;
   if (!post) return null;
 
   return (
