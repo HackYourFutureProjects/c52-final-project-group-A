@@ -6,7 +6,6 @@ import Like from "../models/Like.js";
 import config from "../config.js";
 import { getTrendingPosts } from "../services/trending.js";
 import { hasUserSignals } from "../util/userSignals.js";
-import mongoose from "mongoose";
 
 const { FEED_WINDOW_HOURS } = config;
 
@@ -153,7 +152,7 @@ export const getFeed = async (req, res) => {
 
     // If you want to get tags from liked posts, fetch them separately:
     const likedTaggedPosts = await Post.find({
-      _id: { $in: likedPostIds.map((id) => new mongoose.Types.ObjectId(id)) },
+      _id: { $in: likedPostIds },
     }).select("tags");
 
     const tagFrequency = {};
