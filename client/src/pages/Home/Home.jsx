@@ -1,59 +1,92 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import useFetch from "../../hooks/useFetch";
 import Post from "../../components/Post/Post";
 import style from "./Home.module.css";
 
 function Home() {
-  const [feedData, setFeedData] = useState(null);
+  const [allPosts, setAllPosts] = useState([]);
+  const [currentBatch, setCurrentBatch] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const { isLoading, error, performFetch, cancelFetch } = useFetch(
-    "/feed",
+    `/feed?page=${currentBatch}&limit=10`,
     (response) => {
-      setFeedData(response.data);
+      if (currentBatch === 1) {
+        setAllPosts(response.data.items);
+      } else {
+        setAllPosts((prev) => [...prev, ...response.data.items]);
+      }
+      setHasMore(response.data.pagination.hasNext);
+      setIsLoadingMore(false);
     },
   );
 
+  // Initial load
   useEffect(() => {
-    // Fetch feed data when component mounts
-    performFetch();
+    performFetch({
+      method: "GET",
+    });
 
-    // Cleanup function to cancel fetch when component unmounts
     return () => {
       cancelFetch();
     };
   }, []);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (currentBatch > 1) {
+      setIsLoadingMore(true);
+      performFetch({
+        method: "GET",
+      });
+    }
+  }, [currentBatch]);
+
+  // Scroll handler
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 1000 &&
+      hasMore &&
+      !isLoading &&
+      !isLoadingMore
+    ) {
+      setCurrentBatch((prev) => prev + 1);
+    }
+  }, [hasMore, isLoading, isLoadingMore]);
+
+  // Add scroll listener
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  if (isLoading && currentBatch === 1) {
     return (
       <div className={style.wrapper}>
         <div className={style.container}>
-          <div className={style.loading}>Loading your feed...</div>
+          <div>Loading your feed...</div>
         </div>
       </div>
     );
   }
 
-  if (error) {
+  if (error && currentBatch === 1) {
     return (
       <div className={style.wrapper}>
         <div className={style.container}>
-          <div className={style.error}>
-            Error loading feed: {error.message || error}
-          </div>
+          <div>Error loading feed: {error.message || error}</div>
         </div>
       </div>
     );
   }
 
-  if (!feedData || feedData.items.length === 0) {
+  if (allPosts.length === 0 && !isLoading) {
     return (
       <div className={style.wrapper}>
         <div className={style.container}>
           <h1 className={style.header}>Your Feed</h1>
-          <div className={style.emptyState}>
-            No posts to show yet. Start following some users or check out the
-            explore page!
-          </div>
+          <div className={style.emptyState}>No posts to show yet.</div>
         </div>
       </div>
     );
@@ -63,10 +96,14 @@ function Home() {
     <div className={style.wrapper}>
       <div className={style.container}>
         <div className={style.postsContainer}>
-          {feedData.items.map((post) => (
+          {allPosts.map((post) => (
             <Post key={post._id} post={post} />
           ))}
         </div>
+
+        {isLoadingMore && (
+          <div className={style.loadingMore}>Loading more posts...</div>
+        )}
       </div>
     </div>
   );
