@@ -29,7 +29,7 @@ function Post({ post, className, dashboard = true }) {
         />
       )}
       <Link
-        className={linkDisabled ? style.linkDisabled : ""}
+        className={linkDisabled ? style.linkDisabled : style.link}
         to={`/post/${post._id}`}
       >
         <section className={style.contentContainer}>
