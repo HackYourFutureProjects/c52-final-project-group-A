@@ -14,6 +14,14 @@
 .postContent {
   padding: 0.3rem;
 }
+.link,
+.linkDisabled {
+  color: var(--color-black);
+}
 .linkDisabled {
   pointer-events: none;
+}
+.link:hover,
+.linkDisabled:hover {
+  text-decoration: none;
 }
