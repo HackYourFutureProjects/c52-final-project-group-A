@@ -63,7 +63,7 @@ function Home() {
 
   if (isLoading && currentBatch === 1) {
     return (
-      <div className={style.wrapper}>
+      <div>
         <div className={style.container}>
           <div>Loading your feed...</div>
         </div>
@@ -73,7 +73,7 @@ function Home() {
 
   if (error && currentBatch === 1) {
     return (
-      <div className={style.wrapper}>
+      <div>
         <div className={style.container}>
           <div>Error loading feed: {error.message || error}</div>
         </div>
@@ -83,27 +83,25 @@ function Home() {
 
   if (allPosts.length === 0 && !isLoading) {
     return (
-      <div className={style.wrapper}>
+      <div>
         <div className={style.container}>
-          <h1 className={style.header}>Your Feed</h1>
-          <div className={style.emptyState}>No posts to show yet.</div>
+          <h1>Your Feed</h1>
+          <div>No posts to show yet.</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={style.wrapper}>
+    <div>
       <div className={style.container}>
-        <div className={style.postsContainer}>
+        <div>
           {allPosts.map((post) => (
             <Post key={post._id} post={post} />
           ))}
         </div>
 
-        {isLoadingMore && (
-          <div className={style.loadingMore}>Loading more posts...</div>
-        )}
+        {isLoadingMore && <div>Loading more posts...</div>}
       </div>
     </div>
   );

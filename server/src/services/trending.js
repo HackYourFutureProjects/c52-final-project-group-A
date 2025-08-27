@@ -72,7 +72,7 @@ export async function getTrendingPosts({
   const seen = new Map();
   const items = [];
   for (const post of scored) {
-    const authorId = String(post.author._id); // Изменено: теперь author - это объект
+    const authorId = String(post.author._id);
     const count = seen.get(authorId) || 0;
     if (count < capPerAuthor) {
       items.push(post);
