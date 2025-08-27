@@ -25,3 +25,52 @@
 .linkDisabled:hover {
   text-decoration: none;
 }
+
+.menuWrapper {
+  position: relative;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 12;
+}
+
+.menuBtn {
+  background: none;
+  border: none;
+  font-size: 1.7rem;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 0.2em 0.5em;
+  transition: background 0.18s;
+}
+.menuBtn:hover,
+.menuBtn:focus {
+  background: #f2f2f2;
+}
+
+.menuPopover {
+  position: absolute;
+  right: 0;
+  top: 2.2rem;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 0.7rem;
+  box-shadow: 0 2px 12px #0002;
+  z-index: 20;
+  min-width: 140px;
+  list-style: none;
+  padding: 0.5em 0;
+  margin: 0;
+}
+.menuItem {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.6em 1.2em;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.menuItem:hover {
+  background: #ffe494;
+}

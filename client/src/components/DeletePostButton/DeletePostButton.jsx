@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import Button from "../Button.jsx";
 import useFetchWithAuth from "../../hooks/useFetchWithAuth";
 
-function DeletePostButton({ postId, onDelete }) {
+function DeletePostButton({ postId, onDelete, className }) {
   const { isLoading, error, performFetch } = useFetchWithAuth(
     `/post/${postId}`,
     () => {
@@ -18,7 +18,11 @@ function DeletePostButton({ postId, onDelete }) {
 
   return (
     <>
-      <Button onClick={handleDelete} disabled={isLoading || !postId}>
+      <Button
+        onClick={handleDelete}
+        className={className}
+        disabled={isLoading || !postId}
+      >
         {isLoading ? "Deleting..." : "Delete"}
       </Button>
       {error && (
@@ -33,6 +37,7 @@ function DeletePostButton({ postId, onDelete }) {
 DeletePostButton.propTypes = {
   postId: PropTypes.string.isRequired,
   onDelete: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default DeletePostButton;
