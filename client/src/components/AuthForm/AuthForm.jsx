@@ -7,6 +7,7 @@ import GoogleButton from "../GoogleButton/GoogleButton.jsx";
 import Button from "../Button.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import StateContext from "../../context/state/StateContext.js";
+import useSetError from "../../hooks/useSetError.js";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
@@ -28,7 +29,7 @@ function AuthForm({ type }) {
   const { error, isLoading, performFetch } = useFetch(`${endpoint}`, (res) => {
     if (isSignIn) {
       const { userId, username } = res;
-      setState({ userId, username });
+      setState((prev) => ({ ...prev, userId, username }));
       navigate("/home");
     } else {
       navigate("/verify-email");
@@ -50,9 +51,7 @@ function AuthForm({ type }) {
 
     performFetch(options);
   };
-  if (error) {
-    console.log(error);
-  }
+  useSetError(error);
 
   const renderFormFields = () => {
     if (isSignIn) {

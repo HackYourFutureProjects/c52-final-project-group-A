@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import StateContext from "../../context/state/StateContext.js";
 import style from "./Profile.module.css";
+import useSetError from "../../hooks/useSetError.js";
 
 function Profile() {
   const { username } = useParams();
@@ -26,10 +27,7 @@ function Profile() {
     };
     performFetch(options);
   }, [username]);
-
-  if (error) {
-    console.error(error);
-  }
+  useSetError(error);
 
   return (
     <main className={style.main}>

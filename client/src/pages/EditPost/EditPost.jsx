@@ -5,18 +5,18 @@ import useFetchWithAuth from "../../hooks/useFetchWithAuth";
 import EditPostForm from "../../components/EditPostForm/EditPostForm.jsx";
 import ProfileDash from "../../components/ProfileDash/ProfileDash.jsx";
 import style from "./EditPost.module.css";
+import useSetError from "../../hooks/useSetError.js";
 
 export default function EditPostPage() {
   const { id } = useParams();
   const { state: user } = useContext(StateContext);
   const [post, setPost] = useState(null);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   // GET hook for fetching post
   const {
     isLoading,
-    error: fetchError,
+    error,
     performFetch: fetchPost,
     cancelFetch,
   } = useFetchWithAuth(`/post/${id}`, (res) => setPost(res.post ?? res));
@@ -36,8 +36,6 @@ export default function EditPostPage() {
   }, [id]);
 
   const handleSave = (fields) => {
-    setError("");
-
     // eslint-disable-next-line no-unused-vars
     const { _id, __v, ...fieldsToSend } = fields;
 
@@ -47,6 +45,7 @@ export default function EditPostPage() {
       headers: { "Content-Type": "application/json" },
     });
   };
+  useSetError(error);
 
   // Author check
   if (!user || !user.userId) return <div>Loading user…</div>;
@@ -54,8 +53,6 @@ export default function EditPostPage() {
     return <div>Not authorized</div>;
 
   if (isLoading && !post) return <div>Loading…</div>;
-  if (fetchError)
-    return <div>Error: {String(fetchError.message || fetchError)}</div>;
   if (!post) return null;
 
   const showFollowBtn = user.userId !== post?.author?._id;
@@ -71,7 +68,6 @@ export default function EditPostPage() {
       <div className={style.postContainer}>
         <EditPostForm
           post={post}
-          error={error}
           onSave={handleSave}
           onCancel={() => navigate(`/post/${id}`)}
         />

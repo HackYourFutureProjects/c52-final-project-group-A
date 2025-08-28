@@ -5,7 +5,7 @@ import TextArea from "../TextArea/TextArea.jsx";
 import Button from "../Button.jsx";
 import style from "./EditProfileForm.module.css";
 
-export default function EditProfileForm({ profile, error, onSave, onCancel }) {
+export default function EditProfileForm({ profile, onSave, onCancel }) {
   const [form, setForm] = useState({
     first_name: profile?.first_name || "",
     last_name: profile?.last_name || "",
@@ -57,9 +57,6 @@ export default function EditProfileForm({ profile, error, onSave, onCancel }) {
         onChange={handleChange}
         className={style.textarea}
       />
-
-      {error && <div className={style.error}>{error}</div>}
-
       <div className={style.buttonGroup}>
         <Button type="submit" className={style.submitBtn}>
           Save
@@ -78,7 +75,6 @@ EditProfileForm.propTypes = {
     last_name: PropTypes.string,
     bio: PropTypes.string,
   }).isRequired,
-  error: PropTypes.string,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
