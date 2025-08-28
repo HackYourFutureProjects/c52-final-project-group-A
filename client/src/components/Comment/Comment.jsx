@@ -5,7 +5,6 @@ import style from "./Comment.module.css";
 
 function Comment({ comment }) {
   const createdAgo = timeAgoCalc(new Date(comment.created_at));
-  console.log(createdAgo);
 
   return (
     <article className={style.wrapper}>
@@ -17,6 +16,7 @@ function Comment({ comment }) {
       />
       <div className={style.commentSection}>
         <p>{comment.content}</p>
+        <p className={style.timestamp}>{createdAgo}</p>
       </div>
     </article>
   );
