@@ -58,7 +58,7 @@ const Explore = () => {
             </div>
           )}
           {exploreData?.trendingTags?.length > 0 && (
-            <div className={`${styles.trendingTagsSection} mb-8`}>
+            <div className={styles.trendingTagsSection}>
               <TrendingTags tags={exploreData.trendingTags} />
             </div>
           )}

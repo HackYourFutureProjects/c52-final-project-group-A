@@ -48,9 +48,9 @@
 
 /* Trending tags box */
 .trendingTagsSection {
-  background-color: #fff;
+  background-color: var(--color-white);
+  border-radius: var(--inner-border-radius);
   padding: 1rem;
-  border-radius: 0.5rem;
 }
 
 /* Title for sections */
