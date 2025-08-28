@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import StateContext from "../../context/state/StateContext.js";
 import { GoogleIcon } from "../icons/index.js";
+import useSetError from "../../hooks/useSetError.js";
 
 function GoogleButton() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function GoogleButton() {
     "/login/google-auth",
     (res) => {
       const { _id: userId, username } = res.user;
-      setState({ userId, username });
+      setState((prev) => ({ ...prev, userId, username }));
       navigate("/home"); // Redirect to landing page on success
     },
   );
@@ -40,10 +41,7 @@ function GoogleButton() {
       console.error("Google login error:", error);
     },
   });
-
-  if (error) {
-    console.error("Fetch error:", error);
-  }
+  useSetError(error);
 
   return (
     <Button

@@ -22,7 +22,7 @@ export default function LikeButton({ postId }) {
 
   useEffect(() => {
     fetchLikeStatus();
-    return () => cancelFetch && cancelFetch();
+    return cancelFetch();
   }, [postId]);
 
   // POST the like toggle
