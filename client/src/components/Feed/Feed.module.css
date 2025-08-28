@@ -1,0 +1,18 @@
+.postsGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.noPosts {
+  text-align: center;
+  padding: 4rem 0;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--inner-border-radius);
+  background-color: rgba(249, 250, 251, 0.5);
+  color: var(--color-dark-grey);
+}
+
+.noPostsSubtext {
+  font-size: 0.875rem;
+  color: var(--color-border);
+}

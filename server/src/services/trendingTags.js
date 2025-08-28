@@ -17,6 +17,6 @@ export async function getTrendingTags({ windowHours = 28, limit = 4 } = {}) {
     { $limit: limit },
   ]);
 
-  // Return tag names
-  return posts.map((t) => t._id);
+  // Return tag names as an array of objects
+  return posts.map((t) => ({ tag: t._id }));
 }

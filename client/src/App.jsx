@@ -12,6 +12,7 @@ import SandboxPage from "./pages/Sandbox.jsx";
 import PostPage from "./pages/Post/Post.jsx";
 import Fab from "./components/Fab/Fab.jsx";
 import EditPostPage from "./pages/EditPost/EditPost.jsx";
+import Explore from "./pages/Explore/Explore.jsx";
 import { useContext } from "react";
 import StateContext from "./context/state/StateContext.js";
 
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="/sandbox" element={<SandboxPage />} />
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/post/:id/edit" element={<EditPostPage />} />
+        <Route path="/explore" element={<Explore />} />
       </Routes>
       {!hideFabOn.includes(location.pathname) && <Fab>Create post</Fab>}
     </>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import StateContext from "./StateContext.js";
 import PropTypes from "prop-types";
 import useFetch from "../../hooks/useFetch.js";
@@ -18,7 +19,10 @@ const StateContextProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    performFetch();
+    const token = Cookies.get("bq_token");
+    if (token) {
+      performFetch();
+    }
 
     return () => {
       cancelFetch();
