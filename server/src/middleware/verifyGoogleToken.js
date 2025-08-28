@@ -41,7 +41,7 @@ export const verifyGoogleToken = async (req, res, next) => {
       });
     }
 
-    const { email, given_name, family_name, id } = payload;
+    const { email, given_name, family_name, id, picture } = payload;
 
     if (!email || !id) {
       return res.status(422).json({
@@ -55,6 +55,7 @@ export const verifyGoogleToken = async (req, res, next) => {
       profile: {
         first_name: given_name || "Unknown",
         last_name: family_name || "User",
+        avatar: picture || null,
       },
       google_id: id,
       username: generateUsername(),
