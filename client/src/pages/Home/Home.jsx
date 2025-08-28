@@ -10,7 +10,7 @@ function Home() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const { isLoading, error, performFetch, cancelFetch } = useFetch(
-    `/feed?page=${currentBatch}&limit=10`,
+    `/feed?batch=${currentBatch}&limit=10`,
     (response) => {
       if (currentBatch === 1) {
         setAllPosts(response.data.items);
@@ -63,46 +63,38 @@ function Home() {
 
   if (isLoading && currentBatch === 1) {
     return (
-      <div>
-        <div className={style.container}>
-          <div>Loading your feed...</div>
-        </div>
+      <div className={style.container}>
+        <div>Loading your feed...</div>
       </div>
     );
   }
 
   if (error && currentBatch === 1) {
     return (
-      <div>
-        <div className={style.container}>
-          <div>Error loading feed: {error.message || error}</div>
-        </div>
+      <div className={style.container}>
+        <div>Error loading feed: {error.message || error}</div>
       </div>
     );
   }
 
   if (allPosts.length === 0 && !isLoading) {
     return (
-      <div>
-        <div className={style.container}>
-          <h1>Your Feed</h1>
-          <div>No posts to show yet.</div>
-        </div>
+      <div className={style.container}>
+        <h1>Your Feed</h1>
+        <div>No posts to show yet.</div>
       </div>
     );
   }
 
   return (
-    <div>
-      <div className={style.container}>
-        <div>
-          {allPosts.map((post) => (
-            <Post key={post._id} post={post} />
-          ))}
-        </div>
-
-        {isLoadingMore && <div>Loading more posts...</div>}
+    <div className={style.container}>
+      <div>
+        {allPosts.map((post) => (
+          <Post key={post._id} post={post} />
+        ))}
       </div>
+
+      {isLoadingMore && <div>Loading more posts...</div>}
     </div>
   );
 }

@@ -12,9 +12,9 @@ const { FEED_WINDOW_HOURS } = config;
 export const getFeed = async (req, res) => {
   try {
     const userId = req.user._id;
-    const page = parseInt(req.query.page) || 1;
+    const batch = parseInt(req.query.batch) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
+    const skip = (batch - 1) * limit;
 
     if (!(await hasUserSignals(userId))) {
       const trending = await getTrendingPosts({
@@ -35,11 +35,11 @@ export const getFeed = async (req, res) => {
           mode: "cold-start",
           items: trending,
           pagination: {
-            currentPage: page,
-            totalPages: Math.ceil(totalTrending / limit),
+            currentBatch: batch,
+            totalBatches: Math.ceil(totalTrending / limit),
             totalItems: totalTrending,
-            hasNext: page * limit < totalTrending,
-            hasPrev: page > 1,
+            hasNext: batch * limit < totalTrending,
+            hasPrev: batch > 1,
           },
         },
       });
@@ -118,7 +118,7 @@ export const getFeed = async (req, res) => {
       { $limit: limit },
     ]);
 
-    if (recentPosts.length === 0 && page === 1) {
+    if (recentPosts.length === 0 && batch === 1) {
       // If no recent posts, fall back to trending
       const trending = await getTrendingPosts({
         windowHours: 28,
@@ -137,11 +137,11 @@ export const getFeed = async (req, res) => {
           mode: "cold-start",
           items: trending,
           pagination: {
-            currentPage: page,
-            totalPages: Math.ceil(totalTrending / limit),
+            currentBatch: batch,
+            totalBatches: Math.ceil(totalTrending / limit),
             totalItems: totalTrending,
-            hasNext: page * limit < totalTrending,
-            hasPrev: page > 1,
+            hasNext: batch * limit < totalTrending,
+            hasPrev: batch > 1,
           },
         },
       });
@@ -184,11 +184,11 @@ export const getFeed = async (req, res) => {
         mode: "personalized",
         items: homeFeed,
         pagination: {
-          currentPage: page,
-          totalPages: Math.ceil(totalPosts / limit),
+          currentBatch: batch,
+          totalBatches: Math.ceil(totalPosts / limit),
           totalItems: totalPosts,
-          hasNext: page * limit < totalPosts,
-          hasPrev: page > 1,
+          hasNext: batch * limit < totalPosts,
+          hasPrev: batch > 1,
         },
       },
     });
