@@ -2,6 +2,7 @@ import Post, { PostStatus, validatePost } from "../models/Post.js";
 import Comment, { CommentStatus } from "../models/Comment.js";
 import mongoose from "mongoose";
 import { logError } from "../util/logging.js";
+import User from "../models/User.js";
 
 export const getAllPosts = async (req, res) => {
   try {
@@ -96,6 +97,10 @@ export const createPost = async (req, res) => {
     }
 
     const newPost = await Post.create(candidate);
+    await User.updateOne(
+      { _id: req.user._id },
+      { $push: { posts: newPost._id } },
+    );
     const populated = await newPost.populate("author", "username email");
     res.status(201).json({ success: true, populated });
   } catch (error) {
@@ -199,6 +204,10 @@ export const deletePost = async (req, res) => {
     }
 
     await post.deleteOne();
+
+    // CASCADE deleting post id from user's post array
+    await User.updateOne({ _id: req.user._id }, { $pull: { posts: post._id } });
+
     res.json({ success: true, msg: "Post deleted" });
   } catch (error) {
     logError(error);
