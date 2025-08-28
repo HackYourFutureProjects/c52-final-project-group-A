@@ -46,7 +46,13 @@ function Nav() {
             showSearchBox ? style.navButtonActive : ""
           }`}
         >
-          <Button onClick={() => setShowSearchBox(true)}>
+          <Button
+            onClick={() => {
+              if (state.userId) {
+                setShowSearchBox((prev) => !prev);
+              }
+            }}
+          >
             {mobile ? <SearchIcon style={style.searchIcon} /> : "Search"}
           </Button>
         </li>

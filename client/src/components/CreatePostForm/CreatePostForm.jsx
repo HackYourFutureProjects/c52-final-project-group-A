@@ -43,6 +43,7 @@ export default function CreatePostForm({ onCreated }) {
   return (
     <main className={style.main}>
       <form onSubmit={onSubmit} className={style.form}>
+        <h1 className={style.title}>Create a new post</h1>
         <InputField
           name="title"
           placeholder="Title*"

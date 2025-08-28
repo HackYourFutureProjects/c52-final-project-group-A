@@ -14,7 +14,7 @@
   right: 0;
   background: var(--color-orange);
   color: var(--color-white);
-  padding: 0.3em;
+  padding: 0.3em 0.36em;
   font-size: 0.6em;
   font-weight: 500;
   border-radius: var(--circle-border-radius);

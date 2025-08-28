@@ -15,16 +15,19 @@ import EditPostPage from "./pages/EditPost/EditPost.jsx";
 import Explore from "./pages/Explore/Explore.jsx";
 import { useContext } from "react";
 import StateContext from "./context/state/StateContext.js";
+import EditProfile from "./pages/EditProfile/EditProfile.jsx";
 
 const App = () => {
   const location = useLocation();
-  const { showSearchBox, setShowSearchBox } = useContext(StateContext);
+  const { showSearchBox, setShowSearchBox, state } = useContext(StateContext);
   const hideFabOn = ["/", "/login", "/register", "/new-post"]; // No FAB button here
 
   return (
     <>
-      <Nav />
-      {showSearchBox && <SearchBox onClose={() => setShowSearchBox(false)} />}
+      <Nav setShowSearchBox={setShowSearchBox} showSearchBox={showSearchBox} />
+      {showSearchBox && state.userId && (
+        <SearchBox onClose={() => setShowSearchBox(false)} />
+      )}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />
@@ -37,8 +40,9 @@ const App = () => {
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/post/:id/edit" element={<EditPostPage />} />
         <Route path="/explore" element={<Explore />} />
+        <Route path="/user/:username/edit" element={<EditProfile />} />
       </Routes>
-      {!hideFabOn.includes(location.pathname) && <Fab>Create post</Fab>}
+      {!hideFabOn.includes(location.pathname) && <Fab />}
     </>
   );
 };

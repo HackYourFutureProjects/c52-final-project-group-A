@@ -11,7 +11,7 @@ function Drawer({ name, value, options, placeholder, onChange }) {
         onChange={onChange}
         className={style.input}
       >
-        <option value="">{placeholder}</option>
+        {placeholder && <option value="">{placeholder}</option>}
         {options.length > 0 &&
           options.map((option) => (
             <option key={option} value={option}>
@@ -27,7 +27,7 @@ Drawer.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
-  placeholder: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 
