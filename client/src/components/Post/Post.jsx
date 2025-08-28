@@ -15,8 +15,8 @@ function Post({ post, className, dashboard = true }) {
   const linkDisabled = location.pathname === `/post/${post._id}`;
 
   // Follow button visibility
-  const userData = useContext(StateContext);
-  const showFollowBtn = userData?.userId !== post.author._id;
+  const { state } = useContext(StateContext);
+  const showFollowBtn = state?.userId !== post.author._id;
 
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
@@ -24,7 +24,7 @@ function Post({ post, className, dashboard = true }) {
         <ProfileDash
           size="sm"
           border="bottom"
-          followBtn={!showFollowBtn}
+          followBtn={showFollowBtn}
           user={post.author}
         />
       )}
