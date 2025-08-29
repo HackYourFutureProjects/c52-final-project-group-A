@@ -8,7 +8,7 @@ const useSetError = (error) => {
     if (error && error.message) {
       setState((prev) => ({ ...prev, error: error?.message }));
     }
-  }, [error, error?.message, setState]);
+  }, [error, setState]);
 };
 
 export default useSetError;
