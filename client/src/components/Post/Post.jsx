@@ -2,14 +2,14 @@ import ProfileDash from "../ProfileDash/ProfileDash.jsx";
 import PostFooter from "../PostFooter/PostFooter.jsx";
 import style from "./Post.module.css";
 import PropTypes from "prop-types";
-// import timeAgoCalc from "../../util/timeAgoCalc.js";
+import timeAgoCalc from "../../util/timeAgoCalc.js";
 import { useContext } from "react";
 import StateContext from "../../context/state/StateContext.js";
 import { Link, useLocation } from "react-router-dom";
 
 function Post({ post, className, dashboard = true }) {
-  // const publishedAgo = timeAgoCalc(new Date(post.published_at));  //a value but never used
-  // console.log(publishedAgo);
+const publishedAgo = timeAgoCalc(new Date(post.published_at));
+
 
   const location = useLocation();
   const linkDisabled = location.pathname === `/post/${post._id}`;
@@ -25,7 +25,7 @@ function Post({ post, className, dashboard = true }) {
         <ProfileDash
           size="sm"
           border="bottom"
-          followBtn={!showFollowBtn}
+          followBtn={showFollowBtn}
           user={post.author}
         />
       )}
@@ -38,6 +38,7 @@ function Post({ post, className, dashboard = true }) {
             <h1>{post.title}</h1>
           </header>
           <p className={style.postContent}>{post.content}</p>
+          <p className={style.timestamp}>{publishedAgo}</p>
         </section>
       </Link>
       <PostFooter

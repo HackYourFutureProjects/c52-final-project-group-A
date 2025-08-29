@@ -95,6 +95,11 @@ function ProfileDash({
           )}
         </div>
       </div>
+      {size === "md" && (
+        <p className={style.bio}>
+          {profile.bio ?? "This user has not set a bio yet."}
+        </p>
+      )}
     </article>
   );
 }
