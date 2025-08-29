@@ -31,7 +31,7 @@ function Profile() {
   }
 
   return (
-    <main>
+    <main className={style.main}>
       <ProfileDash size="lg" user={userData} followBtn={!isUser} />
       {isUser && (
         <div className={style.editProfileBtnWrap}>
@@ -43,7 +43,7 @@ function Profile() {
           </Button>
         </div>
       )}
-      <div>
+      <div className={style.postsContainer}>
         {userData?.posts?.length > 0 ? (
           userData.posts.map((post) => <Post key={post._id} post={post} />)
         ) : (
