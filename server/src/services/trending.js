@@ -4,6 +4,7 @@ export async function getTrendingPosts({
   windowHours = 28,
   limit = 10,
   capPerAuthor = 2,
+  skip = 0,
 } = {}) {
   const since = new Date(Date.now() - windowHours * 3600 * 1000);
 
@@ -18,8 +19,25 @@ export async function getTrendingPosts({
       },
     },
     {
+      $lookup: {
+        from: "users",
+        localField: "author",
+        foreignField: "_id",
+        as: "authorData",
+      },
+    },
+    {
+      $unwind: "$authorData",
+    },
+    {
       $addFields: {
         likeCount: { $size: "$likes" },
+        author: {
+          _id: "$authorData._id",
+          username: "$authorData.username",
+          score: "$authorData.score",
+          profile: "$authorData.profile",
+        },
       },
     },
     {
@@ -40,7 +58,9 @@ export async function getTrendingPosts({
   const decayRate = Math.log(2) / halfLifeHours;
 
   const scored = rawPosts.map((post) => {
-    const hoursAgo = Date.now() - new Date(post.published_at).getTime(); //MILLISECONDS_PER_HOUR;
+    const msPerHour = 1000 * 60 * 60;
+    const hoursAgo =
+      (Date.now() - new Date(post.published_at).getTime()) / msPerHour;
     const decay = Math.exp(-decayRate * hoursAgo);
     return { ...post, score: post.likeCount * decay };
   });
@@ -51,10 +71,18 @@ export async function getTrendingPosts({
   // Cap per author for variety
   const seen = new Map();
   const items = [];
+  let skipped = 0;
+
   for (const post of scored) {
-    const authorId = String(post.author);
+    const authorId = String(post.author._id);
     const count = seen.get(authorId) || 0;
     if (count < capPerAuthor) {
+      if (skipped < skip) {
+        skipped++;
+        seen.set(authorId, count + 1);
+        continue;
+      }
+
       items.push(post);
       seen.set(authorId, count + 1);
       if (items.length >= limit) break;
