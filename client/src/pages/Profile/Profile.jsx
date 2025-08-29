@@ -1,10 +1,10 @@
+import { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import ProfileDash from "../../components/ProfileDash/ProfileDash.jsx";
-import { useEffect, useState } from "react";
 import Post from "../../components/Post/Post.jsx";
 import useFetch from "../../hooks/useFetch.js";
-import { useParams } from "react-router-dom";
-import { useContext } from "react";
 import StateContext from "../../context/state/StateContext.js";
+import Button from "../../components/Button.jsx";
 import style from "./Profile.module.css";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
 
@@ -22,13 +22,13 @@ function Profile() {
   useEffect(() => {
     const options = {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     };
     console.log(username);
     performFetch(options);
   }, [username]);
+
+  const navigate = useNavigate();
 
   if (error) {
     console.error(error);
@@ -41,11 +41,20 @@ function Profile() {
         user={userData}
         followBtn={!isUser}
       />
+
+      {isUser && (
+        <div className={style.editProfileBtnWrap}>
+          <Button
+            className={style.editProfileBtn}
+            onClick={() => navigate(`/user/${username}/edit`)}
+          >
+            Edit Profile
+          </Button>
+        </div>
+      )}
       <div className={style.postsContainer}>
-        {userData &&
-        Array.isArray(userData.posts) &&
-        userData.posts.length > 0 ? (
-          userData?.posts?.map((post) => <Post key={post._id} post={post} />)
+        {userData?.posts?.length > 0 ? (
+          userData.posts.map((post) => <Post key={post._id} post={post} />)
         ) : (
           <p>No posts found.</p>
         )}
