@@ -18,7 +18,6 @@ function Post({ post, className, dashboard = true }) {
     userData?.state?.userId &&
     String(userData.state.userId) !== String(post.author._id);
 
-
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
       {dashboard && (
