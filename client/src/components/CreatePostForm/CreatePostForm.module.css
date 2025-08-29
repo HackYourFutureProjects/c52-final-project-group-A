@@ -13,6 +13,10 @@
   padding: 2.5rem;
   box-shadow: 0 0 10px var(--color-border);
 }
+.title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
 .optionsContainer {
   display: flex;
   justify-content: center;

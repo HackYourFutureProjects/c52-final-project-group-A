@@ -5,17 +5,19 @@ import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
 import { useContext } from "react";
 import StateContext from "../../context/state/StateContext.js";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Post({ post, className, dashboard = true }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
-  console.log(publishedAgo);
 
+  const location = useLocation();
+  const linkDisabled = location.pathname === `/post/${post._id}`;
   const userData = useContext(StateContext);
 
   const showFollowBtn =
     userData?.state?.userId &&
     String(userData.state.userId) !== String(post.author._id);
+
 
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
@@ -27,14 +29,18 @@ function Post({ post, className, dashboard = true }) {
           user={post.author}
         />
       )}
-      <section className={style.contentContainer}>
-        <Link to={`/post/${post._id}`}>
+      <Link
+        className={linkDisabled ? style.linkDisabled : style.link}
+        to={`/post/${post._id}`}
+      >
+        <section className={style.contentContainer}>
           <header className={style.headerContainer}>
             <h1>{post.title}</h1>
           </header>
           <p className={style.postContent}>{post.content}</p>
-        </Link>
-      </section>
+          <p className={style.timestamp}>{publishedAgo}</p>
+        </section>
+      </Link>
       <PostFooter postId={post._id} tags={post.tags} />
     </article>
   );

@@ -14,3 +14,17 @@
 .postContent {
   padding: 0.3rem;
 }
+.timestamp {
+  text-align: end;
+}
+.link,
+.linkDisabled {
+  color: var(--color-black);
+}
+.linkDisabled {
+  pointer-events: none;
+}
+.link:hover,
+.linkDisabled:hover {
+  text-decoration: none;
+}

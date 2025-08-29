@@ -44,7 +44,10 @@ menu {
 
 a {
   text-decoration: none;
-  color: inherit;
+  color: var(--color-orange);
+}
+a:hover {
+  text-decoration: underline;
 }
 
 button,
@@ -53,6 +56,7 @@ textarea,
 select {
   font-family: inherit;
   font-weight: inherit;
+  font-size: inherit;
   border: none;
   background: none;
   outline: none;
@@ -64,6 +68,9 @@ textarea:focus,
 select:hover,
 select:focus {
   border-color: var(--color-dark-grey);
+}
+select {
+  cursor: pointer;
 }
 button {
   cursor: pointer;
@@ -79,7 +86,7 @@ button:disabled {
 body {
   font-family: var(--font-sans), sans-serif;
   font-weight: 500;
-  padding: 0 1rem;
+  padding: 0 10rem;
 }
 
 @media (max-width: 768px) {
