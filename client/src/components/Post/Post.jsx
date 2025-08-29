@@ -12,10 +12,11 @@ function Post({ post, className, dashboard = true }) {
 
   const location = useLocation();
   const linkDisabled = location.pathname === `/post/${post._id}`;
+  const userData = useContext(StateContext);
 
-  // Follow button visibility
-  const { state } = useContext(StateContext);
-  const showFollowBtn = state?.userId !== post.author._id;
+  const showFollowBtn =
+    userData?.state?.userId &&
+    String(userData.state.userId) !== String(post.author._id);
 
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
