@@ -36,22 +36,22 @@ function Profile() {
 
   return (
     <main className={style.main}>
-<ProfileDash
-  size={mobile ? "md" : "lg"}
-  user={userData}
-  followBtn={!isUser}
-/>
+      <ProfileDash
+        size={mobile ? "md" : "lg"}
+        user={userData}
+        followBtn={!isUser}
+      />
 
-{isUser && (
-  <div className={style.editProfileBtnWrap}>
-    <Button
-      className={style.editProfileBtn}
-      onClick={() => navigate(`/user/${username}/edit`)}
-    >
-      Edit Profile
-    </Button>
-  </div>
-)}
+      {isUser && (
+        <div className={style.editProfileBtnWrap}>
+          <Button
+            className={style.editProfileBtn}
+            onClick={() => navigate(`/user/${username}/edit`)}
+          >
+            Edit Profile
+          </Button>
+        </div>
+      )}
       <div className={style.postsContainer}>
         {userData?.posts?.length > 0 ? (
           userData.posts.map((post) => <Post key={post._id} post={post} />)
