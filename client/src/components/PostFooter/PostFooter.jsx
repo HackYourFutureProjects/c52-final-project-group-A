@@ -6,9 +6,12 @@ import { CommentIcon, ShareIcon, MoreIcon } from "../icons/index.js";
 import LikeButton from "../LikeButton/LikeButton.jsx";
 import { useNavigate } from "react-router-dom";
 import DeletePostButton from "../DeletePostButton/DeletePostButton.jsx";
+import { useContext } from "react";
+import StateContext from "../../context/state/StateContext.js";
 
-function PostFooter({ postId, tags, authorId, currentUserId }) {
-  const isAuthor = currentUserId?.toString() === authorId?.toString();
+function PostFooter({ postId, tags, authorId }) {
+  const { state } = useContext(StateContext);
+  const isAuthor = state.userId?.toString() === authorId?.toString();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
@@ -52,8 +55,9 @@ function PostFooter({ postId, tags, authorId, currentUserId }) {
         </section>
       </section>
       {isAuthor && (
-        <span style={{ position: "relative" }}>
+        <>
           <Button
+            style={{ position: "relative" }}
             icon={<MoreIcon style={style.icon} />}
             onClick={() => setMenuOpen((open) => !open)}
           />
@@ -71,7 +75,7 @@ function PostFooter({ postId, tags, authorId, currentUserId }) {
               </DeletePostButton>
             </div>
           )}
-        </span>
+        </>
       )}
     </footer>
   );
@@ -81,7 +85,6 @@ PostFooter.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
   postId: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
-  currentUserId: PropTypes.string.isRequired,
 };
 
 export default PostFooter;
