@@ -19,8 +19,6 @@ function Post({ post, className, dashboard = true }) {
   const showFollowBtn = userData?.userId !== post.author._id;
   const currentUserId = userData.state?.userId;
 
-  console.log("userData в Post:", userData);
-
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
       {dashboard && (

@@ -9,14 +9,6 @@ import DeletePostButton from "../DeletePostButton/DeletePostButton.jsx";
 
 function PostFooter({ postId, tags, authorId, currentUserId }) {
   const isAuthor = currentUserId?.toString() === authorId?.toString();
-  console.log(
-    "currentUserId:",
-    currentUserId,
-    "authorId:",
-    authorId,
-    "isAuthor:",
-    isAuthor,
-  );
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
