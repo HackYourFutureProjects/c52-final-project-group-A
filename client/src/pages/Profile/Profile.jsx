@@ -6,22 +6,26 @@ import useFetch from "../../hooks/useFetch.js";
 import StateContext from "../../context/state/StateContext.js";
 import Button from "../../components/Button.jsx";
 import style from "./Profile.module.css";
+import useWindowWidth from "../../hooks/useWindowWidth.js";
 
 function Profile() {
   const { username } = useParams();
   const [userData, setUserData] = useState(null);
   const { state } = useContext(StateContext);
   const isUser = state.username === username;
+  const mobile = useWindowWidth(768);
 
   const { performFetch, error } = useFetch(`/user/${username}`, (response) => {
     setUserData(response.user);
   });
 
   useEffect(() => {
-    performFetch({
+    const options = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-    });
+    };
+    console.log(username);
+    performFetch(options);
   }, [username]);
 
   const navigate = useNavigate();
@@ -32,17 +36,22 @@ function Profile() {
 
   return (
     <main className={style.main}>
-      <ProfileDash size="lg" user={userData} followBtn={!isUser} />
-      {isUser && (
-        <div className={style.editProfileBtnWrap}>
-          <Button
-            className={style.editProfileBtn}
-            onClick={() => navigate(`/user/${username}/edit`)}
-          >
-            Edit Profile
-          </Button>
-        </div>
-      )}
+<ProfileDash
+  size={mobile ? "md" : "lg"}
+  user={userData}
+  followBtn={!isUser}
+/>
+
+{isUser && (
+  <div className={style.editProfileBtnWrap}>
+    <Button
+      className={style.editProfileBtn}
+      onClick={() => navigate(`/user/${username}/edit`)}
+    >
+      Edit Profile
+    </Button>
+  </div>
+)}
       <div className={style.postsContainer}>
         {userData?.posts?.length > 0 ? (
           userData.posts.map((post) => <Post key={post._id} post={post} />)
