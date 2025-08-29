@@ -46,10 +46,11 @@
 }
 
 .menuPopover {
+  background: yellow;
   position: absolute;
   top: 2.2em;
   right: 0;
-  z-index: 10;
+  z-index: 1000;
   background: #acabab;
   border-radius: 0.7em;
   padding: 0.3em 0.5em;

@@ -180,36 +180,57 @@ export const updatePost = async (req, res) => {
   }
 };
 
-// Delete Post endpoint
+// Delete Post endpoint with transaction
 export const deletePost = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      await session.abortTransaction();
+      session.endSession();
       return res.status(400).json({ success: false, msg: "Invalid post ID" });
     }
 
-    const post = await Post.findById(req.params.id);
-    if (!post)
+    const post = await Post.findById(req.params.id).session(session);
+    if (!post) {
+      await session.abortTransaction();
+      session.endSession();
       return res.status(404).json({ success: false, msg: "Post not found" });
+    }
 
     if (!req.user || !req.user._id) {
+      await session.abortTransaction();
+      session.endSession();
       return res
         .status(401)
         .json({ success: false, msg: "User not authenticated" });
     }
 
     if (post.author.toString() !== req.user._id.toString()) {
+      await session.abortTransaction();
+      session.endSession();
       return res
         .status(403)
         .json({ success: false, msg: "Not authorized to delete this post" });
     }
 
-    await post.deleteOne();
+    // Delete post
+    await Post.deleteOne({ _id: post._id }).session(session);
 
-    // CASCADE deleting post id from user's post array
-    await User.updateOne({ _id: req.user._id }, { $pull: { posts: post._id } });
+    // Delete post id from user
+    await User.updateOne(
+      { _id: req.user._id },
+      { $pull: { posts: post._id } },
+    ).session(session);
+
+    await session.commitTransaction();
+    session.endSession();
 
     res.json({ success: true, msg: "Post deleted" });
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
     logError(error);
     res.status(500).json({ success: false, msg: "Server error" });
   }
