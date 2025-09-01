@@ -83,7 +83,7 @@ const useFetch = (route, onReceived) => {
     };
 
     fetchData().catch((error) => {
-      setError(error.message);
+      setError(error?.message || String(error));
       setIsLoading(false);
     });
   };

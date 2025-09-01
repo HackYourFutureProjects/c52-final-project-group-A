@@ -3,11 +3,11 @@ import useFetch from "../../hooks/useFetch";
 import styles from "./EmailVerificationForm.module.css";
 import { useNavigate } from "react-router-dom";
 import Button from "../Button.jsx";
-import StateContext from "../../context/state/StateContext.js";
+import StatusContext from "../../context/status/StatusContext.js";
 
 function EmailVerificationForm() {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
-  const { setState } = useContext(StateContext);
+  const { setStatus } = useContext(StatusContext);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ function EmailVerificationForm() {
     const verificationCode = code.join("");
 
     if (verificationCode.length !== 6) {
-      setState((prev) => ({ ...prev, error: "Please enter a 6-digit code." }));
+      setStatus((prev) => ({ ...prev, error: "Please enter a 6-digit code." }));
       return;
     }
 

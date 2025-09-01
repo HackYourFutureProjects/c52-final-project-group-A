@@ -55,7 +55,7 @@ function Home() {
     ) {
       setCurrentBatch((prev) => prev + 1);
     }
-  }, [hasMore, state, isLoadingMore]);
+  }, [hasMore, state.isLoading, isLoadingMore]);
 
   // Add scroll listener
   useEffect(() => {
