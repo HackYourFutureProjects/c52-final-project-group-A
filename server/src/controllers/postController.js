@@ -97,7 +97,6 @@ export const createPost = async (req, res) => {
     const errors = validatePost(candidate);
     if (errors.length) {
       await session.abortTransaction();
-      session.endSession();
       return res.status(400).json({ success: false, msg: errors.join("; ") });
     }
 
@@ -110,7 +109,6 @@ export const createPost = async (req, res) => {
     );
 
     await session.commitTransaction();
-    session.endSession();
 
     const populated = await Post.findById(newPost._id).populate(
       "author",
@@ -119,9 +117,10 @@ export const createPost = async (req, res) => {
     res.status(201).json({ success: true, populated });
   } catch (error) {
     await session.abortTransaction();
-    session.endSession();
     logError(error);
     res.status(500).json({ success: false, msg: "Server error" });
+  } finally {
+    session.endSession();
   }
 };
 
