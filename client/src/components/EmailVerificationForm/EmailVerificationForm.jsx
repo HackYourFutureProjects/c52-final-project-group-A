@@ -68,7 +68,13 @@ function EmailVerificationForm() {
         </p>
 
         {displayError && (
-          <div className={styles.error}>{displayError.message}</div>
+          <div>
+            {typeof displayError === "object" &&
+            displayError !== null &&
+            "message" in displayError
+              ? displayError.message
+              : displayError}
+          </div>
         )}
 
         <div className={styles.form}>
