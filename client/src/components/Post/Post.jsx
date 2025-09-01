@@ -4,18 +4,17 @@ import style from "./Post.module.css";
 import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
 import { useContext } from "react";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
 import { Link, useLocation } from "react-router-dom";
 
 function Post({ post, className, dashboard = true }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
   const location = useLocation();
   const linkDisabled = location.pathname === `/post/${post._id}`;
-  const userData = useContext(StateContext);
+  const { user } = useContext(UserContext);
 
   const showFollowBtn =
-    userData?.state?.userId &&
-    String(userData.state.userId) !== String(post.author._id);
+    user?.userId && String(user.userId) !== String(post.author._id);
 
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>

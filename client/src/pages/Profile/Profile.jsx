@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import ProfileDash from "../../components/ProfileDash/ProfileDash.jsx";
 import Post from "../../components/Post/Post.jsx";
 import useFetch from "../../hooks/useFetch.js";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
 import Button from "../../components/Button.jsx";
 import style from "./Profile.module.css";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
@@ -11,8 +11,8 @@ import useWindowWidth from "../../hooks/useWindowWidth.js";
 function Profile() {
   const { username } = useParams();
   const [userData, setUserData] = useState(null);
-  const { state } = useContext(StateContext);
-  const isUser = state.username === username;
+  const { user } = useContext(UserContext);
+  const isUser = user.username === username;
   const mobile = useWindowWidth(768);
   const navigate = useNavigate();
 

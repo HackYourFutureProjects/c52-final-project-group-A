@@ -4,18 +4,18 @@ import Button from "../Button.jsx";
 import useFetch from "../../hooks/useFetch.js";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
 import StatusContext from "../../context/status/StatusContext.js";
 import { GoogleIcon } from "../icons/index.js";
 
 function GoogleButton() {
   const navigate = useNavigate();
-  const { setState } = useContext(StateContext);
+  const { setUser } = useContext(UserContext);
   const { setStatus } = useContext(StatusContext);
 
   const { performFetch } = useFetch("/login/google-auth", (res) => {
     const { _id: userId, username } = res.user;
-    setState((prev) => ({ ...prev, userId, username }));
+    setUser({ userId, username });
     navigate("/home"); // Redirect to landing page on success
   });
 

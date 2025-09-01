@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
 import useFetch from "../../hooks/useFetch";
 import EditPostForm from "../../components/EditPostForm/EditPostForm.jsx";
 import ProfileDash from "../../components/ProfileDash/ProfileDash.jsx";
@@ -8,7 +8,7 @@ import style from "./EditPost.module.css";
 
 export default function EditPostPage() {
   const { id } = useParams();
-  const { state: user } = useContext(StateContext);
+  const { user } = useContext(UserContext);
   const [post, setPost] = useState(null);
   const navigate = useNavigate();
 
@@ -41,7 +41,6 @@ export default function EditPostPage() {
   };
 
   // Author check
-  if (!user || !user.userId) return <div>Loading user…</div>;
   if (post && post.author && post.author._id !== user.userId)
     return <div>Not authorized</div>;
 
