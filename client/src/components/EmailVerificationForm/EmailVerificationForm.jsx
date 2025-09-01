@@ -15,7 +15,9 @@ function EmailVerificationForm() {
     isLoading,
     error: fetchError,
     performFetch,
-  } = useFetch("/register/verify");
+  } = useFetch("/register/verify", () => {
+    navigate("/login");
+  });
 
   const handleChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
@@ -52,9 +54,6 @@ function EmailVerificationForm() {
       body: JSON.stringify({
         verificationCode,
       }),
-      onSuccess: () => {
-        navigate("/login");
-      },
     });
   };
 
