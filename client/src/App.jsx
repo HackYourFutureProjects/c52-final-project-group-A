@@ -22,7 +22,7 @@ import Loading from "./components/Loading/Loading.jsx";
 const App = () => {
   const location = useLocation();
   const { user } = useContext(UserContext);
-  const { status, showSearchBox, setShowSearchBox } = useContext(StatusContext);
+  const { isLoading, showSearchBox, setShowSearchBox } = useContext(StatusContext);
   const hideFabOn = ["/", "/login", "/register", "/new-post"]; // No FAB button here
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   useEffect(() => {
@@ -56,7 +56,7 @@ const App = () => {
         <Route path="/post/:id/edit" element={<EditPostPage />} />
         <Route path="/user/:username/edit" element={<EditProfile />} />
       </Routes>
-      <Loading x={mousePos.x} y={mousePos.y} />
+      {isLoading && <Loading x={mousePos.x} y={mousePos.y} />}
       {!hideFabOn.includes(location.pathname) && <Fab />}
       {status.error && <Error message={status.error} />}
     </>
