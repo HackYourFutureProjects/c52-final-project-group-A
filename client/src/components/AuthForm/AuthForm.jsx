@@ -7,7 +7,6 @@ import GoogleButton from "../GoogleButton/GoogleButton.jsx";
 import Button from "../Button.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import StateContext from "../../context/state/StateContext.js";
-import useSetError from "../../hooks/useSetError.js";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
@@ -26,7 +25,7 @@ function AuthForm({ type }) {
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const endpoint = isSignIn ? "/login" : "/register";
-  const { error, isLoading, performFetch } = useFetch(`${endpoint}`, (res) => {
+  const { performFetch } = useFetch(`${endpoint}`, (res) => {
     if (isSignIn) {
       const { userId, username } = res;
       setState((prev) => ({ ...prev, userId, username }));
@@ -51,7 +50,6 @@ function AuthForm({ type }) {
 
     performFetch(options);
   };
-  useSetError(error);
 
   const renderFormFields = () => {
     if (isSignIn) {
@@ -150,11 +148,7 @@ function AuthForm({ type }) {
         )}
         <form onSubmit={handleSubmit} className={style.form}>
           {renderFormFields()}
-          <Button
-            type="submit"
-            className={style.submitBtn}
-            disabled={isLoading}
-          >
+          <Button type="submit" className={style.submitBtn}>
             {isSignIn ? "Log in" : "Continue"}
           </Button>
         </form>

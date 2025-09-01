@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext } from "react";
+import StatusContext from "../context/status/StatusContext.js";
 
 /**
  * Our useFetch hook should be used for all communication with the server.
@@ -8,8 +9,6 @@ import { useState } from "react";
  *
  * Our hook will give you an object with the properties:
  *
- * isLoading - true if the fetch is still in progress
- * error - will contain an Error object if something went wrong
  * performFetch - this function will trigger the fetching. It is up to the user of the hook to determine when to do this!
  * cancelFetch - this function will cancel the fetch, call it when your component is unmounted
  */
@@ -34,8 +33,13 @@ const useFetch = (route, onReceived) => {
     );
   }
 
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const { setStatus } = useContext(StatusContext);
+  const setError = (error) => {
+    setStatus((prev) => ({ ...prev, error: error }));
+  };
+  const setIsLoading = (isLoading) => {
+    setStatus((prev) => ({ ...prev, isLoading }));
+  };
 
   // Add any args given to the function to the fetch function
   const performFetch = (options) => {
@@ -79,12 +83,12 @@ const useFetch = (route, onReceived) => {
     };
 
     fetchData().catch((error) => {
-      setError(error);
+      setError(error.message);
       setIsLoading(false);
     });
   };
 
-  return { isLoading, error, performFetch, cancelFetch };
+  return { performFetch, cancelFetch };
 };
 
 export default useFetch;

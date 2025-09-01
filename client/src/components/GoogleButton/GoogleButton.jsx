@@ -3,24 +3,19 @@ import style from "./GoogleButton.module.css";
 import Button from "../Button.jsx";
 import useFetch from "../../hooks/useFetch.js";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import StateContext from "../../context/state/StateContext.js";
 import { GoogleIcon } from "../icons/index.js";
-import useSetError from "../../hooks/useSetError.js";
 
 function GoogleButton() {
   const navigate = useNavigate();
   const { setState } = useContext(StateContext);
-  const [googleError, setGoogleError] = useState(null);
 
-  const { performFetch, isLoading, error } = useFetch(
-    "/login/google-auth",
-    (res) => {
-      const { _id: userId, username } = res.user;
-      setState((prev) => ({ ...prev, userId, username }));
-      navigate("/home"); // Redirect to landing page on success
-    },
-  );
+  const { performFetch } = useFetch("/login/google-auth", (res) => {
+    const { _id: userId, username } = res.user;
+    setState((prev) => ({ ...prev, userId, username }));
+    navigate("/home"); // Redirect to landing page on success
+  });
 
   const handleLoginSuccess = async (response) => {
     const options = {
@@ -39,21 +34,17 @@ function GoogleButton() {
   const googleLogin = useGoogleLogin({
     onSuccess: handleLoginSuccess,
     onError: (err) => {
-      setGoogleError(err);
+      setState((prev) => ({ ...prev, error: err?.message }));
     },
   });
-
-  const displayError = googleError || error;
-  useSetError(displayError);
 
   return (
     <Button
       onClick={googleLogin}
       icon={<GoogleIcon style={style.googleLogo} />}
       className={style.googleButton}
-      disabled={isLoading}
     >
-      {isLoading ? "Signing in..." : "Continue with Google"}
+      Continue with Google
     </Button>
   );
 }

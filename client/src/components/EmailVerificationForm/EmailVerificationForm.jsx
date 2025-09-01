@@ -1,21 +1,17 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import useFetch from "../../hooks/useFetch";
 import styles from "./EmailVerificationForm.module.css";
 import { useNavigate } from "react-router-dom";
 import Button from "../Button.jsx";
-import useSetError from "../../hooks/useSetError.js";
+import StateContext from "../../context/state/StateContext.js";
 
 function EmailVerificationForm() {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
-  const [error, setError] = useState("");
+  const { setState } = useContext(StateContext);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
-  const {
-    isLoading,
-    error: fetchError,
-    performFetch,
-  } = useFetch("/register/verify", () => {
+  const { performFetch } = useFetch("/register/verify", () => {
     navigate("/login");
   });
 
@@ -43,11 +39,9 @@ function EmailVerificationForm() {
     const verificationCode = code.join("");
 
     if (verificationCode.length !== 6) {
-      setError("Please enter all 6 digits");
+      setState((prev) => ({ ...prev, error: "Please enter a 6-digit code." }));
       return;
     }
-
-    setError("");
 
     performFetch({
       method: "POST",
@@ -56,10 +50,6 @@ function EmailVerificationForm() {
       }),
     });
   };
-
-  // Show fetch error or local error
-  const displayError = fetchError || error;
-  useSetError(displayError);
 
   return (
     <div className={styles.wrapper}>
@@ -81,17 +71,12 @@ function EmailVerificationForm() {
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 className={styles.codeInput}
                 autoComplete="off"
-                disabled={isLoading}
               />
             ))}
           </div>
 
-          <Button
-            onClick={handleSubmit}
-            className={styles.submitBtn}
-            disabled={isLoading}
-          >
-            {isLoading ? "Verifying..." : "Verify Code"}
+          <Button onClick={handleSubmit} className={styles.submitBtn}>
+            Verify Code
           </Button>
         </div>
       </div>

@@ -7,7 +7,6 @@ const StateContextProvider = ({ children }) => {
   const stateInit = {
     userId: "",
     username: "",
-    error: "",
   };
 
   const [state, setState] = useState(stateInit);
