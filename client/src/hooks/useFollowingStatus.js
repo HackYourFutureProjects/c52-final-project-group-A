@@ -11,7 +11,9 @@ const notifyListeners = (userId, status) => {
 export const useFollowingStatus = (userId) => {
   const { state } = useContext(StateContext);
 
-  const [isFollowing, setIsFollowing] = useState(!!state.userId);
+  const [isFollowing, setIsFollowing] = useState(
+    state.userId ? followingStatusMap.get(userId) || false : false,
+  );
 
   useEffect(() => {
     if (!state.userId) {
@@ -32,7 +34,7 @@ export const useFollowingStatus = (userId) => {
     (newStatus) => {
       if (!state.userId) return;
 
-      followingStatusMap.set(userId, newStatus); // Записываем, но не используем
+      followingStatusMap.set(userId, newStatus);
       setIsFollowing(newStatus);
       notifyListeners(userId, newStatus);
     },
