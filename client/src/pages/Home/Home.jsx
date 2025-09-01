@@ -80,8 +80,8 @@ function Home() {
   if (allPosts.length === 0 && !isLoading) {
     return (
       <div className={style.container}>
-        <h1>Your Feed</h1>
-        <div>No posts to show yet.</div>
+        <h1 className={style.title}>For you</h1>
+        <div className={style.emptyMessage}>No new posts</div>
       </div>
     );
   }
