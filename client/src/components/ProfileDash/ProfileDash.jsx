@@ -9,7 +9,6 @@ import useFetch from "../../hooks/useFetch.js";
 import useSetError from "../../hooks/useSetError.js";
 import { useFollowingStatus } from "../../hooks/useFollowingStatus.js";
 
-
 function ProfileDash({
   size,
   user,
@@ -47,7 +46,6 @@ function ProfileDash({
       updateFollowingStatus(!isFollowing);
     },
   );
-
 
   // Check follow status when component loads
   useEffect(() => {
