@@ -3,7 +3,6 @@ import Button from "../Button.jsx";
 import useFetchWithAuth from "../../hooks/useFetchWithAuth";
 
 function DeletePostButton({ postId, onDelete, className, children }) {
-  console.log("DeletePostButton: postId =", postId);
   const { isLoading, error, performFetch } = useFetchWithAuth(
     `/post/${postId}`,
     () => {

@@ -16,8 +16,6 @@ function PostFooter({ postId, tags, authorId }) {
   const menuRef = useRef(null);
   const navigate = useNavigate();
 
-  console.log("PostFooter: postId =", postId, "isAuthor =", isAuthor);
-
   useEffect(() => {
     function handleClickOutside(e) {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -61,27 +59,22 @@ function PostFooter({ postId, tags, authorId }) {
           <Button
             style={{ position: "relative" }}
             icon={<MoreIcon style={style.icon} />}
-            onClick={() => {
-              console.log("Three dots clicked!", menuOpen);
-              setMenuOpen((open) => !open);
-            }}
+            onClick={() => setMenuOpen((open) => !open)}
           />
-          {menuOpen &&
-            (console.log("Menu should be open!"),
-            (
-              <div className={style.menuPopover} ref={menuRef}>
-                <Button className={style.menuBtn} onClick={handleEdit}>
-                  Edit post
-                </Button>
-                <DeletePostButton
-                  postId={postId}
-                  className={style.menuBtn}
-                  onDelete={() => setMenuOpen(false)}
-                >
-                  Delete post
-                </DeletePostButton>
-              </div>
-            ))}
+          {menuOpen && (
+            <div className={style.menuPopover} ref={menuRef}>
+              <Button className={style.menuBtn} onClick={handleEdit}>
+                Edit post
+              </Button>
+              <DeletePostButton
+                postId={postId}
+                className={style.menuBtn}
+                onDelete={() => setMenuOpen(false)}
+              >
+                Delete post
+              </DeletePostButton>
+            </div>
+          )}
         </span>
       )}
     </footer>
