@@ -18,6 +18,7 @@ export const useFollowingStatus = (userId) => {
   useEffect(() => {
     if (!state.userId) {
       setIsFollowing(false);
+      followingStatusMap.clear();
     }
 
     const listener = (changedUserId, status) => {
