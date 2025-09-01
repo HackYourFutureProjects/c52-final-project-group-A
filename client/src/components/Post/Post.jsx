@@ -9,7 +9,6 @@ import { Link, useLocation } from "react-router-dom";
 
 function Post({ post, className, dashboard = true }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
-
   const location = useLocation();
   const linkDisabled = location.pathname === `/post/${post._id}`;
 

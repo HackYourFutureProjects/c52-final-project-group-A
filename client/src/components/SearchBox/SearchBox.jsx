@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import Button from "../Button";
 import { SearchIcon } from "../icons/index.js";
-import useSetError from "../../hooks/useSetError.js";
 
 export default function SearchBox({ onClose }) {
   const [query, setQuery] = useState("");
@@ -24,7 +23,7 @@ export default function SearchBox({ onClose }) {
     [type],
   );
 
-  const { isLoading, error, performFetch, cancelFetch } = useFetch(
+  const { performFetch, cancelFetch } = useFetch(
     `/search?q=${encodeURIComponent(query)}&type=${type}`,
     onReceived,
   );
@@ -57,9 +56,6 @@ export default function SearchBox({ onClose }) {
     },
     [navigate, onClose, type],
   );
-
-  const isRealError = error && error.name !== "AbortError";
-  useSetError(isRealError ? error.message : null);
 
   return (
     <div className={style.searchBoxContainer}>
@@ -107,8 +103,6 @@ export default function SearchBox({ onClose }) {
       >
         <SearchIcon style={style.searchIcon} />
       </Button>
-
-      {isLoading && <div>Loading...</div>}
 
       {results.length > 0 && (
         <ul className={style.suggestionsList}>
