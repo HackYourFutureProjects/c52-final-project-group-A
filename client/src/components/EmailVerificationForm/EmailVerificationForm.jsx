@@ -14,7 +14,9 @@ function EmailVerificationForm() {
     isLoading,
     error: fetchError,
     performFetch,
-  } = useFetch("/register/verify");
+  } = useFetch("/register/verify", () => {
+    navigate("/login");
+  });
 
   const handleChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
@@ -51,9 +53,6 @@ function EmailVerificationForm() {
       body: JSON.stringify({
         verificationCode,
       }),
-      onSuccess: () => {
-        navigate("/login");
-      },
     });
   };
 
@@ -68,7 +67,15 @@ function EmailVerificationForm() {
           We&#39;ve sent a 6-digit verification code to your email
         </p>
 
-        {displayError && <div className={styles.error}>{displayError}</div>}
+        {displayError && (
+          <div>
+            {typeof displayError === "object" &&
+            displayError !== null &&
+            "message" in displayError
+              ? displayError.message
+              : displayError}
+          </div>
+        )}
 
         <div className={styles.form}>
           <div className={styles.codeInputs}>
