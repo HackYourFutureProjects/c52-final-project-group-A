@@ -9,14 +9,14 @@ import { Link, useLocation } from "react-router-dom";
 
 function Post({ post, className, dashboard = true }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
-  console.log(publishedAgo);
 
   const location = useLocation();
   const linkDisabled = location.pathname === `/post/${post._id}`;
-
-  // Follow button visibility
   const userData = useContext(StateContext);
-  const showFollowBtn = userData?.userId !== post.author._id;
+
+  const showFollowBtn =
+    userData?.state?.userId &&
+    String(userData.state.userId) !== String(post.author._id);
 
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
@@ -24,7 +24,7 @@ function Post({ post, className, dashboard = true }) {
         <ProfileDash
           size="sm"
           border="bottom"
-          followBtn={!showFollowBtn}
+          followBtn={showFollowBtn}
           user={post.author}
         />
       )}
@@ -37,6 +37,7 @@ function Post({ post, className, dashboard = true }) {
             <h1>{post.title}</h1>
           </header>
           <p className={style.postContent}>{post.content}</p>
+          <p className={style.timestamp}>{publishedAgo}</p>
         </section>
       </Link>
       <PostFooter postId={post._id} tags={post.tags} />

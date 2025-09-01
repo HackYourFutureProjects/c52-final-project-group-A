@@ -21,6 +21,8 @@ function Nav() {
   const tablet = useWindowWidth(1115);
   const { state, showSearchBox, setShowSearchBox } = useContext(StateContext);
   const [profileLink, setProfileLink] = useState(null);
+  const [scrollPos, setScrollPos] = useState({ y: 0, lastY: 0 });
+  const [hideNav, setHideNav] = useState(false);
 
   useEffect(() => {
     if (!state.username) {
@@ -29,12 +31,27 @@ function Nav() {
     setProfileLink(`/user/${state.username}`);
   }, [state]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!mobile) return;
+      const y = window.scrollY;
+      setScrollPos((prev) => ({ y, lastY: prev.y }));
+      scrollPos.y > scrollPos.lastY ? setHideNav(true) : setHideNav(false);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [mobile, scrollPos]);
+
   const handleSignIn = () => {
     navigate("/login");
   };
 
   return (
-    <nav className={style.navContainer}>
+    <nav
+      className={`${style.navContainer} ${hideNav ? style.navContainerHidden : ""}`}
+    >
       <ul className={style.nav}>
         <li
           className={

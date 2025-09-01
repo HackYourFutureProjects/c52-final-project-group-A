@@ -19,7 +19,12 @@ export default function EditProfile() {
     performFetch: fetchProfile,
     cancelFetch,
   } = useFetchWithAuth(`/user/${username}`, (res) => {
-    setProfile(res.user?.profile || {});
+    setProfile({
+      username: res.user?.username || "",
+      first_name: res.user?.profile?.first_name || "",
+      last_name: res.user?.profile?.last_name || "",
+      bio: res.user?.profile?.bio || "",
+    });
   });
 
   // PATCH profile

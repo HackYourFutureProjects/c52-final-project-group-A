@@ -7,6 +7,7 @@ import style from "./EditProfileForm.module.css";
 
 export default function EditProfileForm({ profile, onSave, onCancel }) {
   const [form, setForm] = useState({
+    username: profile?.username || "",
     first_name: profile?.first_name || "",
     last_name: profile?.last_name || "",
     bio: profile?.bio || "",
@@ -14,6 +15,7 @@ export default function EditProfileForm({ profile, onSave, onCancel }) {
 
   useEffect(() => {
     setForm({
+      username: profile?.username || "",
       first_name: profile?.first_name || "",
       last_name: profile?.last_name || "",
       bio: profile?.bio || "",
@@ -32,6 +34,15 @@ export default function EditProfileForm({ profile, onSave, onCancel }) {
 
   return (
     <form className={style.form} onSubmit={handleSubmit}>
+      <InputField
+        name="username"
+        type="text"
+        placeholder="Username"
+        value={form.username}
+        onChange={handleChange}
+        required
+        className={style.input}
+      />
       <InputField
         name="first_name"
         type="text"
@@ -71,6 +82,7 @@ export default function EditProfileForm({ profile, onSave, onCancel }) {
 
 EditProfileForm.propTypes = {
   profile: PropTypes.shape({
+    username: PropTypes.string,
     first_name: PropTypes.string,
     last_name: PropTypes.string,
     bio: PropTypes.string,

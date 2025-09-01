@@ -4,9 +4,11 @@ import PropTypes from "prop-types";
 import Avatar from "../Avatar/Avatar.jsx";
 import { Link } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import useSetError from "../../hooks/useSetError.js";
+import { useFollowingStatus } from "../../hooks/useFollowingStatus.js";
+
 
 function ProfileDash({
   size,
@@ -16,7 +18,7 @@ function ProfileDash({
   followBtn = true,
 }) {
   const mobile = useWindowWidth(768);
-  const [isFollowing, setIsFollowing] = useState(false);
+  const { isFollowing, updateFollowingStatus } = useFollowingStatus(user?._id);
 
   const dashSize =
     mobile && size === "lg" ? style[`dash_mobile`] : style[`dash_${size}`];
@@ -34,7 +36,7 @@ function ProfileDash({
   const { performFetch: checkFollowStatus, error: checkFollowError } = useFetch(
     "/following/check",
     (response) => {
-      setIsFollowing(response.isFollowing);
+      updateFollowingStatus(response.isFollowing);
     },
   );
 
@@ -42,9 +44,10 @@ function ProfileDash({
   const { performFetch: toggleFollow, error: toggleFollowError } = useFetch(
     "/following",
     () => {
-      setIsFollowing(!isFollowing);
+      updateFollowingStatus(!isFollowing);
     },
   );
+
 
   // Check follow status when component loads
   useEffect(() => {
@@ -102,6 +105,11 @@ function ProfileDash({
           )}
         </div>
       </div>
+      {size === "md" && (
+        <p className={style.bio}>
+          {profile.bio ?? "This user has not set a bio yet."}
+        </p>
+      )}
     </article>
   );
 }
