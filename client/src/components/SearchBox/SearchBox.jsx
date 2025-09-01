@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import Button from "../Button";
 import { SearchIcon } from "../icons/index.js";
+import useSetError from "../../hooks/useSetError.js";
 
 export default function SearchBox({ onClose }) {
   const [query, setQuery] = useState("");
@@ -58,6 +59,7 @@ export default function SearchBox({ onClose }) {
   );
 
   const isRealError = error && error.name !== "AbortError";
+  useSetError(isRealError ? error.message : null);
 
   return (
     <div className={style.searchBoxContainer}>
@@ -107,7 +109,6 @@ export default function SearchBox({ onClose }) {
       </Button>
 
       {isLoading && <div>Loading...</div>}
-      {isRealError && <div>Error: {error.toString()}</div>}
 
       {results.length > 0 && (
         <ul className={style.suggestionsList}>

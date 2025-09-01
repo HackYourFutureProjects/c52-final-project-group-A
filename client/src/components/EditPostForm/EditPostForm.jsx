@@ -6,7 +6,7 @@ import style from "./EditPostForm.module.css";
 import TextArea from "../TextArea/TextArea.jsx";
 import Drawer from "../Drawer/Drawer.jsx";
 
-export default function EditPostForm({ post, error, onSave, onCancel }) {
+export default function EditPostForm({ post, onSave, onCancel }) {
   const [form, setForm] = useState({
     title: post?.title || "",
     content: post?.content || "",
@@ -79,9 +79,6 @@ export default function EditPostForm({ post, error, onSave, onCancel }) {
         onChange={handleChange}
         placeholder="Select status"
       />
-
-      {error && <div>{error}</div>}
-
       <div className={style.buttonGroup}>
         <Button type="submit" className={style.submitBtn}>
           Save
@@ -96,7 +93,6 @@ export default function EditPostForm({ post, error, onSave, onCancel }) {
 
 EditPostForm.propTypes = {
   post: PropTypes.object.isRequired,
-  error: PropTypes.string,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };

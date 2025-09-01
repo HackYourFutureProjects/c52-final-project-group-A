@@ -4,6 +4,7 @@ import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
 import PropTypes from "prop-types";
 import Button from "../Button.jsx";
 import { LikeIcon } from "../icons/index.js";
+import useSetError from "../../hooks/useSetError.js";
 
 export default function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
@@ -21,7 +22,7 @@ export default function LikeButton({ postId }) {
 
   useEffect(() => {
     fetchLikeStatus();
-    return () => cancelFetch && cancelFetch();
+    return cancelFetch();
   }, [postId]);
 
   // POST the like toggle
@@ -35,8 +36,8 @@ export default function LikeButton({ postId }) {
   };
 
   // Error logging for debugging
-  if (fetchStatusError) console.error("Fetch status error:", fetchStatusError);
-  if (sendLikeError) console.error("Send like error:", sendLikeError);
+  const displayError = fetchStatusError || sendLikeError;
+  useSetError(displayError);
 
   return (
     <Button

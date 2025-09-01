@@ -15,6 +15,7 @@ import EditPostPage from "./pages/EditPost/EditPost.jsx";
 import { useContext } from "react";
 import StateContext from "./context/state/StateContext.js";
 import EditProfile from "./pages/EditProfile/EditProfile.jsx";
+import Error from "./components/Error/Error.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/user/:username/edit" element={<EditProfile />} />
       </Routes>
       {!hideFabOn.includes(location.pathname) && <Fab />}
+      {state.error && <Error message={state.error} />}
     </>
   );
 };

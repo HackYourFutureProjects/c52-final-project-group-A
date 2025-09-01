@@ -4,12 +4,12 @@ import StateContext from "../../context/state/StateContext.js";
 import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
 import EditProfileForm from "../../components/EditProfileForm/EditProfileForm.jsx";
 import style from "./EditProfile.module.css";
+import useSetError from "../../hooks/useSetError.js";
 
 export default function EditProfile() {
   const { username } = useParams();
   const { state: user } = useContext(StateContext);
   const [profile, setProfile] = useState(null);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   // GET profile
@@ -28,32 +28,26 @@ export default function EditProfile() {
   });
 
   // PATCH profile
-  const { performFetch: patchProfile } = useFetchWithAuth(
-    `/user/${username}/edit`,
-    (res) => {
-      if (res.success) {
-        navigate(`/user/${username}`);
-      } else {
-        setError(res.msg || "Update failed");
-      }
-    },
-  );
+  const { performFetch: patchProfile, error: pathProfileError } =
+    useFetchWithAuth(`/user/${username}/edit`, () => {
+      navigate(`/user/${username}`);
+    });
 
   useEffect(() => {
     setProfile(null);
-    setError("");
     fetchProfile();
     return () => cancelFetch && cancelFetch();
   }, [username]);
 
+  const displayError = fetchError || pathProfileError;
+  useSetError(displayError);
+
   if (!user || !user.username) return <div>Loading user…</div>;
   if (user.username !== username) return <div>Not authorized</div>;
   if (isLoading && !profile) return <div>Loading…</div>;
-  if (fetchError) return <div>Error: {String(fetchError)}</div>;
   if (!profile) return null;
 
   const handleSave = (fields) => {
-    setError("");
     patchProfile({
       method: "PATCH",
       body: JSON.stringify({ profile: fields }),
@@ -67,7 +61,6 @@ export default function EditProfile() {
         <h2 className={style.header}>Edit Profile</h2>
         <EditProfileForm
           profile={profile}
-          error={error}
           onSave={handleSave}
           onCancel={() => navigate(`/user/${username}`)}
         />

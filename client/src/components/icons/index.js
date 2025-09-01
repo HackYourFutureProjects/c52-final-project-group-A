@@ -6,3 +6,6 @@ export { default as LikeIcon } from "./LikeIcon.jsx";
 export { default as CommentIcon } from "./CommentIcon.jsx";
 export { default as ShareIcon } from "./ShareIcon.jsx";
 export { default as MoreIcon } from "./MoreIcon.jsx";
+export { default as CrossIcon } from "./CrossIcon.jsx";
+export { default as LoginIcon } from "./LoginIcon.jsx";
+export { default as Logo } from "./Logo.jsx";

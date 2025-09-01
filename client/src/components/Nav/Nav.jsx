@@ -3,16 +3,22 @@ import style from "./Nav.module.css";
 import Button from "../Button.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import Logo from "../Logo.jsx";
 import StateContext from "../../context/state/StateContext.js";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
-import { HomeIcon, SearchIcon, ProfileIcon } from "../icons/index.js";
+import {
+  HomeIcon,
+  SearchIcon,
+  ProfileIcon,
+  LoginIcon,
+  Logo,
+} from "../icons/index.js";
 import PropTypes from "prop-types";
 
 function Nav() {
   const navigate = useNavigate();
   const location = useLocation();
   const mobile = useWindowWidth(768);
+  const tablet = useWindowWidth(1115);
   const { state, showSearchBox, setShowSearchBox } = useContext(StateContext);
   const [profileLink, setProfileLink] = useState(null);
   const [scrollPos, setScrollPos] = useState({ y: 0, lastY: 0 });
@@ -76,7 +82,7 @@ function Nav() {
 
         {!mobile && (
           <li className={style.logoContainer}>
-            <Logo className={style.logo} />
+            <Logo style={style.logo} />
           </li>
         )}
         <li
@@ -93,7 +99,7 @@ function Nav() {
       </ul>
       {!mobile && !state.userId && (
         <Button onClick={handleSignIn} className={style.signInButton}>
-          Sign-in
+          {!tablet ? "Sign-in" : <LoginIcon style={style.loginIcon} />}
         </Button>
       )}
     </nav>

@@ -7,6 +7,7 @@ const StateContextProvider = ({ children }) => {
   const stateInit = {
     userId: "",
     username: "",
+    error: "",
   };
 
   const [state, setState] = useState(stateInit);
@@ -14,7 +15,7 @@ const StateContextProvider = ({ children }) => {
 
   const { performFetch, cancelFetch } = useFetch("/context", (res) => {
     const { userId, username } = res;
-    setState((prevState) => ({ ...prevState, userId, username }));
+    setState((prev) => ({ ...prev, userId, username }));
   });
 
   useEffect(() => {

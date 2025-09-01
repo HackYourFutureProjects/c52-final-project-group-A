@@ -6,6 +6,7 @@ import useFetch from "../../hooks/useFetch.js";
 import StateContext from "../../context/state/StateContext.js";
 import Button from "../../components/Button.jsx";
 import style from "./Profile.module.css";
+import useSetError from "../../hooks/useSetError.js";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
 
 function Profile() {
@@ -14,6 +15,7 @@ function Profile() {
   const { state } = useContext(StateContext);
   const isUser = state.username === username;
   const mobile = useWindowWidth(768);
+  const navigate = useNavigate();
 
   const { performFetch, error } = useFetch(`/user/${username}`, (response) => {
     setUserData(response.user);
@@ -28,11 +30,7 @@ function Profile() {
     performFetch(options);
   }, [username]);
 
-  const navigate = useNavigate();
-
-  if (error) {
-    console.error(error);
-  }
+  useSetError(error);
 
   return (
     <main className={style.main}>
