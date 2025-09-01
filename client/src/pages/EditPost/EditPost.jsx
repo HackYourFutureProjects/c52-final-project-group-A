@@ -16,13 +16,13 @@ export default function EditPostPage() {
   // GET hook for fetching post
   const {
     isLoading,
-    error,
+    error: getError,
     performFetch: fetchPost,
     cancelFetch,
   } = useFetchWithAuth(`/post/${id}`, (res) => setPost(res.post ?? res));
 
   // PATCH hook for updating post
-  const { performFetch: updatePost } = useFetchWithAuth(
+  const { performFetch: updatePost, error: postError } = useFetchWithAuth(
     `/post/${id}`,
     (res) => {
       if (res.success) navigate(`/post/${id}`); // redirect to post page after save
@@ -45,7 +45,9 @@ export default function EditPostPage() {
       headers: { "Content-Type": "application/json" },
     });
   };
-  useSetError(error);
+
+  const displayError = getError || postError;
+  useSetError(displayError);
 
   // Author check
   if (!user || !user.userId) return <div>Loading user…</div>;
