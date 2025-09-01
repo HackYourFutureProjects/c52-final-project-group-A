@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Avatar from "../Avatar/Avatar";
+import Button from "../Button";
 import styles from "./TopCreators.module.css";
 
 const TopCreators = ({ creators }) => {
@@ -25,14 +26,14 @@ const TopCreators = ({ creators }) => {
               />
               <span className={styles.creatorName}>{creator.username}</span>
             </Link>
-            <button
+            <Button
               className={styles.followButton}
               onClick={() => {
                 /* Placeholder for follow functionality */
               }}
             >
               Follow
-            </button>
+            </Button>
           </li>
         ))}
       </ul>

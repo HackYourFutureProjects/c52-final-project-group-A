@@ -1,12 +1,9 @@
 /* NavBar */
 .navContainer {
-  z-index: 1000;
+  z-index: 50;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: var(--color-white);
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
+  top: 2rem;
+  width: calc(100% - 2 * 10rem);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,14 +82,6 @@
   font-size: 1.5rem;
   font-weight: 500;
   pointer-events: auto;
-}
-
-/* Add Explore text */
-.exploreText {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--color-black);
-  margin-left: 1rem;
 }
 
 /* @media */

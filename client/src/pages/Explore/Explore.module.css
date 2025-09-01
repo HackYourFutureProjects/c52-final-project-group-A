@@ -3,30 +3,35 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  padding-top: 6rem; /* push content below navbar */
+  padding-top: 8rem; /* push content below navbar */
   padding-inline: 1rem;
 }
 
 /* Grid layout with 3 columns */
 .grid {
   display: grid;
-  grid-template-columns: 1fr 2fr 1.2fr;
-  gap: 2rem;
+  grid-template-columns: 1fr 1fr 1fr; /* Further reduced feed size */
+  gap: 2rem; /* Maintained spacing */
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  min-height: calc(100vh - 6rem); /* ensure full height after navbar */
+  min-height: calc(100vh - 6rem); /* Ensure full height after navbar */
 }
 
 /* Left sidebar */
 .leftSidebar {
-  background-color: #f4f4f4;
+  background-color: var(
+    --color-semi-transparent-white
+  ); /* Updated to use global color variable */
   padding: 1rem;
-  border-radius: 0.5rem;
+  border-radius: var(
+    --inner-border-radius
+  ); /* Ensures consistency with global styles */
   height: fit-content;
-  position: sticky;
+  position: sticky; /* Maintained sticky positioning */
   top: 6rem;
   align-self: flex-start;
+  width: 20%; /* Ensured equal size with right sidebar */
 }
 
 /* Middle: scrollable feed */
@@ -35,15 +40,21 @@
   overflow-y: auto;
   padding-right: 0.5rem;
   scroll-behavior: smooth;
+  margin-left: 17%; /* Adjusted margin to align with left sidebar */
+  margin-right: 17%; /* Adjusted margin to align with right sidebar */
 }
 
 /* Right sidebar */
 .rightSidebar {
+  background-color: var(--color-semi-transparent-white);
+  padding: 1rem;
+  border-radius: var(--inner-border-radius);
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 5rem;
+  position: sticky; /* Maintained sticky positioning */
+  top: 6rem;
   align-self: flex-start;
+  width: 20%; /* Ensured equal size with left sidebar */
 }
 
 /* Trending tags box */
