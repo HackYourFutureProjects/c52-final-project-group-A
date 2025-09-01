@@ -13,19 +13,21 @@ import PostPage from "./pages/Post/Post.jsx";
 import Fab from "./components/Fab/Fab.jsx";
 import EditPostPage from "./pages/EditPost/EditPost.jsx";
 import { useContext } from "react";
-import StateContext from "./context/state/StateContext.js";
+import UserContext from "./context/user/UserContext.js";
 import EditProfile from "./pages/EditProfile/EditProfile.jsx";
 import Error from "./components/Error/Error.jsx";
+import StatusContext from "./context/status/StatusContext.js";
 
 const App = () => {
   const location = useLocation();
-  const { showSearchBox, setShowSearchBox, state } = useContext(StateContext);
+  const { user } = useContext(UserContext);
+  const { status, showSearchBox, setShowSearchBox } = useContext(StatusContext);
   const hideFabOn = ["/", "/login", "/register", "/new-post"]; // No FAB button here
 
   return (
     <>
       <Nav setShowSearchBox={setShowSearchBox} showSearchBox={showSearchBox} />
-      {showSearchBox && state.userId && (
+      {showSearchBox && user.userId && (
         <SearchBox onClose={() => setShowSearchBox(false)} />
       )}
       <Routes>
@@ -42,7 +44,7 @@ const App = () => {
         <Route path="/user/:username/edit" element={<EditProfile />} />
       </Routes>
       {!hideFabOn.includes(location.pathname) && <Fab />}
-      {state.error && <Error message={state.error} />}
+      {status.error && <Error message={status.error} />}
     </>
   );
 };

@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
 import useFetch from "../../hooks/useFetch.js";
 import EditProfileForm from "../../components/EditProfileForm/EditProfileForm.jsx";
 import style from "./EditProfile.module.css";
 
 export default function EditProfile() {
   const { username } = useParams();
-  const { state: user } = useContext(StateContext);
+  const { user } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
 

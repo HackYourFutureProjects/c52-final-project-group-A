@@ -5,13 +5,13 @@ import style from "./Post.module.css";
 import ProfileDash from "../../components/ProfileDash/ProfileDash.jsx";
 import useFetch from "../../hooks/useFetch.js";
 import Comment from "../../components/Comment/Comment.jsx";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
 
 export default function PostPage() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState(null);
-  const { state } = useContext(StateContext);
+  const { user } = useContext(UserContext);
 
   const { performFetch, cancelFetch } = useFetch(`/post/${id}`, (res) => {
     setPost(res.post);
@@ -35,7 +35,7 @@ export default function PostPage() {
       cancelFetchComments();
     };
   }, [id]);
-  const showFollowBtn = state.userId !== post?.author?._id;
+  const showFollowBtn = user.userId !== post?.author?._id;
 
   if (!post) return null;
 

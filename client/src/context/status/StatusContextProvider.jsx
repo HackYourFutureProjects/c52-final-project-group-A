@@ -9,9 +9,12 @@ const StatusContextProvider = ({ children }) => {
   };
 
   const [status, setStatus] = useState(stateInit);
+  const [showSearchBox, setShowSearchBox] = useState(false);
 
   return (
-    <StatusContext.Provider value={{ status, setStatus }}>
+    <StatusContext.Provider
+      value={{ status, setStatus, showSearchBox, setShowSearchBox }}
+    >
       {children}
     </StatusContext.Provider>
   );

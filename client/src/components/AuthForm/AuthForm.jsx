@@ -6,7 +6,7 @@ import InputField from "../InputField/InputField.jsx";
 import GoogleButton from "../GoogleButton/GoogleButton.jsx";
 import Button from "../Button.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
@@ -21,14 +21,14 @@ function AuthForm({ type }) {
         passwordConfirmation: "",
       };
 
-  const { setState } = useContext(StateContext);
+  const { setUser } = useContext(UserContext);
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const endpoint = isSignIn ? "/login" : "/register";
   const { performFetch } = useFetch(`${endpoint}`, (res) => {
     if (isSignIn) {
       const { userId, username } = res;
-      setState((prev) => ({ ...prev, userId, username }));
+      setUser({ userId, username });
       navigate("/home");
     } else {
       navigate("/verify-email");
