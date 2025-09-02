@@ -38,6 +38,7 @@
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
+  min-width: 0;
 }
 
 .creatorAvatar {
@@ -55,7 +56,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 110px;
 }
 
 .creatorLink:hover .creatorName {
