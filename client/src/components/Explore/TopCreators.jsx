@@ -20,11 +20,11 @@ const TopCreators = ({ creators }) => {
               className={styles.creatorLink}
             >
               <Avatar
-                src={creator.profile_image_url}
-                alt={`${creator.username}'s avatar`}
+                avatar={creator.avatar}
+                alt={`${creator.fullName}'s avatar`}
                 size="10"
               />
-              <span className={styles.creatorName}>{creator.username}</span>
+              <span className={styles.creatorName}>{creator.fullName}</span>
             </Link>
             <Button
               className={styles.followButton}
@@ -46,7 +46,8 @@ TopCreators.propTypes = {
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
       username: PropTypes.string.isRequired,
-      profile_image_url: PropTypes.string,
+      fullName: PropTypes.string,
+      avatar: PropTypes.string,
     }),
   ).isRequired,
 };

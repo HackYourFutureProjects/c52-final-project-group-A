@@ -51,7 +51,7 @@ export async function getTopCreators({ windowHours = 168, limit = 5 } = {}) {
   //Fetch user data
   const userIds = sorted.map((u) => u.authorId);
   const users = await User.find({ _id: { $in: userIds } }).select(
-    "_id username profilePic",
+    "_id username profile",
   );
 
   // Merge user info with score data
@@ -62,7 +62,10 @@ export async function getTopCreators({ windowHours = 168, limit = 5 } = {}) {
     return {
       ...stat,
       username: user?.username || "unknown",
-      profilePic: user?.profilePic || null,
+      fullName: user?.profile
+        ? `${user.profile.first_name} ${user.profile.last_name}`
+        : "Unknown",
+      avatar: user?.profile?.avatar || null,
     };
   });
 

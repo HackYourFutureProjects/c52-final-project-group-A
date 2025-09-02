@@ -24,8 +24,14 @@ function ProfileDash({
 
   const username = user?.username ?? "username";
   let score = user?.score ?? "00";
-  const profile = user?.profile ?? { first_name: "Full", last_name: "Name" };
-  const fullName = profile.first_name + " " + profile.last_name;
+
+  // Handle both flattened and nested user data structures
+  const fullName =
+    user?.fullName ??
+    (user?.profile
+      ? `${user.profile.first_name} ${user.profile.last_name}`
+      : "Full Name");
+  const avatar = user?.avatar ?? user?.profile?.avatar ?? null;
 
   score = score.toString().padStart(2, "0");
 
@@ -68,7 +74,7 @@ function ProfileDash({
         .join(" ")}
     >
       <div className={style.mainContainer}>
-        <Avatar avatar={profile.avatar ?? null} score={score} />
+        <Avatar avatar={avatar} score={score} />
         <div className={style.wrapper}>
           <div
             className={style.nameAndBtnContainer + " " + nameAndBtnContainer}
@@ -90,7 +96,7 @@ function ProfileDash({
           </div>
           {size === "lg" && (
             <p className={style.bio}>
-              {profile.bio ?? "This user has not set a bio yet."}
+              {user?.profile?.bio ?? "This user has not set a bio yet."}
             </p>
           )}
         </div>
@@ -104,13 +110,15 @@ ProfileDash.propTypes = {
   user: PropTypes.shape({
     _id: PropTypes.string,
     username: PropTypes.string,
-    profile: {
+    fullName: PropTypes.string,
+    avatar: PropTypes.string,
+    profile: PropTypes.shape({
       first_name: PropTypes.string,
       last_name: PropTypes.string,
       avatar: PropTypes.string,
       bio: PropTypes.string,
       _id: PropTypes.string,
-    },
+    }),
     score: PropTypes.number,
   }),
   className: PropTypes.string,

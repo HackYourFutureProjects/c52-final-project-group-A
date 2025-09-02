@@ -23,14 +23,34 @@ export async function getTrendingPosts({
       },
     },
     {
+      $lookup: {
+        from: "users",
+        localField: "author",
+        foreignField: "_id",
+        as: "author",
+      },
+    },
+    {
+      $unwind: "$author",
+    },
+    {
       $project: {
         _id: 1,
         title: 1,
         content: 1,
         tags: 1,
         likeCount: 1,
-        author: 1,
         published_at: 1,
+        "author._id": 1,
+        "author.username": 1,
+        "author.fullName": {
+          $concat: [
+            "$author.profile.first_name",
+            " ",
+            "$author.profile.last_name",
+          ],
+        },
+        "author.avatar": "$author.profile.avatar",
       },
     },
   ]);
@@ -52,7 +72,7 @@ export async function getTrendingPosts({
   const seen = new Map();
   const items = [];
   for (const post of scored) {
-    const authorId = String(post.author);
+    const authorId = String(post.author._id);
     const count = seen.get(authorId) || 0;
     if (count < capPerAuthor) {
       items.push(post);
