@@ -4,12 +4,24 @@ import config from "../config.js";
 
 const { EMAIL, EMAIL_PASSWORD, EMAIL_PROVIDER } = config;
 
+console.log("EMAIL:", EMAIL);
+console.log("EMAIL_PASSWORD:", EMAIL_PASSWORD ? "yes" : "no");
+console.log("EMAIL_PROVIDER:", EMAIL_PROVIDER);
+
 const transporter = nodemailer.createTransport({
   service: EMAIL_PROVIDER,
   auth: {
     user: EMAIL,
     pass: EMAIL_PASSWORD,
   },
+});
+
+transporter.verify(function (error) {
+  if (error) {
+    console.log("SMTP Error:", error);
+  } else {
+    console.log("SMTP Server is ready to take messages");
+  }
 });
 
 async function sendWeeklyEmail({ to, subject, text, html }) {
