@@ -11,7 +11,7 @@ import { GoogleIcon } from "../icons/index.js";
 function GoogleButton() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
-  const { setStatus } = useContext(StatusContext);
+  const { isLoading, setStatus } = useContext(StatusContext);
 
   const { performFetch } = useFetch("/login/google-auth", (res) => {
     const { _id: userId, username } = res.user;
@@ -45,6 +45,7 @@ function GoogleButton() {
       onClick={googleLogin}
       icon={<GoogleIcon style={style.googleLogo} />}
       className={style.googleButton}
+      disabled={isLoading}
     >
       Continue with Google
     </Button>

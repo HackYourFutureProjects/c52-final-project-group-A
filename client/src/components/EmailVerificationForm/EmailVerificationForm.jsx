@@ -7,7 +7,7 @@ import StatusContext from "../../context/status/StatusContext.js";
 
 function EmailVerificationForm() {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
-  const { setStatus } = useContext(StatusContext);
+  const { isLoading, setStatus } = useContext(StatusContext);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
@@ -75,7 +75,11 @@ function EmailVerificationForm() {
             ))}
           </div>
 
-          <Button onClick={handleSubmit} className={styles.submitBtn}>
+          <Button
+            onClick={handleSubmit}
+            className={styles.submitBtn}
+            disabled={isLoading}
+          >
             Verify Code
           </Button>
         </div>
