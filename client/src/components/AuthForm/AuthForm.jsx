@@ -7,6 +7,7 @@ import GoogleButton from "../GoogleButton/GoogleButton.jsx";
 import Button from "../Button.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../context/user/UserContext.js";
+import StatusContext from "../../context/status/StatusContext.js";
 
 function AuthForm({ type }) {
   const isSignIn = type === "signIn";
@@ -22,6 +23,7 @@ function AuthForm({ type }) {
       };
 
   const { setUser } = useContext(UserContext);
+  const { isLoading } = useContext(StatusContext);
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const endpoint = isSignIn ? "/login" : "/register";
@@ -148,7 +150,11 @@ function AuthForm({ type }) {
         )}
         <form onSubmit={handleSubmit} className={style.form}>
           {renderFormFields()}
-          <Button type="submit" className={style.submitBtn}>
+          <Button
+            type="submit"
+            className={style.submitBtn}
+            disabled={isLoading}
+          >
             {isSignIn ? "Log in" : "Continue"}
           </Button>
         </form>

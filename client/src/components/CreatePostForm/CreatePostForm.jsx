@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import useFetch from "../../hooks/useFetch";
 import Button from "../Button.jsx";
@@ -6,12 +6,14 @@ import InputField from "../InputField/InputField.jsx";
 import style from "./CreatePostForm.module.css";
 import TextArea from "../TextArea/TextArea.jsx";
 import Drawer from "../Drawer/Drawer.jsx";
+import StatusContext from "../../context/status/StatusContext.js";
 
 export default function CreatePostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tagsInput, setTagsInput] = useState("");
   const [status, setStatus] = useState("");
+  const { isLoading } = useContext(StatusContext);
 
   const { performFetch } = useFetch("/post", () => {
     setTitle("");
@@ -73,7 +75,7 @@ export default function CreatePostForm() {
             onChange={(e) => setTagsInput(e.target.value)}
           />
         </div>
-        <Button type="submit" className={style.submitBtn}>
+        <Button type="submit" className={style.submitBtn} disabled={isLoading}>
           Create
         </Button>
       </form>
