@@ -105,6 +105,15 @@ function ProfileDash({
   );
 }
 
+// Define the shape for a profile separately
+const ProfilePropType = PropTypes.shape({
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  avatar: PropTypes.string,
+  bio: PropTypes.string,
+  _id: PropTypes.string,
+});
+
 ProfileDash.propTypes = {
   size: PropTypes.oneOf(["sm", "md", "lg"]).isRequired,
   user: PropTypes.shape({
@@ -112,13 +121,7 @@ ProfileDash.propTypes = {
     username: PropTypes.string,
     fullName: PropTypes.string,
     avatar: PropTypes.string,
-    profile: PropTypes.shape({
-      first_name: PropTypes.string,
-      last_name: PropTypes.string,
-      avatar: PropTypes.string,
-      bio: PropTypes.string,
-      _id: PropTypes.string,
-    }),
+    profile: ProfilePropType, // Use the new, separate definition
     score: PropTypes.number,
   }),
   className: PropTypes.string,
