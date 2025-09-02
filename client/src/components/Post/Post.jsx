@@ -12,11 +12,11 @@ function Post({ post, className, dashboard = true }) {
 
   const location = useLocation();
   const linkDisabled = location.pathname === `/post/${post._id}`;
-  const userData = useContext(StateContext);
 
-  const showFollowBtn =
-    userData?.state?.userId &&
-    String(userData.state.userId) !== String(post.author._id);
+  const {
+    state: { userId },
+  } = useContext(StateContext);
+  const showFollowBtn = userId !== post.author._id;
 
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
@@ -40,7 +40,11 @@ function Post({ post, className, dashboard = true }) {
           <p className={style.timestamp}>{publishedAgo}</p>
         </section>
       </Link>
-      <PostFooter postId={post._id} tags={post.tags} />
+      <PostFooter
+        postId={post._id}
+        tags={post.tags}
+        authorId={post.author._id}
+      />
     </article>
   );
 }
