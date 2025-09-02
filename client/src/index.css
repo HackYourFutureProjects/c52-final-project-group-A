@@ -87,7 +87,7 @@ button:disabled {
 body {
   font-family: var(--font-sans), sans-serif;
   font-weight: 500;
-  overflow: hidden;
+  overflow-x: hidden;
   padding: 0 10rem 5rem 10rem;
 }
 
