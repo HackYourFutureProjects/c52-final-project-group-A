@@ -1,0 +1,40 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--outer-border-radius);
+  padding: 2.5rem;
+  box-shadow: 0 0 10px var(--color-border);
+}
+.title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.optionsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.submitBtn {
+  background: var(--color-dark-grey);
+  color: var(--color-white);
+  border-radius: var(--inner-border-radius);
+  padding: 1rem;
+  margin: 0.5rem 3rem;
+}
+
+@media (max-width: 768px) {
+  .form {
+    border: none;
+    box-shadow: none;
+    margin-bottom: 10vw;
+  }
+}

@@ -1,33 +1,36 @@
 import User from "../models/User.js";
 import { logError } from "../util/logging.js";
-import jwt from "jsonwebtoken";
-import config from "../config.js";
 
-const { JWT_SECRET } = config;
-
+// Get Profile
 export const getProfile = async (req, res) => {
+  const { username } = req.params;
+  if (!username) {
+    return res.status(400).json({
+      success: false,
+      msg: "Username is required",
+    });
+  }
+
   try {
-    const { bq_token } = req.cookies;
-    if (!bq_token) {
-      return res.status(401).json({
+    const user = await User.findOne(
+      { username },
+      { _id: 1, username: 1, profile: 1, posts: 1, score: 1, created_at: 1 },
+    ).populate({
+      path: "posts",
+      populate: {
+        path: "author",
+        select: "_id username profile score",
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
         success: false,
-        msg: "You need to be logged in to view this page",
+        msg: "User not found",
       });
     }
 
-    let tokenData;
-    try {
-      tokenData = jwt.verify(bq_token, JWT_SECRET);
-    } catch (err) {
-      logError(err);
-      return res.status(400).json({
-        success: false,
-        msg: "Token is invalid",
-      });
-    }
-
-    const user = await User.findById(tokenData.userId, { password: 0 });
-    res.status(200).json({ success: true, result: user });
+    res.status(200).json({ success: true, user });
   } catch (err) {
     logError(err);
     res.status(500).json({
@@ -37,41 +40,51 @@ export const getProfile = async (req, res) => {
   }
 };
 
-/*
-// This is left here for future reference
+// Update Profile
+export const updateProfile = async (req, res) => {
+  const { username } = req.params;
+  const { profile = {} } = req.body;
 
-export const createUser = async (req, res) => {
+  if (req.user.username !== username) {
+    return res.status(403).json({
+      success: false,
+      msg: "You can edit only your own profile.",
+    });
+  }
+
   try {
-    const user = req.body?.user;
-
-    if (typeof user !== "object") {
-      res.status(400).json({
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({
         success: false,
-        msg: `You need to provide a 'user' object. Received: ${JSON.stringify(
-          user,
-        )}`,
+        msg: "User not found",
       });
-
-      return;
     }
 
-    const errorList = validateUser(user);
+    // Merging old and new profile
+    const updatedProfile = { ...user.profile.toObject(), ...profile };
+    user.profile = updatedProfile;
 
-    if (errorList.length > 0) {
-      res
-        .status(400)
-        .json({ success: false, msg: validationErrorMessage(errorList) });
-    } else {
-      const newUser = await User.create(user);
+    await user.save();
 
-      res.status(201).json({ success: true, user: newUser });
-    }
-  } catch (error) {
-    logError(error);
-    res
-      .status(500)
-      .json({ success: false, msg: "Unable to create user, try again later" });
+    // We trim unnecessary fields for the answer
+    const userToSend = await User.findOne(
+      { username },
+      { _id: 1, username: 1, profile: 1, posts: 1, score: 1, created_at: 1 },
+    ).populate({
+      path: "posts",
+      populate: {
+        path: "author",
+        select: "_id username profile score",
+      },
+    });
+
+    res.status(200).json({ success: true, user: userToSend });
+  } catch (err) {
+    logError(err);
+    res.status(500).json({
+      success: false,
+      msg: "Unable to update profile, try again later",
+    });
   }
 };
-
-*/

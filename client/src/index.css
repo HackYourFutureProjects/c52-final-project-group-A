@@ -16,7 +16,7 @@
   --font-mono: Roboto Mono, monospace;
 
   /* Colors */
-  --color-white: rgb(255, 255, 255);
+  --color-white: #fff;
   --color-semi-transparent-white: rgba(255, 255, 255, 0.5);
   --color-black: #0d0d0d;
   --color-border: #ccc;
@@ -29,6 +29,7 @@
   --inner-border-radius: 0.5rem;
   --pill-border-radius: 9.375rem;
   --circle-border-radius: 50%;
+  --border: 1px solid var(--color-border);
 }
 
 html {
@@ -43,23 +44,41 @@ menu {
 }
 
 a {
-  color: var(--color-orange);
   text-decoration: none;
+  color: var(--color-orange);
 }
 a:hover {
   text-decoration: underline;
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font-family: inherit;
   font-weight: inherit;
+  font-size: inherit;
   border: none;
   background: none;
   outline: none;
 }
+input:hover,
+input:focus,
+textarea:hover,
+textarea:focus,
+select:hover,
+select:focus {
+  border-color: var(--color-dark-grey);
+}
+select {
+  cursor: pointer;
+}
 button {
   cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+}
+button:hover {
+  opacity: 0.95;
 }
 button:disabled {
   cursor: auto;
@@ -68,11 +87,14 @@ button:disabled {
 body {
   font-family: var(--font-sans), sans-serif;
   font-weight: 500;
-  padding: 10rem 1rem 1rem 1rem;
+  padding: 0 10rem;
 }
 
 @media (max-width: 768px) {
   html {
     font-size: 80%;
+  }
+  body {
+    padding: 1rem;
   }
 }

@@ -9,6 +9,7 @@ function InputField({
   onChange,
   autoComplete,
   required,
+  ...props
 }) {
   return (
     <label htmlFor={name} className={style.label}>
@@ -21,6 +22,7 @@ function InputField({
         autoComplete={autoComplete}
         required={required}
         className={style.input}
+        {...props}
       />
       <span className={style.placeholder}>{placeholder}</span>
     </label>

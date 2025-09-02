@@ -1,0 +1,249 @@
+/* Hero section */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* Hero inner content */
+.heroInner {
+  text-align: center;
+  max-width: 56.25rem; /* 900px */
+  margin: 0 auto;
+  z-index: 1;
+  position: relative;
+}
+
+/* Headline styling */
+.heroTitle {
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-black);
+  font-size: clamp(2.25rem, 6vw, 5rem); /* 36px to 80px */
+  margin-bottom: 1.5rem;
+}
+
+.heroLine {
+  display: block;
+  position: relative;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
+.heroDot {
+  display: inline-block;
+  width: 0.25em;
+  height: 0.25em;
+  background: var(--color-orange);
+  border-radius: 50%;
+  margin-right: 0.3em;
+  transform: translateY(-0.1em);
+}
+
+.heroUnderline {
+  position: relative;
+  display: inline-block;
+}
+
+.heroUnderline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0.1em;
+  background: var(--color-orange);
+  bottom: -0.08em;
+  border-radius: 0.125rem; /* 2px */
+}
+
+/* Pill (highlighted word "ideas") */
+.heroPill {
+  background: var(--color-orange);
+  color: var(--color-white);
+  border-radius: var(--pill-border-radius);
+  padding: 0.05em 0.6em;
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+  margin-left: 0.4em;
+}
+
+.heroPill::before,
+.heroPill::after {
+  content: "";
+  position: absolute;
+  right: -1.25rem;
+  width: 0.875rem;
+  height: 0.25rem;
+  background: var(--color-orange);
+  border-radius: 0.125rem; /* 2px */
+}
+
+.heroPill::before {
+  top: 18%;
+  transform: rotate(25deg);
+}
+
+.heroPill::after {
+  bottom: 18%;
+  transform: rotate(-25deg);
+}
+
+/* Subtitle */
+.heroSubTitle {
+  color: var(--color-black);
+  font-size: 1.1rem;
+  margin: 1.25rem 0 1.5rem;
+}
+
+/* CTA Buttons container */
+.heroCta {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625em 1.25em; /* 10px 20px */
+  border-radius: var(--inner-border-radius);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  border-bottom: 2px solid var(--color-orange);
+}
+
+.btnPrimary {
+  background: var(--color-orange);
+  color: var(--color-white);
+}
+
+.btnPrimary:hover {
+  background: #e84324;
+  border-bottom: 2px solid #e84324;
+}
+
+.btnGhost {
+  background: var(--color-orange);
+  color: var(--color-white);
+}
+.btnGhost:hover {
+  background: #e84324;
+}
+
+/* Floating Tag Cloud */
+.tagCloud {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floatingTag {
+  position: absolute;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-orange);
+  animation: float 5s infinite linear;
+  white-space: nowrap;
+  z-index: 2;
+  transform: translateX(-50%);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+/* Entrance Animations */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-3.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(3.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeLeft {
+  opacity: 0;
+  animation: fadeInLeft 0.8s ease-out forwards;
+}
+
+.fadeRight {
+  opacity: 0;
+  animation: fadeInRight 0.8s ease-out forwards;
+}
+
+.fadeUp {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.delay1 {
+  animation-delay: 0.6s;
+}
+
+.delay2 {
+  animation-delay: 1s;
+}
+
+/* Responsive */
+@media (max-width: 35.063rem) {
+  .heroLine {
+    white-space: normal;
+  }
+
+  .heroPill::before,
+  .heroPill::after {
+    display: none;
+  }
+}

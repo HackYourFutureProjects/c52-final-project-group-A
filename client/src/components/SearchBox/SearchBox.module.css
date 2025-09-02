@@ -1,0 +1,118 @@
+.searchBoxContainer {
+  position: fixed;
+  top: 9.5rem;
+  left: 50%;
+  width: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--pill-border-radius);
+  padding: 0.2rem;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border 0.2s ease-in-out;
+}
+.searchBoxContainer:hover {
+  border: 1px solid var(--color-dark-grey);
+}
+
+.searchGroup {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  font-size: 1.3rem;
+}
+.typeSwitch {
+  border: 1px solid var(--color-border);
+  border-radius: var(--pill-border-radius);
+  padding: 0.35rem 0.6rem;
+  transition: border 0.2s ease-in-out;
+}
+.typeSwitch:hover {
+  border: 1px solid var(--color-dark-grey);
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.4rem 1rem 0.4rem 0.1rem;
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+.searchInput::placeholder {
+  transition: opacity 0.2s ease-in-out;
+}
+.searchInput:focus::placeholder {
+  opacity: 0.5;
+}
+.searchBoxBtn {
+  padding: 0.05rem 0.2rem 0 0.2rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--circle-border-radius);
+  transition: border-color 0.2s ease;
+}
+.searchBoxBtn:hover {
+  border: 1px solid var(--color-black);
+}
+.searchIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.suggestionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--outer-border-radius);
+  z-index: 999;
+}
+
+.suggestionItem {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  color: var(--color-black);
+}
+
+.suggestionItem:hover {
+  background: var(--color-semi-transparent-white);
+}
+
+@media (max-width: 768px) {
+  .suggestionsList {
+    top: auto;
+    bottom: 100%;
+    border-radius: var(--inner-border-radius) var(--inner-border-radius) 0 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: none;
+  }
+  .searchBoxContainer {
+    top: unset;
+    bottom: 7.5rem;
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+.active {
+  background: var(--color-orange);
+}
+
+.loading,
+.error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 var(--inner-border-radius) var(--inner-border-radius);
+  color: var(--color-black);
+  z-index: 998;
+}

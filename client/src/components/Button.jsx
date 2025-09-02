@@ -1,16 +1,28 @@
 import PropTypes from "prop-types";
 
-function Button({ label, onClick, icon, className, disabled = false }) {
+function Button({
+  children,
+  onClick,
+  icon,
+  className,
+  disabled = false,
+  ...props
+}) {
   return (
-    <button className={className} onClick={onClick} disabled={disabled}>
+    <button
+      className={className}
+      onClick={onClick}
+      disabled={disabled}
+      {...props}
+    >
       {icon && icon}
-      {label}
+      {children}
     </button>
   );
 }
 
 Button.propTypes = {
-  label: PropTypes.string,
+  children: PropTypes.node,
   onClick: PropTypes.func,
   icon: PropTypes.element,
   className: PropTypes.string,
