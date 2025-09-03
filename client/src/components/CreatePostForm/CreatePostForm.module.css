@@ -12,6 +12,8 @@
   border-radius: var(--outer-border-radius);
   padding: 2.5rem;
   box-shadow: 0 0 10px var(--color-border);
+  width: 35%;
+  min-width: 30rem;
 }
 .title {
   text-align: center;
