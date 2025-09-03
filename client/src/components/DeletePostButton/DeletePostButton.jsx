@@ -26,6 +26,8 @@ function DeletePostButton({ postId, onDelete }) {
 DeletePostButton.propTypes = {
   postId: PropTypes.string.isRequired,
   onDelete: PropTypes.func,
+  className: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default DeletePostButton;

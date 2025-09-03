@@ -38,7 +38,11 @@ function Post({ post, className, dashboard = true }) {
           <p className={style.timestamp}>{publishedAgo}</p>
         </section>
       </Link>
-      <PostFooter postId={post._id} tags={post.tags} />
+      <PostFooter
+        postId={post._id}
+        tags={post.tags}
+        authorId={post.author._id}
+      />
     </article>
   );
 }
