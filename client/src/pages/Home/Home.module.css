@@ -9,3 +9,17 @@
     padding: 1rem;
   }
 }
+
+.title {
+  font-weight: 600;
+  font-size: 2rem;
+  color: var(--color-orange);
+  margin-bottom: 2rem;
+}
+
+.emptyMessage {
+  color: var(--color-dark-grey);
+  font-size: 1rem;
+  text-align: center;
+  opacity: 0.7;
+}
