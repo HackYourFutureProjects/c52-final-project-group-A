@@ -37,12 +37,12 @@ function Post({ post, className, dashboard = true }) {
           <p className={style.timestamp}>{publishedAgo}</p>
         </section>
       ) : (
-        
+      <>
         <Link
           className={style.link}
           to={`/post/${post._id}`}
           onClick={(e) => {
-            if (!userData.userId) {
+            if (!user.userId) {
               redirectIfNotAuth(e);
             }
           }}
@@ -59,6 +59,8 @@ function Post({ post, className, dashboard = true }) {
         tags={post.tags}
         authorId={post.author._id}
       />
+   </>
+      )}
     </article>
   );
 }
