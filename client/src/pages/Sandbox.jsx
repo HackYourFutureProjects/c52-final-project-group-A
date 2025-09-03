@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DeletePostButton from "../components/DeletePostButton/DeletePostButton.jsx";
 
 export default function SandboxPage() {
   // Delete post state
@@ -13,12 +12,6 @@ export default function SandboxPage() {
   const navigate = useNavigate();
 
   const isValidObjectId = (v) => /^[a-fA-F0-9]{24}$/.test(v);
-
-  // Delete handler
-  const handleDeleteSuccess = () => {
-    setDeleteResult("Post deleted successfully.");
-    setDeleteId("");
-  };
 
   // Go to post handler
   const goToPost = (e) => {
@@ -48,7 +41,6 @@ export default function SandboxPage() {
           }}
           placeholder="Enter post ID to delete"
         />
-        <DeletePostButton postId={deleteId} onDelete={handleDeleteSuccess} />
         {deleteResult && <div>{deleteResult}</div>}
       </div>
 
