@@ -23,13 +23,13 @@ async function sendEmail(to, code) {
         <h2 style="color: #fe4a22;">Email Verification</h2>
         <p>Hello,</p>
         <p>Your verification code is:</p>
-        <div style="background-color: #f5f5f5; padding: 20px; text-align: center; margin: 20px 0;">
+        <div style="background-color: #fff; padding: 20px; text-align: center; margin: 20px 0;">
           <h1 style="color: #0d0d0d; font-size: 32px; letter-spacing: 5px; margin: 0;">${code}</h1>
         </div>
         <p>This code will expire in 10 minutes.</p>
         <p>If you didn't request this verification, please ignore this email.</p>
         <hr style="border: none; border-top: 1px solid #ccc; margin: 20px 0;">
-        <p style="color: #666; font-size: 12px;">This is an automated email, please do not reply.</p>
+        <p style="color: #ccc; font-size: 12px;">This is an automated email, please do not reply.</p>
       </div>
     `,
   };
