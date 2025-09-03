@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import StateContext from "../context/state/StateContext";
+import UserContext from "../context/user/UserContext.js";
 
 const followingStatusMap = new Map();
 const listeners = new Set();
@@ -9,14 +9,14 @@ const notifyListeners = (userId, status) => {
 };
 
 export const useFollowingStatus = (userId) => {
-  const { state } = useContext(StateContext);
+  const { user } = useContext(UserContext);
 
   const [isFollowing, setIsFollowing] = useState(
-    state.userId ? followingStatusMap.get(userId) || false : false,
+    user.userId ? followingStatusMap.get(userId) || false : false,
   );
 
   useEffect(() => {
-    if (!state.userId) {
+    if (!user.userId) {
       setIsFollowing(false);
       followingStatusMap.clear();
     }
@@ -29,17 +29,17 @@ export const useFollowingStatus = (userId) => {
 
     listeners.add(listener);
     return () => listeners.delete(listener);
-  }, [userId, state.userId]);
+  }, [userId, user.userId]);
 
   const updateFollowingStatus = useCallback(
     (newStatus) => {
-      if (!state.userId) return;
+      if (!user.userId) return;
 
       followingStatusMap.set(userId, newStatus);
       setIsFollowing(newStatus);
       notifyListeners(userId, newStatus);
     },
-    [userId, state.userId],
+    [userId, user.userId],
   );
 
   return { isFollowing, updateFollowingStatus };

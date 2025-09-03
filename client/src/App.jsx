@@ -12,17 +12,31 @@ import SandboxPage from "./pages/Sandbox.jsx";
 import PostPage from "./pages/Post/Post.jsx";
 import Fab from "./components/Fab/Fab.jsx";
 import EditPostPage from "./pages/EditPost/EditPost.jsx";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "./context/user/UserContext.js";
 import EditProfile from "./pages/EditProfile/EditProfile.jsx";
 import Error from "./components/Error/Error.jsx";
 import StatusContext from "./context/status/StatusContext.js";
+import Loading from "./components/Loading/Loading.jsx";
 
 const App = () => {
   const location = useLocation();
   const { user } = useContext(UserContext);
   const { status, showSearchBox, setShowSearchBox } = useContext(StatusContext);
+  const { isLoading, error } = status;
   const hideFabOn = ["/", "/login", "/register", "/new-post"]; // No FAB button here
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const handleMousePos = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener("mousemove", handleMousePos);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMousePos);
+    };
+  }, []);
 
   return (
     <>
@@ -43,8 +57,9 @@ const App = () => {
         <Route path="/post/:id/edit" element={<EditPostPage />} />
         <Route path="/user/:username/edit" element={<EditProfile />} />
       </Routes>
+      {isLoading && <Loading x={mousePos.x} y={mousePos.y} />}
       {!hideFabOn.includes(location.pathname) && <Fab />}
-      {status.error && <Error message={status.error} />}
+      {error && <Error message={status.error} />}
     </>
   );
 };
