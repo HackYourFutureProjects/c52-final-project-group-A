@@ -6,9 +6,9 @@ import { logError } from "../util/logging.js";
 export const getExplore = async (req, res) => {
   try {
     const [trendingPosts, topCreators, trendingTags] = await Promise.all([
-      getTrendingPosts({ windowHours: 720, limit: 10, capPerAuthor: 2 }),
-      getTopCreators({ windowHours: 168, limit: 4 }),
-      getTrendingTags({ windowHours: 720, limit: 4 }),
+      getTrendingPosts({ windowHours: 24, limit: 10, capPerAuthor: 1 }),
+      getTopCreators({ windowHours: 24, limit: 4 }),
+      getTrendingTags({ windowHours: 24, limit: 4 }),
     ]);
 
     res.json({

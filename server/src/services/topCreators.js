@@ -1,73 +1,102 @@
-import User from "../models/User.js";
 import Post from "../models/Post.js";
-import Like from "../models/Like.js";
-import Follow from "../models/Follow.js";
 import config from "../config.js";
 const { LIKE_WEIGHT, FOLLOWER_WEIGHT, POST_WEIGHT } = config;
 
-export async function getTopCreators({ windowHours = 168, limit = 5 } = {}) {
+export async function getTopCreators({ windowHours = 168, limit = 4 } = {}) {
   const since = new Date(Date.now() - windowHours * 3600 * 1000);
 
-  //  Find recent posts and group by author
-  const posts = await Post.aggregate([
+  const creators = await Post.aggregate([
+    // Stage 1: Filter for posts within the specified time window
     { $match: { published_at: { $gte: since } } },
+
+    // Stage 2: Group by author to count their recent posts
     {
       $group: {
         _id: "$author",
         postCount: { $sum: 1 },
-        postIds: { $push: "$_id" },
+      },
+    },
+
+    // Stage 3: Lookup all posts by the author to get total likes
+    {
+      $lookup: {
+        from: "posts",
+        localField: "_id",
+        foreignField: "author",
+        as: "allPosts",
+      },
+    },
+    {
+      $lookup: {
+        from: "likes",
+        localField: "allPosts._id",
+        foreignField: "post",
+        as: "likes",
+      },
+    },
+
+    // Stage 4: Lookup followers for the author
+    {
+      $lookup: {
+        from: "follows",
+        localField: "_id",
+        foreignField: "following",
+        as: "followers",
+      },
+    },
+
+    // Stage 5: Calculate counts and the final score
+    {
+      $addFields: {
+        likeCount: { $size: "$likes" },
+        followerCount: { $size: "$followers" },
+      },
+    },
+    {
+      $addFields: {
+        score: {
+          $add: [
+            { $multiply: ["$postCount", POST_WEIGHT] },
+            { $multiply: ["$likeCount", LIKE_WEIGHT] },
+            { $multiply: ["$followerCount", FOLLOWER_WEIGHT] },
+          ],
+        },
+      },
+    },
+
+    // Stage 6: Sort by score and limit the results
+    { $sort: { score: -1 } },
+    { $limit: limit },
+
+    // Stage 7: Join with the users collection to get profile information
+    {
+      $lookup: {
+        from: "users",
+        localField: "_id",
+        foreignField: "_id",
+        as: "authorInfo",
+      },
+    },
+
+    // Stage 8: Deconstruct the authorInfo array to a single object
+    { $unwind: "$authorInfo" },
+
+    // Stage 9: Project the final desired fields for the frontend
+    {
+      $project: {
+        _id: "$_id",
+        username: "$authorInfo.username",
+        fullName: {
+          $concat: [
+            "$authorInfo.profile.first_name",
+            " ",
+            "$authorInfo.profile.last_name",
+          ],
+        },
+        avatar: "$authorInfo.profile.avatar",
       },
     },
   ]);
-
-  //  Count likes on those post IDs
-  const authorStats = await Promise.all(
-    posts.map(async (authorGroup) => {
-      const likeCount = await Like.countDocuments({
-        post: { $in: authorGroup.postIds },
-      });
-
-      const followerCount = await Follow.countDocuments({
-        following: authorGroup._id,
-      });
-
-      const score =
-        likeCount * LIKE_WEIGHT +
-        followerCount * FOLLOWER_WEIGHT +
-        authorGroup.postCount * POST_WEIGHT;
-
-      return {
-        authorId: authorGroup._id,
-        postCount: authorGroup.postCount,
-        likeCount,
-        followerCount,
-        score,
-      };
-    }),
-  );
-
-  const sorted = authorStats.sort((a, b) => b.score - a.score).slice(0, limit);
-
-  //Fetch user data
-  const userIds = sorted.map((u) => u.authorId);
-  const users = await User.find({ _id: { $in: userIds } }).select(
-    "_id username profile",
-  );
-
-  // Merge user info with score data
-  const creators = sorted.map((stat) => {
-    const user = users.find(
-      (u) => u._id.toString() === stat.authorId.toString(),
-    );
-    return {
-      ...stat,
-      username: user?.username || "unknown",
-      fullName: user?.profile
-        ? `${user.profile.first_name} ${user.profile.last_name}`
-        : "Unknown",
-      avatar: user?.profile?.avatar || null,
-    };
-  });
 
   return creators;
 }

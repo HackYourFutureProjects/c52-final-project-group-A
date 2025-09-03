@@ -4,8 +4,10 @@ import PropTypes from "prop-types";
 import Avatar from "../Avatar/Avatar.jsx";
 import { Link } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import useFetch from "../../hooks/useFetch.js";
+import useAuthRedirect from "../../hooks/useAuthRedirect.js";
+import StateContext from "../../context/state/StateContext.js";
 
 function ProfileDash({
   size,
@@ -14,6 +16,8 @@ function ProfileDash({
   border = "full",
   followBtn = true,
 }) {
+  const { state } = useContext(StateContext);
+  const { redirectIfNotAuth } = useAuthRedirect();
   const mobile = useWindowWidth(768);
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -58,9 +62,16 @@ function ProfileDash({
     }
   }, [user?._id, followBtn]);
 
-  const handleFollowClick = () => {
+  const handleFollowClick = (e) => {
     if (!user?._id) return;
 
+    if (!state.userId) {
+      // Redirect to login if not authenticated
+      redirectIfNotAuth(e, `/user/${username}`);
+      return;
+    }
+
+    // Otherwise proceed with the follow action
     toggleFollow({
       method: "POST",
       body: JSON.stringify({ authorId: user._id }),
@@ -81,7 +92,13 @@ function ProfileDash({
           >
             <header className={style.nameContainer}>
               <h1 className={style.fullName}>{fullName}</h1>
-              <Link to={`../user/${username}`} className={style.username}>
+              <Link
+                to={`../user/${username}`}
+                className={style.username}
+                onClick={(e) =>
+                  !state.userId && redirectIfNotAuth(e, `/user/${username}`)
+                }
+              >
                 @{username}
               </Link>
             </header>

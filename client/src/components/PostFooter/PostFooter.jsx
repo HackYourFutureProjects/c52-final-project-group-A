@@ -3,8 +3,11 @@ import style from "./PostFooter.module.css";
 import PropTypes from "prop-types";
 import { CommentIcon, ShareIcon, MoreIcon } from "../icons/index.js";
 import LikeButton from "../LikeButton/LikeButton.jsx";
+import { Link } from "react-router-dom";
+import useAuthRedirect from "../../hooks/useAuthRedirect.js";
 
 function PostFooter({ postId, tags }) {
+  const { redirectIfNotAuth, isAuthenticated } = useAuthRedirect();
   return (
     <footer className={style.footer}>
       <section className={style.wrapper}>
@@ -19,7 +22,15 @@ function PostFooter({ postId, tags }) {
               tags.map((tag) => {
                 return (
                   <li key={tag} className={style.tag}>
-                    {tag}
+                    <Link
+                      to={`/tag/${tag}`}
+                      className={style.tagLink}
+                      onClick={(e) =>
+                        !isAuthenticated && redirectIfNotAuth(e, `/tag/${tag}`)
+                      }
+                    >
+                      {tag}
+                    </Link>
                   </li>
                 );
               })}

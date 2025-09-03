@@ -6,16 +6,17 @@ import timeAgoCalc from "../../util/timeAgoCalc.js";
 import { useContext } from "react";
 import StateContext from "../../context/state/StateContext.js";
 import { Link, useLocation } from "react-router-dom";
+import useAuthRedirect from "../../hooks/useAuthRedirect.js";
 
 function Post({ post, className, dashboard = true }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
-  console.log(publishedAgo);
 
   const location = useLocation();
   const linkDisabled = location.pathname === `/post/${post._id}`;
+  const { redirectIfNotAuth } = useAuthRedirect(`/post/${post._id}`);
 
   // Follow button visibility
-  const userData = useContext(StateContext);
+  const { state: userData } = useContext(StateContext);
   const showFollowBtn = userData?.userId !== post.author._id;
 
   return (
@@ -26,19 +27,34 @@ function Post({ post, className, dashboard = true }) {
           border="bottom"
           followBtn={!showFollowBtn}
           user={post.author}
+          publishedAgo={publishedAgo}
         />
       )}
-      <Link
-        className={linkDisabled ? style.linkDisabled : style.link}
-        to={`/post/${post._id}`}
-      >
+      {linkDisabled ? (
         <section className={style.contentContainer}>
           <header className={style.headerContainer}>
             <h1>{post.title}</h1>
           </header>
           <p className={style.postContent}>{post.content}</p>
         </section>
-      </Link>
+      ) : (
+        <Link
+          className={style.link}
+          to={`/post/${post._id}`}
+          onClick={(e) => {
+            if (!userData.userId) {
+              redirectIfNotAuth(e);
+            }
+          }}
+        >
+          <section className={style.contentContainer}>
+            <header className={style.headerContainer}>
+              <h1>{post.title}</h1>
+            </header>
+            <p className={style.postContent}>{post.content}</p>
+          </section>
+        </Link>
+      )}
       <PostFooter postId={post._id} tags={post.tags} />
     </article>
   );
