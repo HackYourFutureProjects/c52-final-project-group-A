@@ -32,8 +32,5 @@ export default function EditPostPage() {
   if (isLoading && !post) return <div>Loading…</div>;
   if (!post) return null;
 
-  const showFollowBtn = user.userId === post?.author?._id;
-  console.log(showFollowBtn);
-
   return <EditPostForm post={post} />;
 }
