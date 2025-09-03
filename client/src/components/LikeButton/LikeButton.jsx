@@ -19,7 +19,6 @@ export default function LikeButton({ postId }) {
     setLiked(Boolean(data.liked));
   }, []);
 
-
   const { performFetch: fetchLikeStatus, cancelFetch } = useFetch(
     `/posts/${postId}/like`,
     handleStatus,

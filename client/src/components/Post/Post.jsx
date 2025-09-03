@@ -16,7 +16,7 @@ function Post({ post, className, dashboard = true }) {
   const { user } = useContext(UserContext);
   const showFollowBtn =
     user?.userId && String(user.userId) !== String(post.author._id);
-  
+
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
       {dashboard && (
@@ -37,29 +37,29 @@ function Post({ post, className, dashboard = true }) {
           <p className={style.timestamp}>{publishedAgo}</p>
         </section>
       ) : (
-      <>
-        <Link
-          className={style.link}
-          to={`/post/${post._id}`}
-          onClick={(e) => {
-            if (!user.userId) {
-              redirectIfNotAuth(e);
-            }
-          }}
-        >
-          <section className={style.contentContainer}>
-            <header className={style.headerContainer}>
-              <h1>{post.title}</h1>
-            </header>
-            <p className={style.postContent}>{post.content}</p>
-          </section>
-        </Link>
-      <PostFooter
-        postId={post._id}
-        tags={post.tags}
-        authorId={post.author._id}
-      />
-   </>
+        <>
+          <Link
+            className={style.link}
+            to={`/post/${post._id}`}
+            onClick={(e) => {
+              if (!user.userId) {
+                redirectIfNotAuth(e);
+              }
+            }}
+          >
+            <section className={style.contentContainer}>
+              <header className={style.headerContainer}>
+                <h1>{post.title}</h1>
+              </header>
+              <p className={style.postContent}>{post.content}</p>
+            </section>
+          </Link>
+          <PostFooter
+            postId={post._id}
+            tags={post.tags}
+            authorId={post.author._id}
+          />
+        </>
       )}
     </article>
   );

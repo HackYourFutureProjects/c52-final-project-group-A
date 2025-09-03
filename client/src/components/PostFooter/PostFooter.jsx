@@ -11,8 +11,8 @@ import { useContext } from "react";
 import UserContext from "../../context/user/UserContext.js";
 import useFetch from "../../hooks/useFetch.js";
 
-const { redirectIfNotAuth, isAuthenticated } = useAuthRedirect();
 function PostFooter({ postId, tags, authorId }) {
+  const { redirectIfNotAuth, isAuthenticated } = useAuthRedirect();
   const { user } = useContext(UserContext);
   const isAuthor = user.userId?.toString() === authorId?.toString();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -72,7 +72,6 @@ function PostFooter({ postId, tags, authorId }) {
                   </li>
                 );
               })}
-
           </ul>
         </section>
       </section>

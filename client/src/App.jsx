@@ -13,7 +13,6 @@ import PostPage from "./pages/Post/Post.jsx";
 import Fab from "./components/Fab/Fab.jsx";
 import EditPostPage from "./pages/EditPost/EditPost.jsx";
 import Explore from "./pages/Explore/Explore.jsx";
-import StateContext from "./context/state/StateContext.js";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "./context/user/UserContext.js";
 import EditProfile from "./pages/EditProfile/EditProfile.jsx";

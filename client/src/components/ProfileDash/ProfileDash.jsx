@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Avatar from "../Avatar/Avatar.jsx";
 import { Link } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import useAuthRedirect from "../../hooks/useAuthRedirect.js";
 import StateContext from "../../context/state/StateContext.js";
@@ -121,7 +121,7 @@ function ProfileDash({
       </div>
       {size === "md" && (
         <p className={style.bio}>
-          {profile.bio ?? "This user has not set a bio yet."}
+          {user?.profile.bio ?? "This user has not set a bio yet."}
         </p>
       )}
     </article>
