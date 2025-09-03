@@ -10,9 +10,8 @@ export default function EditPostPage() {
   const [post, setPost] = useState(null);
 
   // GET hook for fetching post
-  const { performFetch, cancelFetch } = useFetch(
-    `/post/${id}`,
-    (res) => setPost(res.post ?? res),
+  const { performFetch, cancelFetch } = useFetch(`/post/${id}`, (res) =>
+    setPost(res.post ?? res),
   );
 
   useEffect(() => {
