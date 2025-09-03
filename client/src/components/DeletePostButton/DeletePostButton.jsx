@@ -16,7 +16,11 @@ function DeletePostButton({ postId, onDelete, className }) {
     performFetch({ method: "DELETE" });
   };
 
-  return <Button onClick={handleDelete} className={className} disabled={isLoading}>Delete</Button>;
+  return (
+    <Button onClick={handleDelete} className={className} disabled={isLoading}>
+      Delete
+    </Button>
+  );
 }
 
 DeletePostButton.propTypes = {
