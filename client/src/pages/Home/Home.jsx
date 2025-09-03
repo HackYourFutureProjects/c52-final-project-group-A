@@ -1,15 +1,17 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import useFetch from "../../hooks/useFetch";
 import Post from "../../components/Post/Post";
 import style from "./Home.module.css";
+import StatusContext from "../../context/status/StatusContext.js";
 
 function Home() {
   const [allPosts, setAllPosts] = useState([]);
   const [currentBatch, setCurrentBatch] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const { status } = useContext(StatusContext);
 
-  const { isLoading, error, performFetch, cancelFetch } = useFetch(
+  const { performFetch, cancelFetch } = useFetch(
     `/feed?batch=${currentBatch}&limit=10`,
     (response) => {
       if (currentBatch === 1) {
@@ -48,12 +50,12 @@ function Home() {
       window.innerHeight + document.documentElement.scrollTop >=
         document.documentElement.offsetHeight - 1000 &&
       hasMore &&
-      !isLoading &&
+      !status.isLoading &&
       !isLoadingMore
     ) {
       setCurrentBatch((prev) => prev + 1);
     }
-  }, [hasMore, isLoading, isLoadingMore]);
+  }, [hasMore, status.isLoading, isLoadingMore]);
 
   // Add scroll listener
   useEffect(() => {
@@ -61,23 +63,7 @@ function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  if (isLoading && currentBatch === 1) {
-    return (
-      <div className={style.container}>
-        <div>Loading your feed...</div>
-      </div>
-    );
-  }
-
-  if (error && currentBatch === 1) {
-    return (
-      <div className={style.container}>
-        <div>Error loading feed: {error.message || error}</div>
-      </div>
-    );
-  }
-
-  if (allPosts.length === 0 && !isLoading) {
+  if (allPosts.length === 0 && !status.isLoading) {
     return (
       <div className={style.container}>
         <h1>Your Feed</h1>

@@ -5,16 +5,19 @@ import PropTypes from "prop-types";
 import { CommentIcon, ShareIcon, MoreIcon } from "../icons/index.js";
 import LikeButton from "../LikeButton/LikeButton.jsx";
 import { useNavigate } from "react-router-dom";
-import DeletePostButton from "../DeletePostButton/DeletePostButton.jsx";
 import { useContext } from "react";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
+import useFetch from "../../hooks/useFetch.js";
 
 function PostFooter({ postId, tags, authorId }) {
-  const { state } = useContext(StateContext);
-  const isAuthor = state.userId?.toString() === authorId?.toString();
+  const { user } = useContext(UserContext);
+  const isAuthor = user.userId?.toString() === authorId?.toString();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const { performFetch } = useFetch(`/post/${postId}`, () => {
+    setMenuOpen(false);
+  });
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -33,6 +36,11 @@ function PostFooter({ postId, tags, authorId }) {
   const handleEdit = () => {
     navigate(`/post/${postId}/edit`);
     setMenuOpen(false);
+  };
+  const handleDelete = () => {
+    if (!postId) return;
+    if (!window.confirm("Delete post?")) return;
+    performFetch({ method: "DELETE" });
   };
 
   return (
@@ -66,13 +74,9 @@ function PostFooter({ postId, tags, authorId }) {
               <Button className={style.menuBtn} onClick={handleEdit}>
                 Edit post
               </Button>
-              <DeletePostButton
-                postId={postId}
-                className={style.menuBtn}
-                onDelete={() => setMenuOpen(false)}
-              >
+              <Button className={style.menuBtn} onClick={handleDelete}>
                 Delete post
-              </DeletePostButton>
+              </Button>
             </div>
           )}
         </span>

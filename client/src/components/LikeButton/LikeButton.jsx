@@ -1,10 +1,9 @@
 import { useCallback, useState, useEffect } from "react";
 import style from "./LikeButton.module.css";
-import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
+import useFetch from "../../hooks/useFetch.js";
 import PropTypes from "prop-types";
 import Button from "../Button.jsx";
 import { LikeIcon } from "../icons/index.js";
-import useSetError from "../../hooks/useSetError.js";
 
 export default function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
@@ -14,30 +13,24 @@ export default function LikeButton({ postId }) {
     setLiked(Boolean(data.liked));
   }, []);
 
-  const {
-    performFetch: fetchLikeStatus,
-    cancelFetch,
-    error: fetchStatusError,
-  } = useFetchWithAuth(`/posts/${postId}/like`, handleStatus);
+  const { performFetch: fetchLikeStatus, cancelFetch } = useFetch(
+    `/posts/${postId}/like`,
+    handleStatus,
+  );
 
   useEffect(() => {
     fetchLikeStatus();
-    return cancelFetch();
+    return () => cancelFetch();
   }, [postId]);
 
   // POST the like toggle
-  const { performFetch: sendLike, error: sendLikeError } = useFetchWithAuth(
-    `/posts/${postId}/like`,
-    (data) => setLiked(Boolean(data.liked)),
+  const { performFetch: sendLike } = useFetch(`/posts/${postId}/like`, (data) =>
+    setLiked(Boolean(data.liked)),
   );
 
   const handleToggle = () => {
     sendLike({ method: "POST", credentials: "include" });
   };
-
-  // Error logging for debugging
-  const displayError = fetchStatusError || sendLikeError;
-  useSetError(displayError);
 
   return (
     <Button
@@ -45,7 +38,6 @@ export default function LikeButton({ postId }) {
       aria-pressed={liked}
       className={style.likeButton}
       onClick={handleToggle}
-      title={liked ? "Unlike" : "Like"}
       icon={<LikeIcon style={style.icon} fill={liked} />}
     />
   );

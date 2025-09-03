@@ -1,20 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import useFetchWithAuth from "../../hooks/useFetchWithAuth";
+import useFetch from "../../hooks/useFetch";
 import Button from "../Button.jsx";
 import InputField from "../InputField/InputField.jsx";
 import style from "./CreatePostForm.module.css";
 import TextArea from "../TextArea/TextArea.jsx";
 import Drawer from "../Drawer/Drawer.jsx";
-import useSetError from "../../hooks/useSetError.js";
+import StatusContext from "../../context/status/StatusContext.js";
 
 export default function CreatePostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tagsInput, setTagsInput] = useState("");
   const [status, setStatus] = useState("");
+  const { isLoading } = useContext(StatusContext);
 
-  const { isLoading, error, performFetch } = useFetchWithAuth("/post", () => {
+  const { performFetch } = useFetch("/post", () => {
     setTitle("");
     setContent("");
     setTagsInput("");
@@ -36,7 +37,6 @@ export default function CreatePostForm() {
       }),
     });
   };
-  useSetError(error);
 
   return (
     <main className={style.main}>
@@ -75,8 +75,8 @@ export default function CreatePostForm() {
             onChange={(e) => setTagsInput(e.target.value)}
           />
         </div>
-        <Button type="submit" disabled={isLoading} className={style.submitBtn}>
-          {isLoading ? "Saving..." : "Create"}
+        <Button type="submit" className={style.submitBtn} disabled={isLoading}>
+          Create
         </Button>
       </form>
     </main>

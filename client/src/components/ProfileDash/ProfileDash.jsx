@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
 import { useEffect } from "react";
 import useFetch from "../../hooks/useFetch.js";
-import useSetError from "../../hooks/useSetError.js";
 import { useFollowingStatus } from "../../hooks/useFollowingStatus.js";
 
 function ProfileDash({
@@ -32,7 +31,7 @@ function ProfileDash({
   score = score.toString().padStart(2, "0");
 
   // Hook for checking follow status
-  const { performFetch: checkFollowStatus, error: checkFollowError } = useFetch(
+  const { performFetch: checkFollowStatus } = useFetch(
     "/following/check",
     (response) => {
       updateFollowingStatus(response.isFollowing);
@@ -40,12 +39,9 @@ function ProfileDash({
   );
 
   // Hook for follow/unfollow actions
-  const { performFetch: toggleFollow, error: toggleFollowError } = useFetch(
-    "/following",
-    () => {
-      updateFollowingStatus(!isFollowing);
-    },
-  );
+  const { performFetch: toggleFollow } = useFetch("/following", () => {
+    updateFollowingStatus(!isFollowing);
+  });
 
   // Check follow status when component loads
   useEffect(() => {
@@ -65,9 +61,6 @@ function ProfileDash({
       body: JSON.stringify({ authorId: user._id }),
     });
   };
-
-  const displayError = checkFollowError || toggleFollowError;
-  useSetError(displayError);
 
   return (
     <article
