@@ -18,7 +18,7 @@ function DeletePostButton({ postId, onDelete, className }) {
 
   return (
     <Button onClick={handleDelete} className={className} disabled={isLoading}>
-      Delete
+      Delete post
     </Button>
   );
 }
