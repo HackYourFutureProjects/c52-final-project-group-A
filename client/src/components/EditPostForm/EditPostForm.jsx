@@ -6,8 +6,7 @@ import style from "./EditPostForm.module.css";
 import TextArea from "../TextArea/TextArea.jsx";
 import Drawer from "../Drawer/Drawer.jsx";
 import { useNavigate } from "react-router-dom";
-import useSetError from "../../hooks/useSetError.js";
-import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
+import useFetch from "../../hooks/useFetch.js";
 
 export default function EditPostForm({ post }) {
   const { _id: id } = post;
@@ -20,7 +19,7 @@ export default function EditPostForm({ post }) {
   const navigate = useNavigate();
 
   // PATCH hook for updating post
-  const { performFetch, error } = useFetchWithAuth(`/post/${id}`, (res) => {
+  const { performFetch } = useFetch(`/post/${id}`, (res) => {
     if (res.success) navigate(`/post/${id}`); // redirect to post page after save
   });
 
@@ -61,8 +60,6 @@ export default function EditPostForm({ post }) {
       headers: { "Content-Type": "application/json" },
     });
   };
-
-  useSetError(error);
 
   return (
     <main className={style.main}>

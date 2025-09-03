@@ -4,9 +4,8 @@ import InputField from "../InputField/InputField.jsx";
 import TextArea from "../TextArea/TextArea.jsx";
 import Button from "../Button.jsx";
 import style from "./EditProfileForm.module.css";
-import useSetError from "../../hooks/useSetError.js";
-import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
 import { useNavigate } from "react-router-dom";
+import useFetch from "../../hooks/useFetch.js";
 
 export default function EditProfileForm({ profile }) {
   const { username, first_name, last_name, bio } = profile;
@@ -19,12 +18,9 @@ export default function EditProfileForm({ profile }) {
   const navigate = useNavigate();
 
   // PATCH profile
-  const { performFetch, error } = useFetchWithAuth(
-    `/user/${username}/edit`,
-    () => {
-      navigate(`/user/${username}`);
-    },
-  );
+  const { performFetch } = useFetch(`/user/${username}/edit`, () => {
+    navigate(`/user/${username}`);
+  });
   const handleSave = (fields) => {
     performFetch({
       method: "PATCH",
@@ -51,7 +47,6 @@ export default function EditProfileForm({ profile }) {
     e.preventDefault();
     handleSave(form);
   };
-  useSetError(error);
 
   return (
     <main className={style.main}>
