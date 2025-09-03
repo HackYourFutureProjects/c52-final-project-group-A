@@ -5,16 +5,16 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import Home from "./pages/Home/Home.jsx";
-import NewPostPage from "./pages/NewPost/NewPost.jsx";
+import NewPostPage from "./pages/NewPost.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
 import SearchBox from "./components/SearchBox/SearchBox";
 import SandboxPage from "./pages/Sandbox.jsx";
 import PostPage from "./pages/Post/Post.jsx";
 import Fab from "./components/Fab/Fab.jsx";
-import EditPostPage from "./pages/EditPost/EditPost.jsx";
+import EditPostPage from "./pages/EditPost.jsx";
 import { useContext } from "react";
 import StateContext from "./context/state/StateContext.js";
-import EditProfile from "./pages/EditProfile/EditProfile.jsx";
+import EditProfile from "./pages/EditProfile.jsx";
 import Error from "./components/Error/Error.jsx";
 
 const App = () => {

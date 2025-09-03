@@ -40,8 +40,14 @@ function PostFooter({ postId, tags, authorId }) {
       <section className={style.wrapper}>
         <section className={style.actionsContainer}>
           <LikeButton postId={postId} />
-          <Button icon={<CommentIcon style={style.icon} />} />
-          <Button icon={<ShareIcon style={style.icon} />} />
+          <Button
+            className={style.actionButton}
+            icon={<CommentIcon style={style.icon} />}
+          />
+          <Button
+            className={style.actionButton}
+            icon={<ShareIcon style={style.icon} />}
+          />
         </section>
         <section className={style.tagsContainer}>
           <ul>
@@ -58,6 +64,7 @@ function PostFooter({ postId, tags, authorId }) {
         <span style={{ position: "relative", display: "inline-block" }}>
           <Button
             style={{ position: "relative" }}
+            className={style.actionButton}
             icon={<MoreIcon style={style.icon} />}
             onClick={() => setMenuOpen((open) => !open)}
           />

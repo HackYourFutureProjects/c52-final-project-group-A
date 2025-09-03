@@ -78,7 +78,7 @@ button {
   transition: opacity 0.2s ease-in-out;
 }
 button:hover {
-  opacity: 0.95;
+  opacity: 0.9;
 }
 button:disabled {
   cursor: auto;
