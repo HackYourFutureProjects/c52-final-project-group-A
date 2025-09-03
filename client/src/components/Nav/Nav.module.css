@@ -73,6 +73,9 @@
 /* Sign-in button */
 
 .signInButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--color-orange);
   color: var(--color-white);
   border: none;
@@ -84,12 +87,21 @@
   pointer-events: auto;
 }
 
+.loginIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
 /* @media */
 @media (max-width: 768px) {
   .navContainer {
     top: auto;
     bottom: 2rem;
     width: calc(100% - 2 * 1rem);
+    transition: bottom 0.3s ease-in-out;
+  }
+  .navContainerHidden {
+    bottom: -5rem;
   }
   .navButton {
     border: none;

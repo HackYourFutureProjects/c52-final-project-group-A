@@ -4,28 +4,26 @@ import style from "./Post.module.css";
 import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
 import { useContext } from "react";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
 import { Link, useLocation } from "react-router-dom";
 import useAuthRedirect from "../../hooks/useAuthRedirect.js";
 
 function Post({ post, className, dashboard = true }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
-
+  const { redirectIfNotAuth } = useAuthRedirect(`/post/${post._id}`);
   const location = useLocation();
   const linkDisabled = location.pathname === `/post/${post._id}`;
-  const { redirectIfNotAuth } = useAuthRedirect(`/post/${post._id}`);
-
-  // Follow button visibility
-  const { state: userData } = useContext(StateContext);
-  const showFollowBtn = userData?.userId !== post.author._id;
-
+  const { user } = useContext(UserContext);
+  const showFollowBtn =
+    user?.userId && String(user.userId) !== String(post.author._id);
+  
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
       {dashboard && (
         <ProfileDash
           size="sm"
           border="bottom"
-          followBtn={!showFollowBtn}
+          followBtn={showFollowBtn}
           user={post.author}
           publishedAgo={publishedAgo}
         />
@@ -36,8 +34,10 @@ function Post({ post, className, dashboard = true }) {
             <h1>{post.title}</h1>
           </header>
           <p className={style.postContent}>{post.content}</p>
+          <p className={style.timestamp}>{publishedAgo}</p>
         </section>
       ) : (
+        
         <Link
           className={style.link}
           to={`/post/${post._id}`}
@@ -54,8 +54,11 @@ function Post({ post, className, dashboard = true }) {
             <p className={style.postContent}>{post.content}</p>
           </section>
         </Link>
-      )}
-      <PostFooter postId={post._id} tags={post.tags} />
+      <PostFooter
+        postId={post._id}
+        tags={post.tags}
+        authorId={post.author._id}
+      />
     </article>
   );
 }

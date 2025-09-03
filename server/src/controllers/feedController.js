@@ -12,15 +12,39 @@ const { FEED_WINDOW_HOURS } = config;
 export const getFeed = async (req, res) => {
   try {
     const userId = req.user._id;
+    const batch = parseInt(req.query.batch) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (batch - 1) * limit;
 
     if (!(await hasUserSignals(userId))) {
       const trending = await getTrendingPosts({
         windowHours: 28,
-        limit: 10,
+        limit: limit,
         capPerAuthor: 2,
+        skip: skip,
       });
-      return res.json({ mode: "cold-start", items: trending });
+
+      const totalTrending = await Post.countDocuments({
+        status: "PUBLISHED",
+        published_at: { $gte: new Date(Date.now() - 28 * 3600 * 1000) },
+      });
+
+      return res.json({
+        success: true,
+        data: {
+          mode: "cold-start",
+          items: trending,
+          pagination: {
+            currentBatch: batch,
+            totalBatches: Math.ceil(totalTrending / limit),
+            totalItems: totalTrending,
+            hasNext: batch * limit < totalTrending,
+            hasPrev: batch > 1,
+          },
+        },
+      });
     }
+
     const since = new Date(Date.now() - FEED_WINDOW_HOURS * 3600 * 1000);
 
     // Get list of users the logged-in user follows
@@ -32,15 +56,22 @@ export const getFeed = async (req, res) => {
     const likedPosts = await Like.find({ user: userId })
       .select("post")
       .limit(config.MAX_LIKED_POSTS_LIMIT);
-    const likedPostIds = likedPosts.map((like) => like.post.toString()); // now we convert to string for comparison
+    const likedPostIds = likedPosts.map((like) => like.post.toString());
+
+    const matchCondition = {
+      published_at: { $gte: since },
+    };
+    if (followingIds.length > 0) {
+      matchCondition.author = { $in: followingIds };
+    }
+
+    // Count total posts for pagination
+    const totalPosts = await Post.countDocuments(matchCondition);
 
     // Get posts by followed users from last 7 days
     const recentPosts = await Post.aggregate([
       {
-        $match: {
-          author: { $in: followingIds },
-          published_at: { $gte: since },
-        },
+        $match: matchCondition,
       },
       {
         $lookup: {
@@ -51,8 +82,25 @@ export const getFeed = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "authorData",
+        },
+      },
+      {
+        $unwind: "$authorData",
+      },
+      {
         $addFields: {
           likeCount: { $size: "$likes" },
+          author: {
+            _id: "$authorData._id",
+            username: "$authorData.username",
+            score: "$authorData.score",
+            profile: "$authorData.profile",
+          },
         },
       },
       {
@@ -63,16 +111,49 @@ export const getFeed = async (req, res) => {
           tags: 1,
           likeCount: 1,
           published_at: 1,
+          author: 1,
         },
       },
+      { $skip: skip },
+      { $limit: limit },
     ]);
 
-    // Get the logged-in user’s tag preference (based on their own posts)
+    if (recentPosts.length === 0 && batch === 1) {
+      // If no recent posts, fall back to trending
+      const trending = await getTrendingPosts({
+        windowHours: 28,
+        limit: limit,
+        capPerAuthor: 2,
+      });
+
+      const totalTrending = await Post.countDocuments({
+        status: "PUBLISHED",
+        published_at: { $gte: new Date(Date.now() - 28 * 3600 * 1000) },
+      });
+
+      return res.json({
+        success: true,
+        data: {
+          mode: "cold-start",
+          items: trending,
+          pagination: {
+            currentBatch: batch,
+            totalBatches: Math.ceil(totalTrending / limit),
+            totalItems: totalTrending,
+            hasNext: batch * limit < totalTrending,
+            hasPrev: batch > 1,
+          },
+        },
+      });
+    }
+
+    // Get the logged-in user's tag preference (based on their own posts)
     const userPosts = await Post.find({ author: userId }).select("tags");
-    const likedTaggedPosts = await Post.aggregate([
-      { $match: { _id: { $in: likedPostIds } } },
-      { $project: { tags: 1 } },
-    ]);
+
+    // If you want to get tags from liked posts, fetch them separately:
+    const likedTaggedPosts = await Post.find({
+      _id: { $in: likedPostIds },
+    }).select("tags");
 
     const tagFrequency = {};
     userPosts.forEach((post) => {
@@ -80,7 +161,6 @@ export const getFeed = async (req, res) => {
         tagFrequency[tag] = (tagFrequency[tag] || 0) + 1;
       });
     });
-    // Include tags from liked posts in frequency calculation
 
     likedTaggedPosts.forEach((post) => {
       post.tags?.forEach((tag) => {
@@ -92,18 +172,31 @@ export const getFeed = async (req, res) => {
     const homeFeed = recentPosts.map((post) => ({
       ...post,
       score: calculatePostScore(post.likeCount, post.tags, tagFrequency),
-      likedByMe: likedPostIds.includes(post._id.toString()), // New field added
+      likedByMe: likedPostIds.includes(post._id.toString()),
     }));
 
     homeFeed.sort((a, b) => b.score - a.score);
 
     //  Return both feeds
     res.json({
-      mode: "personalized",
-      items: homeFeed,
+      success: true,
+      data: {
+        mode: "personalized",
+        items: homeFeed,
+        pagination: {
+          currentBatch: batch,
+          totalBatches: Math.ceil(totalPosts / limit),
+          totalItems: totalPosts,
+          hasNext: batch * limit < totalPosts,
+          hasPrev: batch > 1,
+        },
+      },
     });
   } catch (err) {
-    logError("Error generating feed:", err.message);
-    res.status(500).json({ error: "Failed to generate feed" });
+    logError(err);
+    res.status(500).json({
+      success: false,
+      msg: "Failed to generate feed",
+    });
   }
 };

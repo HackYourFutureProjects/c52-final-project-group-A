@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect, useContext } from "react";
 import style from "./LikeButton.module.css";
-import useFetchWithAuth from "../../hooks/useFetchWithAuth.js";
+import useFetch from "../../hooks/useFetch.js";
 import PropTypes from "prop-types";
 import Button from "../Button.jsx";
 import { LikeIcon } from "../icons/index.js";
@@ -19,7 +19,8 @@ export default function LikeButton({ postId }) {
     setLiked(Boolean(data.liked));
   }, []);
 
-  const { performFetch: fetchLikeStatus, cancelFetch } = useFetchWithAuth(
+
+  const { performFetch: fetchLikeStatus, cancelFetch } = useFetch(
     `/posts/${postId}/like`,
     handleStatus,
   );
@@ -32,9 +33,8 @@ export default function LikeButton({ postId }) {
   }, [postId, isAuth]);
 
   // POST the like toggle
-  const { performFetch: sendLike } = useFetchWithAuth(
-    `/posts/${postId}/like`,
-    (data) => setLiked(Boolean(data.liked)),
+  const { performFetch: sendLike } = useFetch(`/posts/${postId}/like`, (data) =>
+    setLiked(Boolean(data.liked)),
   );
 
   const handleToggle = (e) => {
@@ -51,7 +51,6 @@ export default function LikeButton({ postId }) {
       aria-pressed={liked}
       className={style.likeButton}
       onClick={handleToggle}
-      title={liked ? "Unlike" : "Like"}
       icon={<LikeIcon style={style.icon} fill={liked} />}
     />
   );

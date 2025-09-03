@@ -23,7 +23,7 @@ export default function SearchBox({ onClose }) {
     [type],
   );
 
-  const { isLoading, error, performFetch, cancelFetch } = useFetch(
+  const { performFetch, cancelFetch } = useFetch(
     `/search?q=${encodeURIComponent(query)}&type=${type}`,
     onReceived,
   );
@@ -56,8 +56,6 @@ export default function SearchBox({ onClose }) {
     },
     [navigate, onClose, type],
   );
-
-  const isRealError = error && error.name !== "AbortError";
 
   return (
     <div className={style.searchBoxContainer}>
@@ -105,9 +103,6 @@ export default function SearchBox({ onClose }) {
       >
         <SearchIcon style={style.searchIcon} />
       </Button>
-
-      {isLoading && <div>Loading...</div>}
-      {isRealError && <div>Error: {error.toString()}</div>}
 
       {results.length > 0 && (
         <ul className={style.suggestionsList}>

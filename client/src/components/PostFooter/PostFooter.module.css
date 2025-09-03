@@ -21,6 +21,9 @@
 .tagsContainer ul {
   display: flex;
   gap: 0.5rem;
+  overflow-x: auto;
+  max-width: 45vw;
+  border-radius: var(--pill-border-radius);
 }
 .tag {
   border: 1px solid var(--color-border);
@@ -43,4 +46,45 @@
 }
 .footer button:hover {
   border: 1px solid var(--color-dark-grey);
+}
+
+.menuPopover {
+  background: yellow;
+  position: absolute;
+  top: 2.2em;
+  right: 0;
+  z-index: 1000;
+  background: #acabab;
+  border-radius: 0.7em;
+  padding: 0.3em 0.5em;
+  min-width: 170px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+}
+
+.menuBtn {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--color-black);
+  padding: 0.65em 1.2em;
+  text-align: left;
+  font-size: 1.08rem;
+  border-radius: 0.6em;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  outline: none;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.menuBtn:hover,
+.menuBtn:focus-visible {
+  background: #f5f5f5;
+  color: #111;
 }

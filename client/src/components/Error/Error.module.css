@@ -1,0 +1,42 @@
+.section {
+  position: absolute;
+  left: 0;
+  bottom: 3rem;
+  background: var(--color-semi-transparent-white);
+  backdrop-filter: blur(3px);
+  border: 1px solid var(--color-border);
+  border-radius: 0 0 var(--outer-border-radius) var(--outer-border-radius);
+  margin: 0.5rem;
+}
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: var(--border);
+  background: var(--color-orange);
+}
+.header {
+  color: var(--color-white);
+  margin: 0.1rem 0.3rem;
+}
+.closeBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-white);
+  border-left: var(--border);
+  width: 2rem;
+}
+.crossIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.message {
+  padding: 0.5rem;
+  max-width: 40vw;
+}
+
+@media (max-width: 768px) {
+  .section {
+    bottom: 8rem;
+  }
+}

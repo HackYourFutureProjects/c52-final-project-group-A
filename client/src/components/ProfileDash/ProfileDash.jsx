@@ -8,6 +8,7 @@ import { useState, useEffect, useContext } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import useAuthRedirect from "../../hooks/useAuthRedirect.js";
 import StateContext from "../../context/state/StateContext.js";
+import { useFollowingStatus } from "../../hooks/useFollowingStatus.js";
 
 function ProfileDash({
   size,
@@ -19,7 +20,7 @@ function ProfileDash({
   const { state } = useContext(StateContext);
   const { redirectIfNotAuth } = useAuthRedirect();
   const mobile = useWindowWidth(768);
-  const [isFollowing, setIsFollowing] = useState(false);
+  const { isFollowing, updateFollowingStatus } = useFollowingStatus(user?._id);
 
   const dashSize =
     mobile && size === "lg" ? style[`dash_mobile`] : style[`dash_${size}`];
@@ -43,13 +44,13 @@ function ProfileDash({
   const { performFetch: checkFollowStatus } = useFetch(
     "/following/check",
     (response) => {
-      setIsFollowing(response.isFollowing);
+      updateFollowingStatus(response.isFollowing);
     },
   );
 
   // Hook for follow/unfollow actions
   const { performFetch: toggleFollow } = useFetch("/following", () => {
-    setIsFollowing(!isFollowing);
+    updateFollowingStatus(!isFollowing);
   });
 
   // Check follow status when component loads
@@ -118,6 +119,11 @@ function ProfileDash({
           )}
         </div>
       </div>
+      {size === "md" && (
+        <p className={style.bio}>
+          {profile.bio ?? "This user has not set a bio yet."}
+        </p>
+      )}
     </article>
   );
 }

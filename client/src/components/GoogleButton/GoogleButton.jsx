@@ -4,21 +4,20 @@ import Button from "../Button.jsx";
 import useFetch from "../../hooks/useFetch.js";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import StateContext from "../../context/state/StateContext.js";
+import UserContext from "../../context/user/UserContext.js";
+import StatusContext from "../../context/status/StatusContext.js";
 import { GoogleIcon } from "../icons/index.js";
 
 function GoogleButton() {
   const navigate = useNavigate();
-  const { setState } = useContext(StateContext);
+  const { setUser } = useContext(UserContext);
+  const { isLoading, setStatus } = useContext(StatusContext);
 
-  const { performFetch, isLoading, error } = useFetch(
-    "/login/google-auth",
-    (res) => {
-      const { _id: userId, username } = res.user;
-      setState({ userId, username });
-      navigate("/home"); // Redirect to landing page on success
-    },
-  );
+  const { performFetch } = useFetch("/login/google-auth", (res) => {
+    const { _id: userId, username } = res.user;
+    setUser({ userId, username });
+    navigate("/home"); // Redirect to landing page on success
+  });
 
   const handleLoginSuccess = async (response) => {
     const options = {
@@ -36,14 +35,10 @@ function GoogleButton() {
 
   const googleLogin = useGoogleLogin({
     onSuccess: handleLoginSuccess,
-    onError: (error) => {
-      console.error("Google login error:", error);
+    onError: (err) => {
+      setStatus((prev) => ({ ...prev, error: err?.message }));
     },
   });
-
-  if (error) {
-    console.error("Fetch error:", error);
-  }
 
   return (
     <Button
@@ -52,7 +47,7 @@ function GoogleButton() {
       className={style.googleButton}
       disabled={isLoading}
     >
-      {isLoading ? "Signing in..." : "Continue with Google"}
+      Continue with Google
     </Button>
   );
 }
