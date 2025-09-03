@@ -23,7 +23,7 @@ function AuthForm({ type }) {
       };
 
   const { setUser } = useContext(UserContext);
-  const { isLoading } = useContext(StatusContext);
+  const { status } = useContext(StatusContext);
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const endpoint = isSignIn ? "/login" : "/register";
@@ -153,7 +153,7 @@ function AuthForm({ type }) {
           <Button
             type="submit"
             className={style.submitBtn}
-            disabled={isLoading}
+            disabled={status.isLoading}
           >
             {isSignIn ? "Log in" : "Continue"}
           </Button>
