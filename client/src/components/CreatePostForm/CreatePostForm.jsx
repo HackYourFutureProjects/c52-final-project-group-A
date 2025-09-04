@@ -13,7 +13,8 @@ export default function CreatePostForm() {
   const [content, setContent] = useState("");
   const [tagsInput, setTagsInput] = useState("");
   const [status, setStatus] = useState("");
-  const { isLoading } = useContext(StatusContext);
+  const { status: statusContext } = useContext(StatusContext);
+  const { isLoading } = statusContext;
 
   const { performFetch } = useFetch("/post", () => {
     setTitle("");

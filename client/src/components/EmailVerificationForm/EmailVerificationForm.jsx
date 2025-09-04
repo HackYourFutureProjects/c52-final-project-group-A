@@ -7,7 +7,8 @@ import StatusContext from "../../context/status/StatusContext.js";
 
 function EmailVerificationForm() {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
-  const { isLoading, setStatus } = useContext(StatusContext);
+  const { status, setStatus } = useContext(StatusContext);
+  const { isLoading } = status;
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
