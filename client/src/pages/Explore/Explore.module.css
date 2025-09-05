@@ -36,8 +36,6 @@
 
 /* Middle: scrollable feed */
 .feedContainer {
-  height: calc(100vh - 6rem);
-  overflow-y: auto;
   padding-right: 0.5rem;
   scroll-behavior: smooth;
   margin-left: 17%; /* Adjusted margin to align with left sidebar */
