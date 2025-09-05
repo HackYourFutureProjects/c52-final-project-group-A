@@ -1,13 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import Button from "../Button.jsx";
 import style from "./PostFooter.module.css";
 import PropTypes from "prop-types";
 import { CommentIcon, ShareIcon, MoreIcon } from "../icons/index.js";
 import LikeButton from "../LikeButton/LikeButton.jsx";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import UserContext from "../../context/user/UserContext.js";
 import useFetch from "../../hooks/useFetch.js";
+import useAuthAction from "../../hooks/useAuthAction.js";
 
 function PostFooter({ postId, tags, authorId }) {
   const { user } = useContext(UserContext);
@@ -15,6 +15,7 @@ function PostFooter({ postId, tags, authorId }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const handleAuthAction = useAuthAction();
   const { performFetch } = useFetch(`/post/${postId}`, () => {
     setMenuOpen(false);
   });
@@ -43,6 +44,14 @@ function PostFooter({ postId, tags, authorId }) {
     performFetch({ method: "DELETE" });
   };
 
+  const handleComment = () => {
+    navigate(`/post/${postId}`);
+  };
+
+  const handleShare = () => {
+    // Placeholder for share logic, you can add your share functionality here.
+  };
+
   return (
     <footer className={style.footer}>
       <section className={style.wrapper}>
@@ -51,10 +60,12 @@ function PostFooter({ postId, tags, authorId }) {
           <Button
             className={style.actionButton}
             icon={<CommentIcon style={style.icon} />}
+            onClick={() => handleAuthAction(handleComment)}
           />
           <Button
             className={style.actionButton}
             icon={<ShareIcon style={style.icon} />}
+            onClick={() => handleAuthAction(handleShare)}
           />
         </section>
         <section className={style.tagsContainer}>

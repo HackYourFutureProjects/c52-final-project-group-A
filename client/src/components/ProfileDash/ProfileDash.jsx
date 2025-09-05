@@ -2,11 +2,13 @@ import Button from "../Button.jsx";
 import style from "./ProfileDash.module.css";
 import PropTypes from "prop-types";
 import Avatar from "../Avatar/Avatar.jsx";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth.js";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import { useFollowingStatus } from "../../hooks/useFollowingStatus.js";
+import useAuthAction from "../../hooks/useAuthAction.js";
+import UserContext from "../../context/user/UserContext.js";
 
 function ProfileDash({
   size,
@@ -17,6 +19,9 @@ function ProfileDash({
 }) {
   const mobile = useWindowWidth(768);
   const { isFollowing, updateFollowingStatus } = useFollowingStatus(user?._id);
+  const navigate = useNavigate();
+  const handleAuthAction = useAuthAction();
+  const { user: loggedInUser } = useContext(UserContext);
 
   const dashSize =
     mobile && size === "lg" ? style[`dash_mobile`] : style[`dash_${size}`];
@@ -45,13 +50,13 @@ function ProfileDash({
 
   // Check follow status when component loads
   useEffect(() => {
-    if (followBtn && user?._id) {
+    if (followBtn && user?._id && loggedInUser.userId) {
       checkFollowStatus({
         method: "POST",
         body: JSON.stringify({ authorId: user._id }),
       });
     }
-  }, [user?._id, followBtn]);
+  }, [user?._id, followBtn, loggedInUser.userId]);
 
   const handleFollowClick = () => {
     if (!user?._id) return;
@@ -60,6 +65,12 @@ function ProfileDash({
       method: "POST",
       body: JSON.stringify({ authorId: user._id }),
     });
+  };
+
+  const handleProfileClick = () => {
+    if (!user?._id) return;
+
+    navigate(`../user/${username}`);
   };
 
   return (
@@ -74,11 +85,19 @@ function ProfileDash({
           <div
             className={style.nameAndBtnContainer + " " + nameAndBtnContainer}
           >
-            <header className={style.nameContainer}>
+            <header
+              className={style.nameContainer}
+              onClick={() => handleAuthAction(handleProfileClick)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  handleAuthAction(handleProfileClick);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+            >
               <h1 className={style.fullName}>{fullName}</h1>
-              <Link to={`../user/${username}`} className={style.username}>
-                @{username}
-              </Link>
+              <div className={style.username}>@{username}</div>
             </header>
             {followBtn && (
               <Button

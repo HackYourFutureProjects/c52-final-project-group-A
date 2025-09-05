@@ -1,0 +1,121 @@
+/* Container for Explore page */
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: 8rem; /* push content below navbar */
+  padding-inline: 1rem;
+}
+
+/* Grid layout with 3 columns */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* Further reduced feed size */
+  gap: 2rem; /* Maintained spacing */
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  min-height: calc(100vh - 6rem); /* Ensure full height after navbar */
+}
+
+/* Left sidebar */
+.leftSidebar {
+  background-color: var(
+    --color-semi-transparent-white
+  ); /* Updated to use global color variable */
+  padding: 1rem;
+  border-radius: var(
+    --inner-border-radius
+  ); /* Ensures consistency with global styles */
+  height: fit-content;
+  position: sticky; /* Maintained sticky positioning */
+  top: 6rem;
+  align-self: flex-start;
+  width: 20%; /* Ensured equal size with right sidebar */
+}
+
+/* Middle: scrollable feed */
+.feedContainer {
+  padding-right: 0.5rem;
+  scroll-behavior: smooth;
+  margin-left: 17%; /* Adjusted margin to align with left sidebar */
+  margin-right: 17%; /* Adjusted margin to align with right sidebar */
+}
+
+/* Right sidebar */
+.rightSidebar {
+  background-color: var(--color-semi-transparent-white);
+  padding: 1rem;
+  border-radius: var(--inner-border-radius);
+  display: flex;
+  gap: 5rem;
+  flex-direction: column;
+  position: sticky; /* Maintained sticky positioning */
+  top: 6rem;
+  align-self: flex-start;
+  width: 20%; /* Ensured equal size with left sidebar */
+}
+
+/* Trending tags box */
+.trendingTagsSection {
+  background-color: var(--color-white);
+  border-radius: var(--inner-border-radius);
+  padding: 1rem;
+}
+
+/* Title for sections */
+.sectionTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Tag styles */
+.tagLink {
+  padding: 0.5rem;
+  border-radius: var(--pill-border-radius);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.2s;
+  text-decoration: none;
+}
+
+.tagLink:hover {
+  transform: scale(1.05);
+}
+
+.tagRank {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.tagName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Responsive layout (1 column on mobile) */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .leftSidebar,
+  .rightSidebar {
+    display: none;
+  }
+
+  .feedContainer {
+    height: auto;
+    overflow: visible;
+  }
+
+  .container {
+    padding-top: 5rem;
+  }
+}
