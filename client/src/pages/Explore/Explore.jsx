@@ -43,7 +43,7 @@ const Explore = () => {
       <aside className={styles.leftSidebar}>
         <p>This is the left sidebar</p>
       </aside>
-      <main className={styles.mainContent}>
+      <main className={styles.feedContainer}>
         <Feed posts={exploreData.trendingPosts} />
       </main>
       <aside className={styles.rightSidebar}>
