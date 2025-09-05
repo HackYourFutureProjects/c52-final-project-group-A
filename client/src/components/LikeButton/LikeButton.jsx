@@ -1,12 +1,16 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useContext } from "react";
 import style from "./LikeButton.module.css";
 import useFetch from "../../hooks/useFetch.js";
 import PropTypes from "prop-types";
 import Button from "../Button.jsx";
 import { LikeIcon } from "../icons/index.js";
+import useAuthAction from "../../hooks/useAuthAction.js";
+import UserContext from "../../context/user/UserContext.js";
 
 export default function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
+  const handleAuthAction = useAuthAction();
+  const { user } = useContext(UserContext);
 
   // GET the like status
   const handleStatus = useCallback((data) => {
@@ -19,9 +23,11 @@ export default function LikeButton({ postId }) {
   );
 
   useEffect(() => {
-    fetchLikeStatus();
+    if (user.userId) {
+      fetchLikeStatus();
+    }
     return () => cancelFetch();
-  }, [postId]);
+  }, [postId, user.userId]);
 
   // POST the like toggle
   const { performFetch: sendLike } = useFetch(`/posts/${postId}/like`, (data) =>
@@ -29,7 +35,9 @@ export default function LikeButton({ postId }) {
   );
 
   const handleToggle = () => {
-    sendLike({ method: "POST", credentials: "include" });
+    handleAuthAction(() => {
+      sendLike({ method: "POST", credentials: "include" });
+    });
   };
 
   return (

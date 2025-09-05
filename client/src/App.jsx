@@ -10,6 +10,7 @@ import EmailVerification from "./pages/EmailVerification.jsx";
 import SearchBox from "./components/SearchBox/SearchBox";
 import SandboxPage from "./pages/Sandbox.jsx";
 import PostPage from "./pages/Post/Post.jsx";
+import Explore from "./pages/Explore/Explore.jsx";
 import Fab from "./components/Fab/Fab.jsx";
 import EditPostPage from "./pages/EditPost.jsx";
 import { useContext, useEffect, useState } from "react";
@@ -53,6 +54,7 @@ const App = () => {
         <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/new-post" element={<NewPostPage />} />
         <Route path="/sandbox" element={<SandboxPage />} />
+        <Route path="/explore" element={<Explore />} />
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/post/:id/edit" element={<EditPostPage />} />
         <Route path="/user/:username/edit" element={<EditProfile />} />

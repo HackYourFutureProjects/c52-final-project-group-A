@@ -5,16 +5,23 @@ import PropTypes from "prop-types";
 import timeAgoCalc from "../../util/timeAgoCalc.js";
 import { useContext } from "react";
 import UserContext from "../../context/user/UserContext.js";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import useAuthAction from "../../hooks/useAuthAction.js";
 
 function Post({ post, className, dashboard = true }) {
   const publishedAgo = timeAgoCalc(new Date(post.published_at));
   const location = useLocation();
+  const navigate = useNavigate();
+  const handleAuthAction = useAuthAction();
   const linkDisabled = location.pathname === `/post/${post._id}`;
   const { user } = useContext(UserContext);
 
   const showFollowBtn =
     user?.userId && String(user.userId) !== String(post.author._id);
+
+  const handlePostClick = () => {
+    navigate(`/post/${post._id}`);
+  };
 
   return (
     <article className={[style.wrapper, className].filter(Boolean).join(" ")}>
@@ -26,9 +33,16 @@ function Post({ post, className, dashboard = true }) {
           user={post.author}
         />
       )}
-      <Link
+      <div
         className={linkDisabled ? style.linkDisabled : style.link}
-        to={`/post/${post._id}`}
+        onClick={() => handleAuthAction(handlePostClick)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleAuthAction(handlePostClick);
+          }
+        }}
+        role="button"
+        tabIndex={linkDisabled ? -1 : 0}
       >
         <section className={style.contentContainer}>
           <header className={style.headerContainer}>
@@ -37,7 +51,7 @@ function Post({ post, className, dashboard = true }) {
           <p className={style.postContent}>{post.content}</p>
           <p className={style.timestamp}>{publishedAgo}</p>
         </section>
-      </Link>
+      </div>
       <PostFooter
         postId={post._id}
         tags={post.tags}

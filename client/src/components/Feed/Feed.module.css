@@ -1,0 +1,51 @@
+.container {
+  width: 100%;
+}
+
+.container h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-color-primary);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.postItem {
+  background-color: var(--background-color);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+.postTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color-primary);
+}
+
+.postContent {
+  margin: 0 0 1rem 0;
+  color: var(--text-color-secondary);
+  white-space: pre-wrap;
+}
+
+.postAuthor {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color-tertiary);
+}
+
+.emptyMessage {
+  color: var(--text-color-secondary);
+  padding: 2rem;
+  text-align: center;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+}
