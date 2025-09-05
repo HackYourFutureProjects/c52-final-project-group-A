@@ -50,7 +50,6 @@ function PostFooter({ postId, tags, authorId }) {
 
   const handleShare = () => {
     // Placeholder for share logic, you can add your share functionality here.
-    alert(`Share functionality for post ${postId} is not yet implemented.`);
   };
 
   return (
