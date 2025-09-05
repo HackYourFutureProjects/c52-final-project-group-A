@@ -23,7 +23,7 @@ const TopCreators = ({ creators }) => {
   };
 
   const handleProfileClick = (username) => {
-    navigate(`/profile/${username}`);
+    navigate(`../user/${username}`);
   };
 
   return (
