@@ -12,14 +12,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-transporter.verify(function (error) {
-  if (error) {
-    console.log("SMTP Error:", error);
-  } else {
-    console.log("SMTP Server is ready to take messages");
-  }
-});
-
 async function sendWeeklyEmail({ to, subject, text, html }) {
   const mailOptions = {
     from: `'MySite' <${EMAIL}>`,
