@@ -55,6 +55,9 @@ const config = {
   EMAIL_PASSWORD: getEnvVariable("EMAIL_PASSWORD", null),
   // Google OAuth configuration
   CLIENT_ID: getEnvVariable("CLIENT_ID", null),
+
+  IS_TEST_MODE: getEnvVariable("IS_TEST_MODE", "false"),
+  TEST_EMAIL: getEnvVariable("TEST_EMAIL", null),
 };
 
 export default config;
